@@ -1,0 +1,19 @@
+{
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/about/page": "app/about/page.js",
+  "/admin/dashboard/page": "app/admin/dashboard/page.js",
+  "/admin/login/page": "app/admin/login/page.js",
+  "/admin/operator/offline-booking/page": "app/admin/operator/offline-booking/page.js",
+  "/admin/operator/page": "app/admin/operator/page.js",
+  "/api/qr-generate/route": "app/api/qr-generate/route.js",
+  "/authority/scanner/page": "app/authority/scanner/page.js",
+  "/booking/[slotId]/page": "app/booking/[slotId]/page.js",
+  "/contact/page": "app/contact/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/gallery/page": "app/gallery/page.js",
+  "/page": "app/page.js",
+  "/pass/[bookingId]/page": "app/pass/[bookingId]/page.js",
+  "/services/page": "app/services/page.js",
+  "/user-manual/page": "app/user-manual/page.js"
+}

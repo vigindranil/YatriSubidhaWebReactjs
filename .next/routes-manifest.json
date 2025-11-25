@@ -1,0 +1,151 @@
+{
+  "version": 3,
+  "pages404": true,
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "priority": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/booking/[slotId]",
+      "regex": "^/booking/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslotId": "nxtPslotId"
+      },
+      "namedRegex": "^/booking/(?<nxtPslotId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/pass/[bookingId]",
+      "regex": "^/pass/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPbookingId": "nxtPbookingId"
+      },
+      "namedRegex": "^/pass/(?<nxtPbookingId>[^/]+?)(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_global-error",
+      "regex": "^/_global\\-error(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_global\\-error(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/about",
+      "regex": "^/about(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/about(?:/)?$"
+    },
+    {
+      "page": "/admin/dashboard",
+      "regex": "^/admin/dashboard(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/dashboard(?:/)?$"
+    },
+    {
+      "page": "/admin/login",
+      "regex": "^/admin/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/login(?:/)?$"
+    },
+    {
+      "page": "/admin/operator",
+      "regex": "^/admin/operator(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/operator(?:/)?$"
+    },
+    {
+      "page": "/admin/operator/offline-booking",
+      "regex": "^/admin/operator/offline\\-booking(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/operator/offline\\-booking(?:/)?$"
+    },
+    {
+      "page": "/api/qr-generate",
+      "regex": "^/api/qr\\-generate(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/qr\\-generate(?:/)?$"
+    },
+    {
+      "page": "/authority/scanner",
+      "regex": "^/authority/scanner(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/authority/scanner(?:/)?$"
+    },
+    {
+      "page": "/contact",
+      "regex": "^/contact(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/contact(?:/)?$"
+    },
+    {
+      "page": "/dashboard",
+      "regex": "^/dashboard(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard(?:/)?$"
+    },
+    {
+      "page": "/gallery",
+      "regex": "^/gallery(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/gallery(?:/)?$"
+    },
+    {
+      "page": "/services",
+      "regex": "^/services(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/services(?:/)?$"
+    },
+    {
+      "page": "/user-manual",
+      "regex": "^/user\\-manual(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/user\\-manual(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSuffix": ".prefetch.rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments",
+    "clientParamParsing": false,
+    "dynamicRSCPrerender": false
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}
