@@ -1,6 +1,8 @@
 {
-  "/admin/login/page": "app/admin/login/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/admin/operator/offline-booking/page": "app/admin/operator/offline-booking/page.js",
+  "/admin/operator/online-booking/page": "app/admin/operator/online-booking/page.js",
   "/admin/operator/page": "app/admin/operator/page.js",
-  "/page": "app/page.js"
+  "/api/mock-booking/[bookingNumber]/check/route": "app/api/mock-booking/[bookingNumber]/check/route.js",
+  "/api/mock-booking/[bookingNumber]/route": "app/api/mock-booking/[bookingNumber]/route.js"
 }

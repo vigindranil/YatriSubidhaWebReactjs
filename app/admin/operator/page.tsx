@@ -1,3 +1,4 @@
+// ...existing code...
 "use client"
 
 import Link from "next/link"
@@ -30,12 +31,23 @@ export default function OperatorDashboardPage() {
                 <UserCircle className="w-5 h-5 text-emerald-400" />
                 <span className="text-white font-medium text-sm">Operator #12</span>
               </div>
+
+              {/* Offline Booking */}
               <Link href="/admin/operator/offline-booking">
                 <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white gap-2 shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/40 transition-all duration-300 font-semibold">
                   <CreditCard className="w-4 h-4" />
                   Offline Booking
                 </Button>
               </Link>
+
+              {/* Online Booking (new) */}
+              <Link href="/admin/operator/online-booking">
+                <Button className="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white gap-2 shadow-lg shadow-indigo-500/25 hover:shadow-xl transition-all duration-300 font-semibold">
+                  <ClipboardList className="w-4 h-4" />
+                  Online Booking
+                </Button>
+              </Link>
+
               <Button className="border-slate-600 text-slate-300 hover:text-white hover:bg-slate-700/50 gap-2 transition-all duration-300 bg-transparent border">
                 <Users className="w-4 h-4" />
                 <span className="hidden sm:inline">Queue</span>
@@ -206,20 +218,25 @@ export default function OperatorDashboardPage() {
               </div>
             </Link>
 
-            <div className="relative border-2 border-slate-200 rounded-2xl p-6 bg-gradient-to-br from-white to-slate-50 opacity-60">
-              <div className="bg-slate-100 inline-flex p-4 rounded-xl mb-4 border border-slate-200">
-                <Users className="w-7 h-7 text-slate-500" />
+            {/* Online Booking (live) */}
+            <Link href="/admin/operator/online-booking" className="block group">
+              <div className="relative border-2 border-slate-200 rounded-2xl p-6 hover:border-indigo-400 hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-white to-slate-50 overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-100 rounded-full -mr-16 -mt-16 opacity-0 group-hover:opacity-50 transition-opacity"></div>
+                <div className="relative z-10">
+                  <div className="bg-gradient-to-br from-indigo-100 to-violet-100 inline-flex p-4 rounded-xl mb-4 group-hover:scale-110 transition-transform duration-300 border border-indigo-200">
+                    <ClipboardList className="w-7 h-7 text-indigo-700" />
+                  </div>
+                  <h3 className="font-bold text-lg text-slate-900 mb-2">Online Booking</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    Lookup online reservations by booking number or QR, view payment status, and mark checked.
+                  </p>
+                  <div className="mt-4 flex items-center gap-2 text-indigo-600 font-semibold text-sm">
+                    <span>Open</span>
+                    <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                  </div>
+                </div>
               </div>
-              <h3 className="font-bold text-lg text-slate-900 mb-2">Queue Management</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                View and manage passenger queue in real-time.
-              </p>
-              <div className="mt-4">
-                <span className="text-xs font-semibold text-slate-500 bg-slate-200 px-3 py-1 rounded-full">
-                  Coming Soon
-                </span>
-              </div>
-            </div>
+            </Link>
 
             <div className="relative border-2 border-slate-200 rounded-2xl p-6 bg-gradient-to-br from-white to-slate-50 opacity-60">
               <div className="bg-slate-100 inline-flex p-4 rounded-xl mb-4 border border-slate-200">
@@ -241,3 +258,4 @@ export default function OperatorDashboardPage() {
     </main>
   )
 }
+// ...existing code...

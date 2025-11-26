@@ -1,11 +1,129 @@
-[00:00:01.022] Server  LOG      ✓ Ready in 777ms
-[00:00:14.053] Server  WARN     ⚠ Cross origin request detected from 192.168.29.167 to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+[00:00:00.853] Server  LOG      ✓ Ready in 617ms
+[00:00:01.286] Server  WARN     ⚠ Cross origin request detected from 192.168.29.167 to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
 Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
-[00:00:14.074] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:14.266] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:00:14.266] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[00:00:14.266] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.29.167:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764065589493}
-[00:00:20.146] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/login color: rgb(120, 120, 120) color: inherit {"dp":"/admin/login","o":"http://192.168.29.167:3000/admin/login","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764065595373}
-[00:00:41.198] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator","o":"http://192.168.29.167:3000/admin/operator","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764065616425}
-[00:00:49.194] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/offline-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/offline-booking","o":"http://192.168.29.167:3000/admin/operator/offline-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764065624395}
-[00:01:31.163] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator","o":"http://192.168.29.167:3000/admin/operator","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764065666385}
+[00:00:03.907] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:04.031] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:00:04.031] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/admin/operator/online-booking","route":"/admin/operator/online-booking"}
+[00:00:04.031] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/online-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/online-booking","o":"http://192.168.29.167:3000/admin/operator/online-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764085101532}
+[00:00:06.914] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator","o":"http://192.168.29.167:3000/admin/operator","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764085104412}
+[00:00:08.476] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/online-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/online-booking","o":"http://192.168.29.167:3000/admin/operator/online-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764085105975}
+[00:02:23.513] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator","o":"http://192.168.29.167:3000/admin/operator","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764085241095}
+[00:03:10.347] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/online-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/online-booking","o":"http://192.168.29.167:3000/admin/operator/online-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764085287933}
+[00:03:12.832] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator","o":"http://192.168.29.167:3000/admin/operator","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764085290421}
+[00:03:14.501] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/offline-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/offline-booking","o":"http://192.168.29.167:3000/admin/operator/offline-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764085292066}
+[00:03:18.360] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator","o":"http://192.168.29.167:3000/admin/operator","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764085295947}
+[00:03:30.624] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/offline-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/offline-booking","o":"http://192.168.29.167:3000/admin/operator/offline-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764085308193}
+[00:03:34.085] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator","o":"http://192.168.29.167:3000/admin/operator","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764085311675}
+[00:14:11.024] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/online-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/online-booking","o":"http://192.168.29.167:3000/admin/operator/online-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764085948605}
+[00:15:02.732] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:15:02.899] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:15:02.899] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/admin/operator/online-booking","route":"/admin/operator/online-booking"}
+[00:15:02.899] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/online-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/online-booking","o":"http://192.168.29.167:3000/admin/operator/online-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086000484}
+[00:16:23.027] Server  LOG      ✓ Compiled in 405ms
+[00:16:23.834] Browser ERROR   uncaughtError: ReferenceError: ClipboardList is not defined
+[00:17:08.925] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:17:08.959] Server  LOG      ✓ Compiled in 152ms
+[00:17:09.629] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:17:09.833] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:17:09.833] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/admin/operator/online-booking","route":"/admin/operator/online-booking"}
+[00:17:09.833] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/online-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/online-booking","o":"http://192.168.29.167:3000/admin/operator/online-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086127368}
+[00:18:31.997] Server  LOG      ✓ Compiled in 151ms
+[00:19:25.245] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/offline-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/offline-booking","o":"http://192.168.29.167:3000/admin/operator/offline-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086262782}
+[00:19:29.832] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/online-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/online-booking","o":"http://192.168.29.167:3000/admin/operator/online-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086267396}
+[00:20:03.787] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/offline-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/offline-booking","o":"http://192.168.29.167:3000/admin/operator/offline-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086301330}
+[00:21:09.721] Server  LOG      ✓ Compiled in 184ms
+[00:21:24.013] Server  LOG      ✓ Compiled in 238ms
+[00:21:50.609] Server  LOG      ✓ Compiled in 161ms
+[00:22:00.250] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/online-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/online-booking","o":"http://192.168.29.167:3000/admin/operator/online-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086417811}
+[00:22:06.085] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator","o":"http://192.168.29.167:3000/admin/operator","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086423648}
+[00:22:08.496] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/online-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/online-booking","o":"http://192.168.29.167:3000/admin/operator/online-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086426059}
+[00:22:18.229] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator","o":"http://192.168.29.167:3000/admin/operator","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086435788}
+[00:22:22.019] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/offline-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/offline-booking","o":"http://192.168.29.167:3000/admin/operator/offline-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086439564}
+[00:22:24.385] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator","o":"http://192.168.29.167:3000/admin/operator","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086441946}
+[00:22:54.595] Server  LOG      ✓ Compiled in 212ms
+[00:23:40.539] Server  LOG      ✓ Compiled in 102ms
+[00:24:04.831] Server  LOG      ✓ Compiled in 125ms
+[00:24:09.005] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/online-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/online-booking","o":"http://192.168.29.167:3000/admin/operator/online-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086546566}
+[00:24:10.343] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator","o":"http://192.168.29.167:3000/admin/operator","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086547895}
+[00:24:11.657] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/online-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/online-booking","o":"http://192.168.29.167:3000/admin/operator/online-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086549217}
+[00:24:21.866] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/offline-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/offline-booking","o":"http://192.168.29.167:3000/admin/operator/offline-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086559406}
+[00:24:37.235] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/online-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/online-booking","o":"http://192.168.29.167:3000/admin/operator/online-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086574792}
+[00:24:39.136] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator","o":"http://192.168.29.167:3000/admin/operator","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086576697}
+[00:24:41.979] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/online-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/online-booking","o":"http://192.168.29.167:3000/admin/operator/online-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086579540}
+[00:25:20.147] Server  LOG      ✓ Compiled in 212ms
+[00:25:34.861] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/offline-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/offline-booking","o":"http://192.168.29.167:3000/admin/operator/offline-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086632405}
+[00:25:35.697] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/online-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/online-booking","o":"http://192.168.29.167:3000/admin/operator/online-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086633256}
+[00:25:36.603] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/offline-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/offline-booking","o":"http://192.168.29.167:3000/admin/operator/offline-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086634145}
+[00:25:37.765] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/online-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/online-booking","o":"http://192.168.29.167:3000/admin/operator/online-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086635325}
+[00:25:38.617] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/offline-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/offline-booking","o":"http://192.168.29.167:3000/admin/operator/offline-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086636152}
+[00:25:39.585] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/online-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/online-booking","o":"http://192.168.29.167:3000/admin/operator/online-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086637145}
+[00:25:40.275] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/offline-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/offline-booking","o":"http://192.168.29.167:3000/admin/operator/offline-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086637815}
+[00:25:40.962] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/online-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/online-booking","o":"http://192.168.29.167:3000/admin/operator/online-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086638522}
+[00:25:41.603] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/offline-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/offline-booking","o":"http://192.168.29.167:3000/admin/operator/offline-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086639146}
+[00:25:42.272] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/online-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/online-booking","o":"http://192.168.29.167:3000/admin/operator/online-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086639830}
+[00:25:42.756] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator","o":"http://192.168.29.167:3000/admin/operator","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086640316}
+[00:26:01.441] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/online-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/online-booking","o":"http://192.168.29.167:3000/admin/operator/online-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086658998}
+[00:26:15.820] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator","o":"http://192.168.29.167:3000/admin/operator","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086673379}
+[00:26:19.141] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/online-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/online-booking","o":"http://192.168.29.167:3000/admin/operator/online-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086676700}
+[00:26:32.511] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator","o":"http://192.168.29.167:3000/admin/operator","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086690069}
+[00:26:36.737] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/offline-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/offline-booking","o":"http://192.168.29.167:3000/admin/operator/offline-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086694282}
+[00:26:42.354] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator","o":"http://192.168.29.167:3000/admin/operator","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764086699902}
+[00:34:42.883] Server  LOG      ✓ Compiled in 547ms
+[00:34:51.479] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/offline-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/offline-booking","o":"http://192.168.29.167:3000/admin/operator/offline-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764087188993}
+[00:35:12.314] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:35:12.527] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:35:12.527] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/admin/operator/offline-booking","route":"/admin/operator/offline-booking"}
+[00:35:12.527] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/offline-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/offline-booking","o":"http://192.168.29.167:3000/admin/operator/offline-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764087210057}
+[00:35:14.622] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:35:14.779] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:35:14.779] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/admin/operator/offline-booking","route":"/admin/operator/offline-booking"}
+[00:35:14.779] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.29.167:3000/admin/operator/offline-booking color: rgb(120, 120, 120) color: inherit {"dp":"/admin/operator/offline-booking","o":"http://192.168.29.167:3000/admin/operator/offline-booking","sdkn":"@vercel/analytics/next","sdkv":"1.5.0","sv":"0.1.3","ts":1764087212310}
+[00:35:19.257] Server  LOG      ✓ Compiled in 176ms
+[00:39:04.234] Server  LOG      ✓ Compiled in 470ms
+[00:39:04.839] Browser ERROR   ./app/admin/operator/offline-booking/page.tsx:122:9
+Parsing ecmascript source code failed
+  120 |           </div>
+  121 |         </div>
+> 122 |       </div>
+      |         ^^^
+  123 |       {showGateway && (
+  124 |         <PaymentGateway amount={Number(amount)} onPaymentSuccess={handlePaymentSuccess} onCancel={() => setShowGateway(false)} />
+  125 |       )}
+
+Expected corresponding JSX closing tag for <main>
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/operator/offline-booking/page.tsx [Client Component Browser]
+    ./app/admin/operator/offline-booking/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/operator/offline-booking/page.tsx [Client Component SSR]
+    ./app/admin/operator/offline-booking/page.tsx [Server Component]
+[00:39:12.757] Server  LOG      ✓ Compiled in 120ms
+[00:39:27.196] Server  LOG      ✓ Compiled in 135ms
+[00:40:12.820] Server  LOG      ✓ Compiled in 117ms
+[00:40:13.843] Browser ERROR   ./app/admin/operator/offline-booking/page.tsx:147:9
+Parsing ecmascript source code failed
+  145 |         </div>
+  146 |       </div>
+> 147 |       </div>
+      |         ^^^
+  148 |       {showGateway && (
+  149 |         <PaymentGateway amount={Number(amount)} onPaymentSuccess={handlePaymentSuccess} onCancel={() => setShowGateway(false)} />
+  150 |       )}
+
+Expected corresponding JSX closing tag for <main>
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/operator/offline-booking/page.tsx [Client Component Browser]
+    ./app/admin/operator/offline-booking/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/operator/offline-booking/page.tsx [Client Component SSR]
+    ./app/admin/operator/offline-booking/page.tsx [Server Component]
+[00:40:48.392] Server  LOG      ✓ Compiled in 131ms
+[00:42:18.133] Server  LOG      ✓ Compiled in 299ms
+[00:44:09.177] Server  LOG      ✓ Compiled in 205ms
+[00:44:40.795] Server  LOG      ✓ Compiled in 105ms

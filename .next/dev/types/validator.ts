@@ -83,6 +83,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../../app/admin/operator/online-booking/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/admin/operator/online-booking">> = Specific
+  const handler = {} as typeof import("../../../app/admin/operator/online-booking/page.jss")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../app/admin/operator/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/admin/operator">> = Specific
@@ -168,6 +177,24 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends AppPageConfig<"/user-manual">> = Specific
   const handler = {} as typeof import("../../../app/user-manual/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/api/mock-booking/[bookingNumber]/check/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/mock-booking/[bookingNumber]/check">> = Specific
+  const handler = {} as typeof import("../../../app/api/mock-booking/[bookingNumber]/check/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/api/mock-booking/[bookingNumber]/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/mock-booking/[bookingNumber]">> = Specific
+  const handler = {} as typeof import("../../../app/api/mock-booking/[bookingNumber]/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

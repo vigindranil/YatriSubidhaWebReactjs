@@ -1,0 +1,3 @@
+{
+  "/api/mock-booking/[bookingNumber]/route": "app/api/mock-booking/[bookingNumber]/route.js"
+}

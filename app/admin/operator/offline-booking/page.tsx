@@ -107,7 +107,7 @@ export default function OfflineBookingPage() {
             <span className="font-bold text-xl">Counter Operator</span>
           </div>
           <div className="flex items-center gap-3">
-            <Link href="/admin/operator/offline-booking">
+            <Link href="/admin/operator/online-booking">
               <Button className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2">
                 <CreditCard className="w-4 h-4" />
                 Offline Booking
@@ -124,7 +124,7 @@ export default function OfflineBookingPage() {
         <PaymentGateway amount={Number(amount)} onPaymentSuccess={handlePaymentSuccess} onCancel={() => setShowGateway(false)} />
       )}
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 ">
         <Button variant="ghost" onClick={() => router.back()} className="mb-4 gap-2">
           <ArrowLeft className="w-4 h-4" />
           Back
