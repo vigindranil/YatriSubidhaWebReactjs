@@ -5,6 +5,7 @@ import type React from "react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Mail, Phone, ArrowRight, RotateCcw } from "lucide-react"
+import { generateOTP } from "./apis/auth"
 
 interface OTPLoginFormProps {
   onSuccess?: () => void
@@ -23,8 +24,9 @@ export function OTPLoginForm({ onSuccess }: OTPLoginFormProps) {
 
     // Simulate OTP sending
     await new Promise((resolve) => setTimeout(resolve, 1500))
+    const response = await generateOTP(contactType, contact)
 
-    console.log(`[v0] OTP sent to ${contactType}: ${contact}`)
+    console.log(`[v0] OTP sent to response`, response)
     setStep("otp")
     setLoading(false)
   }
