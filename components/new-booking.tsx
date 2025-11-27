@@ -33,13 +33,14 @@ export function NewBooking() {
     return new Date().toISOString().split("T")[0];
   });
   const [searchQuery, setSearchQuery] = useState("")
+  const [travelType, setTravelType] = useState("1")
   const [sortField, setSortField] = useState<SortField | null>(null)
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc")
 
   const [slots, setSlots] = useState<Slot[]>([])
 
   const getAvailableSlotByDate = async () => {
-    const response = await callApi("user/slot/get-available-slot-by-date", { JourneyDate: selectedDate, AuthInfo: "{}", Type: 2 })
+    const response = await callApi("user/slot/get-available-slot-by-date", { JourneyDate: selectedDate, AuthInfo: "{}", Type: parseInt(travelType) })
     console.log(response);
 
     if (response.success) {
@@ -127,9 +128,9 @@ export function NewBooking() {
     getAvailableSlotByDate();
   }
 
-  const handleSelectSlot = (slotId: string) => {
+  const handleSelectSlot = (slotId: string, slotName: string, timeRange: string) => {
     // Navigate to booking page with slot ID and date
-    router.push(`/booking/${slotId}?date=${selectedDate}`)
+    router.push(`/booking/${slotId}?date=${selectedDate}&type=${travelType}&name=${slotName}&timing=${timeRange}`)
   }
 
   return (
@@ -142,6 +143,16 @@ export function NewBooking() {
               Select A Date For Checking Slot Availability
             </h2>
             <div className="flex items-center justify-center gap-4">
+              {/* Travel Type Dropdown */}
+              <select
+                value={travelType}
+                onChange={(e) => setTravelType(e.target.value)}
+                className="border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400"
+              >
+                <option value="">Select Journey Type</option>
+                <option value="2">Arrival</option>
+                <option value="1">Departure</option>
+              </select>
               <Input
                 type="date"
                 value={selectedDate}
@@ -333,7 +344,7 @@ export function NewBooking() {
                       </TableCell>
                       <TableCell>
                         <Button
-                          onClick={() => handleSelectSlot(slot?.SlotID)}
+                          onClick={() => handleSelectSlot(slot?.SlotID, slot?.SlotNameEng, slot?.TimeRangeEng)}
                           className="bg-violet-600 hover:bg-violet-700 text-white gap-2"
                           size="sm"
                         >

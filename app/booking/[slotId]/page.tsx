@@ -36,6 +36,9 @@ function BookingContent() {
   const searchParams = useSearchParams()
   const slotId = params.slotId as string
   const date = searchParams.get("date") || "2025-11-25"
+  const name = searchParams.get("name")
+  const timing = searchParams.get("timing")
+  const type = searchParams.get("type")
 
   const [passengers, setPassengers] = useState<Passenger[]>([
     {
@@ -55,20 +58,11 @@ function BookingContent() {
   const [showPayment, setShowPayment] = useState(false)
   const [paymentDone, setPaymentDone] = useState(false)
 
-  // Mock slot data
-  const slotData: { [key: string]: { name: string; timing: string } } = {
-    "8": { name: "SLOT-8", timing: "01:00 PM TO 01:59 PM" },
-    "9": { name: "SLOT-9", timing: "02:00 PM TO 02:59 PM" },
-    "10": { name: "SLOT-10", timing: "03:00 PM TO 03:59 PM" },
-    "11": { name: "SLOT-11", timing: "04:00 PM TO 04:59 PM" },
-    "12": { name: "SLOT-12", timing: "05:00 PM TO 05:59 PM" },
-  }
-
   useEffect(() => {
-    if (slotId && slotData[slotId]) {
-      setSelectedSlot(slotData[slotId])
+    if (name && timing) {
+      setSelectedSlot({ name: name, timing: timing })
     }
-  }, [slotId])
+  }, [name, timing])
 
   const handleAddExistingDetails = () => {
     // This would fetch existing passenger details from the backend
@@ -137,7 +131,7 @@ function BookingContent() {
       PrefferedSlotID: slotId,
       JourneyDate: date,
       PassengerInformation: formattedPassengers,
-      Type: 2,
+      Type: type,
       UserID: userId,
       AuthInfo: "{}"
     });
@@ -187,7 +181,7 @@ function BookingContent() {
 
     if (result.success) {
       const bookingId = result?.data[0]?.TokenNo;
-      router.push(`/pass/${bookingId}`)
+      router.push(`/pass/${bookingId}?type=${type == "1" ? "Departure" : "Arrival"}`)
     } else {
       alert(result.message)
     }

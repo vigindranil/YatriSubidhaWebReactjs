@@ -1,4 +1,5 @@
 import { CheckCircle, Users, ArrowLeft } from "lucide-react"
+import { QRCodeCanvas } from "qrcode.react";
 
 interface Passenger {
   PassengerName: string
@@ -28,6 +29,34 @@ export function DigitalPass({
   reference,
   qrCode,
 }: DigitalPassProps) {
+
+  const slotTailwindColors: Record<string, { bg: string; text: string }> = {
+    "SLOT-1": { bg: "bg-pink-400", text: "text-gray-800" },      // #FF6EC7
+    "SLOT-2": { bg: "bg-purple-400", text: "text-gray-800" },    // #AA77FF
+    "SLOT-3": { bg: "bg-blue-500", text: "text-gray-800" },      // #068FFF
+    "SLOT-4": { bg: "bg-red-500", text: "text-gray-800" },       // #FF2965
+    "SLOT-5": { bg: "bg-green-700", text: "text-gray-200" },     // #2B7A0B
+    "SLOT-6": { bg: "bg-teal-300", text: "text-gray-800" },      // #2BE5A6
+    "SLOT-7": { bg: "bg-pink-600", text: "text-gray-800" },      // #C84186
+    "SLOT-8": { bg: "bg-purple-600", text: "text-gray-200" },    // #6F38C5
+    "SLOT-9": { bg: "bg-yellow-400", text: "text-gray-800" },    // #FFD700
+    "SLOT-10": { bg: "bg-sky-300", text: "text-gray-800" },      // #97DEFF
+    "SLOT-11": { bg: "bg-orange-400", text: "text-gray-800" },   // #FF7256
+    "SLOT-12": { bg: "bg-fuchsia-500", text: "text-gray-800" },  // #FF00FF
+    "SLOT-13": { bg: "bg-indigo-600", text: "text-gray-800" },   // #6528F7
+    "SLOT-14": { bg: "bg-red-500", text: "text-gray-800" },      // #FF2965
+    "SLOT-15": { bg: "bg-lime-600", text: "text-gray-800" },     // #7A9D54
+    "SLOT-16": { bg: "bg-teal-300", text: "text-gray-800" },     // #2BE5A6
+    "SLOT-17": { bg: "bg-pink-600", text: "text-gray-800" },     // #C84186
+    "SLOT-18": { bg: "bg-purple-600", text: "text-gray-200" },   // #6F38C5
+    "SLOT-19": { bg: "bg-pink-400", text: "text-gray-800" },     // #FF1DCE
+    "SLOT-20": { bg: "bg-yellow-400", text: "text-gray-800" },   // #FFD700
+    "SLOT-21": { bg: "bg-orange-400", text: "text-gray-800" },   // #FF7256
+    "SLOT-22": { bg: "bg-fuchsia-500", text: "text-gray-800" },  // #FF00FF
+    "SLOT-23": { bg: "bg-pink-400", text: "text-gray-800" },     // #FF6EC7
+    "SLOT-24": { bg: "bg-sky-200", text: "text-gray-800" },      // #7DF9FF
+  }
+
   const colorConfig = {
     green: { bg: "bg-emerald-600", text: "text-emerald-600", lightBg: "bg-emerald-50" },
     yellow: { bg: "bg-amber-600", text: "text-amber-600", lightBg: "bg-amber-50" },
@@ -39,7 +68,7 @@ export function DigitalPass({
   return (
     <div className="max-w-4xl mx-auto shadow-lg rounded-xl overflow-hidden border border-slate-200 bg-white">
       {/* Top Header */}
-      <div className={`${config.bg} p-6 text-white`}>
+      <div className={`${slotTailwindColors[slot]?.bg} p-6 ${slotTailwindColors[slot]?.text}`}>
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm opacity-80">Yatri Suvidha</p>
@@ -64,7 +93,9 @@ export function DigitalPass({
 
       {/* QR Code + Info */}
       <div className="p-6 flex flex-col items-center text-center">
-        <img src={qrCode} alt="QR Code" className="w-36 h-36 rounded-lg mb-3" />
+        {/* QR Code generated using TokenNo */}
+        <QRCodeCanvas className="w-36 h-36 rounded-lg mb-3 border-2 " value={reference} size={100} level="H" includeMargin={true} />
+        {/* <img src={qrCode} alt="QR Code" className="w-36 h-36 rounded-lg mb-3" /> */}
         <p className="text-xs text-slate-500">Scan at ICP Petrapole for verification</p>
       </div>
 
@@ -125,8 +156,8 @@ export function DigitalPass({
       </div>
 
       {/* Slot Info */}
-      <div className={`${config.lightBg} p-4 border-t`}>
-        <p className={`text-sm font-semibold ${config.text}`}>
+      <div className={`${slotTailwindColors[slot]?.lightBg} p-4 border-t`}>
+        <p className={`text-sm font-semibold ${slotTailwindColors[slot]?.text}`}>
           Slot Status:{" "}
           {slotColor === "green"
             ? "Fast Processing"
@@ -148,7 +179,7 @@ export function DigitalPass({
       </div>
 
       {/* Terms Footer */}
-      <div className={`${config.bg} text-white text-xs text-center py-3`}>
+      <div className={`${slotTailwindColors[slot]?.bg} text-white text-xs text-center py-3`}>
         Pass valid only for specified date and time. Arrive 15 minutes early with travel documents.
       </div>
     </div>

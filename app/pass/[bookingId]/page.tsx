@@ -5,13 +5,15 @@ import { Button } from "@/components/ui/button"
 import { DigitalPass } from "@/components/digital-pass"
 import { Download, Share2, Printer, ArrowLeft } from "lucide-react"
 import { callApi } from "@/components/apis/commonApi"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 
 export default function PassPage({ params }: { params: Promise<{ bookingId: string }> }) {
   const { bookingId } = use(params)
   const passRef = useRef(null)
   const [showShareMenu, setShowShareMenu] = useState(false)
   const [bookingDetails, setBookingDetails] = useState<any>([])
+  const searchParams = useSearchParams()
+  const type = (searchParams.get("type") as "Departure" | "Arrival") || "Departure"
 
   const getBookingDetailsByTokenNo = async () => {
     const response = await callApi("user/slot/get-departure-booking-details-by-token-number", { AuthInfo: "{}", TokenNo: bookingId })
@@ -61,7 +63,7 @@ export default function PassPage({ params }: { params: Promise<{ bookingId: stri
             date={bookingDetails[0]?.JourneyDate}
             time={bookingDetails[0]?.SlotTime}
             slot={bookingDetails[0]?.SlotName}
-            type="Arrival"
+            type={type || "Departure"}
             slotColor="green"
             qrCode="/qr-code.png"
             passengers={bookingDetails || []}
