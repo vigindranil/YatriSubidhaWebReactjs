@@ -5,7 +5,7 @@ import type React from "react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Mail, Phone, ArrowRight, RotateCcw } from "lucide-react"
-import { generateOTP } from "./apis/auth"
+import { generateOTP, verifyOTP } from "./apis/auth"
 
 interface OTPLoginFormProps {
   onSuccess?: () => void
@@ -22,11 +22,9 @@ export function OTPLoginForm({ onSuccess }: OTPLoginFormProps) {
     e.preventDefault()
     setLoading(true)
 
-    // Simulate OTP sending
-    await new Promise((resolve) => setTimeout(resolve, 1500))
     const response = await generateOTP(contactType, contact)
 
-    console.log(`[v0] OTP sent to response`, response)
+    console.log(`OTP sent to response`, response)
     setStep("otp")
     setLoading(false)
   }
@@ -35,10 +33,9 @@ export function OTPLoginForm({ onSuccess }: OTPLoginFormProps) {
     e.preventDefault()
     setLoading(true)
 
-    // Simulate OTP verification
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    const response = await verifyOTP(contact, otp)
 
-    console.log(`[v0] OTP verified: ${otp}`)
+    console.log(`OTP verified: ${response}`)
     setLoading(false)
     onSuccess?.()
   }
@@ -59,11 +56,10 @@ export function OTPLoginForm({ onSuccess }: OTPLoginFormProps) {
               <button
                 type="button"
                 onClick={() => setContactType("phone")}
-                className={`p-4 rounded-lg border-2 transition flex flex-col items-center gap-2 ${
-                  contactType === "phone"
-                    ? "border-emerald-600 bg-emerald-50"
-                    : "border-slate-300 bg-white hover:border-slate-400"
-                }`}
+                className={`p-4 rounded-lg border-2 transition flex flex-col items-center gap-2 ${contactType === "phone"
+                  ? "border-emerald-600 bg-emerald-50"
+                  : "border-slate-300 bg-white hover:border-slate-400"
+                  }`}
               >
                 <Phone className="w-5 h-5" />
                 <span className="text-sm font-medium">Phone & WhatsApp</span>
@@ -71,11 +67,10 @@ export function OTPLoginForm({ onSuccess }: OTPLoginFormProps) {
               <button
                 type="button"
                 onClick={() => setContactType("email")}
-                className={`p-4 rounded-lg border-2 transition flex flex-col items-center gap-2 ${
-                  contactType === "email"
-                    ? "border-emerald-600 bg-emerald-50"
-                    : "border-slate-300 bg-white hover:border-slate-400"
-                }`}
+                className={`p-4 rounded-lg border-2 transition flex flex-col items-center gap-2 ${contactType === "email"
+                  ? "border-emerald-600 bg-emerald-50"
+                  : "border-slate-300 bg-white hover:border-slate-400"
+                  }`}
               >
                 <Mail className="w-5 h-5" />
                 <span className="text-sm font-medium">Email</span>
@@ -122,9 +117,9 @@ export function OTPLoginForm({ onSuccess }: OTPLoginFormProps) {
             <input
               type="text"
               value={otp}
-              onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
-              placeholder="000000"
-              maxLength="6"
+              onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 4))}
+              placeholder="0000"
+              maxLength="4"
               className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-center text-2xl tracking-widest font-mono"
               required
             />
@@ -132,7 +127,7 @@ export function OTPLoginForm({ onSuccess }: OTPLoginFormProps) {
 
           <Button
             type="submit"
-            disabled={loading || otp.length !== 6}
+            disabled={loading || otp.length !== 4}
             className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 font-semibold mt-6 disabled:opacity-50"
           >
             {loading ? "Verifying..." : "Verify OTP"}

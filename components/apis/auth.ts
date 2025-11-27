@@ -15,11 +15,41 @@ export const generateOTP = async (type: string = "email", user_name: string) => 
         "authInfo": "{}"
       }),
     });
-    
+
 
     const data = await response.json();
     console.log(data);
-    
+
+
+    return data;
+  } catch (error) {
+    return { success: false, error: "Network error, please try again." };
+  }
+};
+
+// Function to verify OTP
+export const verifyOTP = async (user_name: string, otp: string) => {
+  try {
+    const response = await fetch(`${BASE_URL}auth/validate-otp`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "userName": user_name,
+        "otp": otp,
+        "authInfo": "{}"
+      }),
+    });
+
+
+    const data = await response.json();
+    if (data.success) {
+      Cookies.save("token", data?.data?.authToken, { path: "/", maxAge: 60 * 60 * 24 });
+      Cookies.save("userID", data?.data?.UserID, { path: "/", maxAge: 60 * 60 * 24 });
+    }
+    console.log(data);
+
 
     return data;
   } catch (error) {

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -13,6 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { ArrowRight, ChevronUp, ChevronDown, Users } from "lucide-react"
+import { callApi } from "./apis/commonApi"
 
 interface Slot {
   id: string
@@ -33,14 +34,29 @@ export function NewBooking() {
   const [sortField, setSortField] = useState<SortField | null>(null)
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc")
 
+  const [slots, setSlots] = useState<Slot[]>([])
+
+  const getAvailableSlotByDate = async () => {
+    const response = await callApi("user/slot/get-available-slot-by-date", { JourneyDate: selectedDate, authInfo: "{}" })
+    console.log(response);
+
+    if (response.success) {
+      setSlots(response.data)
+    }
+  }
+
+  useEffect(() => {
+    getAvailableSlotByDate()
+  }, [selectedDate])
+
   // Mock data for slots
-  const slots: Slot[] = [
-    { id: "8", name: "SLOT-8", timing: "01:00 PM TO 01:59 PM", capacity: 100, booked: 0, available: 100 },
-    { id: "9", name: "SLOT-9", timing: "02:00 PM TO 02:59 PM", capacity: 100, booked: 0, available: 100 },
-    { id: "10", name: "SLOT-10", timing: "03:00 PM TO 03:59 PM", capacity: 100, booked: 0, available: 100 },
-    { id: "11", name: "SLOT-11", timing: "04:00 PM TO 04:59 PM", capacity: 100, booked: 0, available: 100 },
-    { id: "12", name: "SLOT-12", timing: "05:00 PM TO 05:59 PM", capacity: 100, booked: 0, available: 100 },
-  ]
+  // const slots: Slot[] = [
+  //   { id: "8", name: "SLOT-8", timing: "01:00 PM TO 01:59 PM", capacity: 100, booked: 0, available: 100 },
+  //   { id: "9", name: "SLOT-9", timing: "02:00 PM TO 02:59 PM", capacity: 100, booked: 0, available: 100 },
+  //   { id: "10", name: "SLOT-10", timing: "03:00 PM TO 03:59 PM", capacity: 100, booked: 0, available: 100 },
+  //   { id: "11", name: "SLOT-11", timing: "04:00 PM TO 04:59 PM", capacity: 100, booked: 0, available: 100 },
+  //   { id: "12", name: "SLOT-12", timing: "05:00 PM TO 05:59 PM", capacity: 100, booked: 0, available: 100 },
+  // ]
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -56,9 +72,9 @@ export function NewBooking() {
       if (!searchQuery) return true
       const query = searchQuery.toLowerCase()
       return (
-        slot.id.toLowerCase().includes(query) ||
+        slot.SlotID.toLowerCase().includes(query) ||
         slot.name.toLowerCase().includes(query) ||
-        slot.timing.toLowerCase().includes(query)
+        slot?.TimeRangeEng.toLowerCase().includes(query)
       )
     })
     .sort((a, b) => {
@@ -286,36 +302,36 @@ export function NewBooking() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredAndSortedSlots.map((slot) => (
-                    <TableRow key={slot.id}>
-                      <TableCell className="font-medium">{slot.id}</TableCell>
+                  {filteredAndSortedSlots.map((slot: Slot) => (
+                    <TableRow key={slot?.SlotID}>
+                      <TableCell className="font-medium">{slot?.SlotID}</TableCell>
                       <TableCell>
                         <span className="bg-violet-100 text-violet-700 px-3 py-1 rounded font-semibold text-sm">
-                          {slot.name}
+                          {slot?.SlotNameEng}
                         </span>
                       </TableCell>
-                      <TableCell>{slot.timing}</TableCell>
+                      <TableCell>{slot?.TimeRangeEng}</TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <Users className="w-5 h-5 text-yellow-600" />
-                          <span>{slot.capacity}</span>
+                          <span>{slot?.SlotCapacity}</span>
                         </div>
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <Users className="w-5 h-5 text-red-600" />
-                          <span>{slot.booked}</span>
+                          <span>{slot?.BookingCount}</span>
                         </div>
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <Users className="w-5 h-5 text-green-600" />
-                          <span>{slot.available}</span>
+                          <span>{slot?.AvailableTokenCount}</span>
                         </div>
                       </TableCell>
                       <TableCell>
                         <Button
-                          onClick={() => handleSelectSlot(slot.id)}
+                          onClick={() => handleSelectSlot(slot?.SlotID)}
                           className="bg-violet-600 hover:bg-violet-700 text-white gap-2"
                           size="sm"
                         >
