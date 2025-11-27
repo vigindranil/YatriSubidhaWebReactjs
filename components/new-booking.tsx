@@ -29,7 +29,9 @@ type SortDirection = "asc" | "desc"
 
 export function NewBooking() {
   const router = useRouter()
-  const [selectedDate, setSelectedDate] = useState<string>("2025-11-25")
+  const [selectedDate, setSelectedDate] = useState<string>(() => {
+    return new Date().toISOString().split("T")[0];
+  });
   const [searchQuery, setSearchQuery] = useState("")
   const [sortField, setSortField] = useState<SortField | null>(null)
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc")
@@ -37,7 +39,7 @@ export function NewBooking() {
   const [slots, setSlots] = useState<Slot[]>([])
 
   const getAvailableSlotByDate = async () => {
-    const response = await callApi("user/slot/get-available-slot-by-date", { JourneyDate: selectedDate, authInfo: "{}" })
+    const response = await callApi("user/slot/get-available-slot-by-date", { JourneyDate: selectedDate, AuthInfo: "{}", Type: 2 })
     console.log(response);
 
     if (response.success) {
@@ -47,7 +49,7 @@ export function NewBooking() {
 
   useEffect(() => {
     getAvailableSlotByDate()
-  }, [selectedDate])
+  }, [])
 
   // Mock data for slots
   // const slots: Slot[] = [
@@ -122,7 +124,7 @@ export function NewBooking() {
 
   const handleCheckAvailability = () => {
     // This would trigger an API call to check availability for the selected date
-    console.log("Checking availability for:", selectedDate)
+    getAvailableSlotByDate();
   }
 
   const handleSelectSlot = (slotId: string) => {

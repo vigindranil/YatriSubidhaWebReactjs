@@ -18,7 +18,7 @@ export default function AboutPage() {
         {/* Hero Section */}
         <div className="bg-gradient-to-br from-emerald-600 via-teal-600 to-blue-600 text-white py-16 md:py-24">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">About YYatri Subidha</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">About Yatri Subidha</h1>
             <p className="text-xl text-emerald-100 max-w-3xl mx-auto">
               Revolutionizing border crossing experience with modern technology and efficient queuing systems
             </p>
@@ -44,9 +44,7 @@ export default function AboutPage() {
                   <h3 className="text-2xl font-bold text-slate-900">Our Mission</h3>
                 </div>
                 <p className="text-slate-700 leading-relaxed">
-                  To streamline and optimize the border crossing process at ICP Petrapole through innovative digital
-                  solutions, reducing congestion and wait times while maintaining the highest standards of security and
-                  efficiency for international and domestic passengers.
+                  To streamline and optimize the border crossing process at ICP Petrapole through innovative digital solutions, reducing congestion and wait times while maintaining the highest standards of security and efficiency for both international and domestic passengers.
                 </p>
               </div>
 

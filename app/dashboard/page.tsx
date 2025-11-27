@@ -6,10 +6,13 @@ import { DashboardNav } from "@/components/dashboard-nav"
 import { NewBooking } from "@/components/new-booking"
 import { BookingHistory } from "@/components/booking-history"
 import { ArrowUpRight, ArrowDownLeft, TrendingUp } from "lucide-react"
+import { callApi } from "@/components/apis/commonApi"
 
 function DashboardContent() {
   const searchParams = useSearchParams()
   const [activeTab, setActiveTab] = useState<"book" | "history">("book")
+  const [dashboardCount, setDashboardCount] = useState<any>({ totalDepartures: 0, totalArrivals: 0 })
+
 
   useEffect(() => {
     const tab = searchParams.get("tab")
@@ -19,6 +22,21 @@ function DashboardContent() {
       setActiveTab("book")
     }
   }, [searchParams])
+
+  const getDepartures = async () => {
+    const response = await callApi("admin/arrival-departure-count", { AuthInfo: "{}", FromDate: new Date().toISOString().split("T")[0], ToDate: new Date().toISOString().split("T")[0], Type: 2 })
+    if (response.success) {
+      console.log(response)
+      setDashboardCount({
+        totalDepartures: response?.data[0]?.BookingCount,
+        totalArrivals: response?.data[1]?.BookingCount
+      })
+    }
+  }
+
+  useEffect(() => {
+    getDepartures()
+  }, [])
 
   return (
     <>
@@ -41,7 +59,7 @@ function DashboardContent() {
                   <span>Active</span>
                 </div>
               </div>
-              <p className="text-5xl font-bold text-slate-900 mb-2">5</p>
+              <p className="text-5xl font-bold text-slate-900 mb-2">{dashboardCount?.totalDepartures || 0}</p>
               <p className="text-slate-500 text-sm">Total journeys departing</p>
             </div>
           </div>
@@ -62,7 +80,7 @@ function DashboardContent() {
                   <span>Active</span>
                 </div>
               </div>
-              <p className="text-5xl font-bold text-slate-900 mb-2">3</p>
+              <p className="text-5xl font-bold text-slate-900 mb-2">{dashboardCount?.totalArrivals || 0}</p>
               <p className="text-slate-500 text-sm">Total journeys arriving</p>
             </div>
           </div>
