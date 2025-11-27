@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/select"
 import { RefreshCcw, UserPlus, CheckCircle, CreditCard, ArrowLeft } from "lucide-react"
 import { PaymentGateway } from "@/components/payment-gateway"
+import { callApi } from "@/components/apis/commonApi"
+import Cookies from "react-cookies";
 
 interface Passenger {
   id: string
@@ -23,6 +25,7 @@ interface Passenger {
   email: string
   nationality: string
   passportNumber: string
+  passportValidUpto: string
   address: string
   intendedTravelDate: string
 }
@@ -33,7 +36,7 @@ function BookingContent() {
   const searchParams = useSearchParams()
   const slotId = params.slotId as string
   const date = searchParams.get("date") || "2025-11-25"
-  
+
   const [passengers, setPassengers] = useState<Passenger[]>([
     {
       id: "1",
@@ -43,6 +46,7 @@ function BookingContent() {
       email: "",
       nationality: "Indian",
       passportNumber: "",
+      passportValidUpto: "",
       address: "",
       intendedTravelDate: date,
     },
@@ -80,6 +84,7 @@ function BookingContent() {
         passportNumber: "A12345678",
         address: "123 Main Street, City, State",
         intendedTravelDate: date,
+        passportValidUpto: "2025-12-31"
       },
     ])
   }
@@ -97,6 +102,7 @@ function BookingContent() {
         passportNumber: "",
         address: "",
         intendedTravelDate: date,
+        passportValidUpto: date
       },
     ])
   }
@@ -105,6 +111,37 @@ function BookingContent() {
     if (passengers.length > 1) {
       setPassengers(passengers.filter((p) => p.id !== id))
     }
+  }
+
+  const savePassengerDetails = async () => {
+    const userId = Cookies.load("userID");
+
+    // Convert to proper API format
+    const formattedPassengers = passengers?.map((p) => ({
+      FullName: p.fullName,
+      Address: p.address,
+      Nationality: p.nationality,
+      DOB: "1990-01-01",
+      Gender: "Male",
+      MobileNo: p.mobileNumber,
+      EmailID: p.email,
+      PassportNo: p.passportNumber,
+      PassportValidUpto: p.passportValidUpto,
+      VisaNo: "A1234567",
+      VisaValidUpto: "2025-12-31",
+    }));
+
+    console.log(formattedPassengers)
+
+    const response = await callApi("user/save-passenger-details", {
+      PrefferedSlotID: slotId,
+      JourneyDate: date,
+      PassengerInformation: formattedPassengers,
+      Type: 2,
+      UserID: userId,
+      AuthInfo: "{}"
+    });
+    return response;
   }
 
   const handlePassengerChange = (id: string, field: keyof Passenger, value: string) => {
@@ -118,7 +155,8 @@ function BookingContent() {
     setShowPayment(false)
   }
 
-  const handleBookSlot = () => {
+  const handleBookSlot = async () => {
+
     if (!paymentDone) {
       setShowPayment(true)
       return
@@ -142,10 +180,17 @@ function BookingContent() {
 
     // Here you would make an API call to book the slot
     console.log("Booking slot:", { slotId, date, passengers })
-    
+
     // Generate a booking ID and redirect to pass page
-    const bookingId = `AS-${Date.now()}`
-    router.push(`/pass/${bookingId}`)
+    const result = await savePassengerDetails();
+    console.log(result)
+
+    if (result.success) {
+      const bookingId = result?.data[0]?.TokenNo;
+      router.push(`/pass/${bookingId}`)
+    } else {
+      alert(result.message)
+    }
   }
 
   const countryCodes = [
@@ -165,7 +210,7 @@ function BookingContent() {
   return (
     <main className="min-h-screen bg-slate-100">
       <DashboardNav />
-      
+
       {showPayment && (
         <PaymentGateway
           amount={passengers.length * 100}
@@ -351,8 +396,27 @@ function BookingContent() {
                         />
                       </div>
 
-                      {/* Intended Travel Date */}
+                      {/* Passport Valid Upto */}
                       <div>
+                        <label className="block text-sm font-semibold text-slate-900 mb-2">
+                          Passport Valid Upto <span className="text-red-500">*</span>
+                        </label>
+                        <Input
+                          type="date"
+                          value={passenger.passportValidUpto}
+                          onChange={(e) =>
+                            handlePassengerChange(
+                              passenger.id,
+                              "passportValidUpto",
+                              e.target.value
+                            )
+                          }
+                          required
+                        />
+                      </div>
+
+                      {/* Intended Travel Date */}
+                      {/* <div>
                         <label className="block text-sm font-semibold text-slate-900 mb-2">
                           Intended Travel Date <span className="text-red-500">*</span>
                         </label>
@@ -368,11 +432,12 @@ function BookingContent() {
                           }
                           required
                         />
-                      </div>
+                      </div> */}
                     </div>
 
+
                     {/* Address */}
-                    <div className="mt-4">
+                    < div className="mt-4" >
                       <label className="block text-sm font-semibold text-slate-900 mb-2">
                         Address <span className="text-red-500">*</span>
                       </label>
@@ -391,7 +456,7 @@ function BookingContent() {
               </div>
 
               {/* Add New Person Button */}
-              <Button
+              < Button
                 variant="outline"
                 onClick={handleAddNewPerson}
                 className="mt-6 gap-2"
@@ -476,8 +541,8 @@ function BookingContent() {
             </div>
           </div>
         </div>
-      </div>
-    </main>
+      </div >
+    </main >
   )
 }
 

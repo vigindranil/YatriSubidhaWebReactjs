@@ -1,23 +1,28 @@
-import { CheckCircle } from "lucide-react"
+import { CheckCircle, Users, ArrowLeft } from "lucide-react"
+
+interface Passenger {
+  PassengerName: string
+  passportNumber: string
+}
 
 interface DigitalPassProps {
   bookingId: string
-  passengerName: string
-  passportNumber: string
+  passengers: Passenger[] // 👈 Now supports multiple passengers
   date: string
   time: string
   type: "Arrival" | "Departure"
   slotColor: "green" | "yellow" | "red"
   reference: string
   qrCode: string
+  slot: string
 }
 
 export function DigitalPass({
   bookingId,
-  passengerName,
-  passportNumber,
+  passengers,
   date,
   time,
+  slot,
   type,
   slotColor,
   reference,
@@ -32,128 +37,119 @@ export function DigitalPass({
   const config = colorConfig[slotColor]
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className={`${config.bg} rounded-t-2xl p-6 text-white`}>
-        <div className="flex items-center justify-between mb-4">
+    <div className="max-w-4xl mx-auto shadow-lg rounded-xl overflow-hidden border border-slate-200 bg-white">
+      {/* Top Header */}
+      <div className={`${config.bg} p-6 text-white`}>
+        <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-semibold opacity-90">Yatri Subidha</p>
+            <p className="text-sm opacity-80">Yatri Suvidha</p>
             <h1 className="text-2xl font-bold">Border Clearance Pass</h1>
           </div>
           <div className="text-right">
-            <p className="text-xs opacity-90">Ref.</p>
+            <p className="text-xs opacity-80">Ref.</p>
             <p className="text-lg font-bold">{reference}</p>
           </div>
         </div>
-
-        <div className="h-1 bg-white/30 rounded-full"></div>
       </div>
 
-      <div className="bg-white border-l-4 border-r-4 border-slate-300 p-8">
-        <div className="grid md:grid-cols-3 gap-8 mb-8">
-          {/* Passenger Info */}
-          <div className="md:col-span-2">
-            <div className="mb-6">
-              <p className="text-xs font-semibold text-slate-500 mb-1">PASSENGER NAME</p>
-              <p className="text-2xl font-bold text-slate-900">{passengerName}</p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-6">
-              <div>
-                <p className="text-xs font-semibold text-slate-500 mb-1">PASSPORT NUMBER</p>
-                <p className="text-lg font-bold text-slate-900 font-mono">{passportNumber}</p>
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-slate-500 mb-1">TRAVEL TYPE</p>
-                <p className={`text-lg font-bold ${config.text} capitalize`}>{type}</p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-6 mt-6">
-              <div>
-                <p className="text-xs font-semibold text-slate-500 mb-1">DATE</p>
-                <p className="text-lg font-bold text-slate-900">{date}</p>
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-slate-500 mb-1">TIME SLOT</p>
-                <p className={`text-lg font-bold ${config.text}`}>{time}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* QR Code */}
-          <div className="flex flex-col items-center justify-center">
-            <div className={`${config.lightBg} p-4 rounded-lg mb-4`}>
-              <img src={qrCode || "/placeholder.svg"} alt="QR Code" className="w-32 h-32" />
-            </div>
-            <p className="text-xs text-slate-600 text-center">Scan for verification</p>
-          </div>
-        </div>
-
-        {/* Slot Color Legend */}
-        <div className={`${config.lightBg} rounded-lg p-4 mb-6 border-l-4 ${config.bg}`}>
-          <div className="flex items-center gap-3">
-            <div className={`w-6 h-6 rounded-full ${config.bg}`}></div>
-            <div>
-              <p className="text-sm font-bold text-slate-900">
-                Slot Status:{" "}
-                <span className={config.text}>
-                  {slotColor === "green"
-                    ? "Available / Fast Processing"
-                    : slotColor === "yellow"
-                      ? "Limited / Standard Processing"
-                      : "Peak Hours"}
-                </span>
-              </p>
-              <p className="text-xs text-slate-600 mt-1">
-                {slotColor === "green" && "This slot typically has minimal waiting time"}
-                {slotColor === "yellow" && "This slot may have moderate waiting time"}
-                {slotColor === "red" && "This slot experiences peak-hour congestion"}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Status */}
-        <div className="flex items-center gap-2 text-emerald-700 font-semibold">
-          <CheckCircle className="w-5 h-5" />
-          <span>Booking Confirmed & Valid</span>
+      {/* Booking Summary (Single Use) */}
+      <div className="px-6 py-4 border-b bg-slate-50">
+        <div className="flex justify-between text-sm text-slate-700">
+          <p><strong>Pass Type:</strong> <span className={config.text}>{type}</span></p>
+          <p><strong>Slot:</strong> {slot}</p>
+          <p><strong>Slot Timing:</strong> {time}</p>
+          <p><strong>Date:</strong> {date ? new Date(date)?.toISOString()?.split("T")[0] : ""}</p>
         </div>
       </div>
 
-      <div className={`${config.bg} rounded-b-2xl px-6 py-4 text-white`}>
-        <p className="text-xs opacity-90 text-center">
-          This pass is valid only for the specified date and time. Please arrive 15 minutes early.
+      {/* QR Code + Info */}
+      <div className="p-6 flex flex-col items-center text-center">
+        <img src={qrCode} alt="QR Code" className="w-36 h-36 rounded-lg mb-3" />
+        <p className="text-xs text-slate-500">Scan at ICP Petrapole for verification</p>
+      </div>
+
+      {/* Passenger List */}
+      <div className="px-6 pb-6">
+        <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2 mb-3">
+          <Users className="w-5 h-5" /> Passenger Details ({passengers?.length})
+        </h2>
+
+        <div className="space-y-3">
+          {passengers?.map((p, index) => (
+            <div
+              key={index}
+              className="p-4 bg-slate-50 rounded-lg border border-slate-200"
+            >
+              <p className="text-sm font-semibold text-slate-800">
+                Passenger {index + 1}: {p?.PasengerName}
+              </p>
+              <div className="grid grid-cols-2 gap-2 mt-2 text-xs text-slate-600">
+                <p>
+                  <span className="font-semibold">Nationality:</span> {p?.Nationality}
+                </p>
+                <p>
+                  <span className="font-semibold">Mobile:</span> {p?.MobileNo}
+                </p>
+                <p>
+                  <span className="font-semibold">Email:</span> {p?.EmailID}
+                </p>
+                <p>
+                  <span className="font-semibold">Passport:</span> {p?.PassportNo}
+                </p>
+                <p>
+                  <span className="font-semibold">Passport Valid Upto:</span>{" "}
+                  {new Date(p?.PassportValidUpto).toLocaleDateString()}
+                </p>
+                <p>
+                  <span className="font-semibold">Journey Date:</span>{" "}
+                  {new Date(p?.JourneyDate).toLocaleDateString()}
+                </p>
+                <p>
+                  <span className="font-semibold">Slot Name:</span> {p?.SlotName}
+                </p>
+                <p>
+                  <span className="font-semibold">Slot Time:</span> {p?.SlotTime}
+                </p>
+                <p>
+                  <span className="font-semibold">Attendance Status:</span> {p?.AttendanceStatus}
+                </p>
+                <p>
+                  <span className="font-semibold">Attendance Date:</span>{" "}
+                  {p?.AttendenceDate ? new Date(p.AttendenceDate).toLocaleDateString() : "N/A"}
+                </p>
+              </div>
+            </div>
+          ))}
+
+        </div>
+      </div>
+
+      {/* Slot Info */}
+      <div className={`${config.lightBg} p-4 border-t`}>
+        <p className={`text-sm font-semibold ${config.text}`}>
+          Slot Status:{" "}
+          {slotColor === "green"
+            ? "Fast Processing"
+            : slotColor === "yellow"
+              ? "Standard Processing"
+              : "Peak Hours / High Waiting"}
+        </p>
+        <p className="text-xs text-slate-600 mt-1">
+          {slotColor === "green" && "Minimal wait time expected."}
+          {slotColor === "yellow" && "Moderate wait time expected."}
+          {slotColor === "red" && "High congestion, expect delays."}
         </p>
       </div>
 
-      {/* Tear Line */}
-      <div className="flex items-center justify-center my-8">
-        <div className="flex-1 border-t-2 border-dashed border-slate-300"></div>
-        <p className="px-4 text-xs text-slate-500 font-semibold">TEAR HERE</p>
-        <div className="flex-1 border-t-2 border-dashed border-slate-300"></div>
+      {/* Footer */}
+      <div className="px-6 py-4 flex items-center text-emerald-700 bg-emerald-50 border-t">
+        <CheckCircle className="w-5 h-5" />
+        <p className="ml-2 text-sm font-semibold">Booking Confirmed & Valid</p>
       </div>
 
-      {/* Receipt Section */}
-      <div className="bg-slate-50 rounded-lg p-6 border border-slate-200">
-        <h3 className="font-bold text-slate-900 mb-4">Booking Receipt</h3>
-        <div className="grid grid-cols-2 gap-4 text-sm">
-          <div>
-            <p className="text-slate-600 text-xs mb-1">BOOKING ID</p>
-            <p className="font-mono font-semibold text-slate-900">{bookingId}</p>
-          </div>
-          <div>
-            <p className="text-slate-600 text-xs mb-1">BOOKING DATE</p>
-            <p className="font-semibold text-slate-900">11 Dec 2025</p>
-          </div>
-          <div>
-            <p className="text-slate-600 text-xs mb-1">LOCATION</p>
-            <p className="font-semibold text-slate-900">ICP Petrapole</p>
-          </div>
-          <div>
-            <p className="text-slate-600 text-xs mb-1">CONTACT</p>
-            <p className="font-semibold text-slate-900">+91-XXXXX-XXXXX</p>
-          </div>
-        </div>
+      {/* Terms Footer */}
+      <div className={`${config.bg} text-white text-xs text-center py-3`}>
+        Pass valid only for specified date and time. Arrive 15 minutes early with travel documents.
       </div>
     </div>
   )
