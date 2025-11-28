@@ -10,7 +10,7 @@ export function About() {
           <div className="inline-block px-4 py-2 bg-teal-50 border border-teal-200 rounded-full mb-6">
             <p className="text-teal-700 text-sm font-medium">About the Portal</p>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4 text-balance">About YYatri Subidha</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4 text-balance">About Yatri Subidha</h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
             A modern queuing system designed to streamline border crossing at ICP Petrapole for international and
             domestic passengers
@@ -20,7 +20,7 @@ export function About() {
         {/* Main Description */}
         <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl p-8 md:p-12 border border-emerald-100 mb-12">
           <p className="text-lg text-slate-700 leading-relaxed">
-            YYatri Subidha portal helps international passengers (both arrival and departure) apply for available time
+            Yatri Subidha portal helps international passengers (both arrival and departure) apply for available time
             slots for smooth and faster clearance at the Passenger Terminal, ICP Petrapole (West Bengal). Passengers can
             select their preferable date and available slot from the portal. The system automatically generates a
             digital pass and sends a link with QR code to the registered mobile number, WhatsApp, and email. Passengers

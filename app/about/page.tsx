@@ -139,7 +139,7 @@ export default function AboutPage() {
               <h3 className="text-3xl font-bold text-slate-900 mb-4">Our Commitment</h3>
               <p className="text-lg text-slate-600 max-w-3xl mx-auto">
                 A dedicated team of experts works round the clock to ensure smooth operations and continuous
-                improvements to the YYatri Subidha system. We are committed to providing the best experience for every
+                improvements to the Yatri Subidha system. We are committed to providing the best experience for every
                 traveler at ICP Petrapole.
               </p>
             </div>
@@ -174,7 +174,7 @@ export default function AboutPage() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h3 className="text-3xl font-bold mb-4">Ready to Experience Seamless Border Crossing?</h3>
             <p className="text-lg text-emerald-100 mb-8">
-              Join thousands of passengers who are already benefiting from YYatri Subidha's efficient slot booking
+              Join thousands of passengers who are already benefiting from Yatri Subidha's efficient slot booking
               system.
             </p>
             <button

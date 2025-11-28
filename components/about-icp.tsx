@@ -11,7 +11,7 @@ export function AboutICP() {
             <p className="text-slate-700 text-sm font-medium">Land Ports Authority of India</p>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4 text-balance">
-            Integrated Check Posts (ICPs) & YYatri Subidha
+            Integrated Check Posts (ICPs) & Yatri Subidha
           </h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
             Modernizing border crossing infrastructure for seamless international travel
@@ -101,11 +101,11 @@ export function AboutICP() {
           </div>
         </div>
 
-        {/* YYatri Subidha Connection */}
+        {/* Yatri Subidha Connection */}
         <div className="mt-16 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl p-8 md:p-12 text-white text-center">
-          <h3 className="text-3xl font-bold mb-4">YYatri Subidha at ICP Petrapole</h3>
+          <h3 className="text-3xl font-bold mb-4">Yatri Subidha at ICP Petrapole</h3>
           <p className="text-lg text-emerald-50 max-w-3xl mx-auto leading-relaxed">
-            YYatri Subidha is the digital queuing system deployed at ICP Petrapole (West Bengal) to implement the ICP
+            Yatri Subidha is the digital queuing system deployed at ICP Petrapole (West Bengal) to implement the ICP
             vision. It leverages modern technology to streamline the border crossing process, reduce congestion, and
             provide passengers with a predictable, efficient travel experience while supporting the Land Ports
             Authority's mission to facilitate seamless cross-border movement.

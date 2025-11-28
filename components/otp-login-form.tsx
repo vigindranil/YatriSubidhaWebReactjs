@@ -6,6 +6,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Mail, Phone, ArrowRight, RotateCcw } from "lucide-react"
 import { generateOTP, verifyOTP } from "./apis/auth"
+import { toast } from "sonner";
 
 interface OTPLoginFormProps {
   onSuccess?: () => void
@@ -24,7 +25,9 @@ export function OTPLoginForm({ onSuccess }: OTPLoginFormProps) {
 
     const response = await generateOTP(contactType, contact)
 
-    console.log(`OTP sent to response`, response)
+    if(response.success){
+      toast.success(response.message || "OTP sent successfully!")
+    }
     setStep("otp")
     setLoading(false)
   }

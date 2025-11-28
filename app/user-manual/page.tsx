@@ -22,7 +22,7 @@ export default function UserManualPage() {
               <h1 className="text-4xl font-bold text-slate-900">User Manual</h1>
             </div>
             <p className="text-lg text-slate-600">
-              Complete guide to using YYatri Subidha portal for smooth border crossing
+              Complete guide to using Yatri Subidha portal for smooth border crossing
             </p>
           </div>
 
@@ -161,7 +161,7 @@ export default function UserManualPage() {
             </h2>
             <div className="bg-white border border-slate-200 rounded-lg p-6 space-y-4">
               <p className="text-slate-600">
-                Your YYatri Subidha Pass will be automatically generated after successful booking.
+                Your Yatri Subidha Pass will be automatically generated after successful booking.
               </p>
               <div>
                 <h3 className="font-semibold text-slate-900 mb-2">Download Your Pass:</h3>
