@@ -51,7 +51,7 @@ export default function GalleryPage() {
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-slate-900 mb-4">Photo Gallery</h1>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-              Visual insights into YYatri Subidha portal infrastructure and operations at ICP Petrapole
+              Visual insights into Yatri Subidha portal infrastructure and operations at ICP Petrapole
             </p>
           </div>
 

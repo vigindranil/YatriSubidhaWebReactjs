@@ -101,7 +101,7 @@ export function AboutICP() {
           </div>
         </div>
 
-        {/* YYatri Subidha Connection */}
+        {/* Yatri Subidha Connection */}
         <div className="mt-16 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl p-8 md:p-12 text-white text-center">
           <h3 className="text-3xl font-bold mb-4">Yatri Subidha at ICP Petrapole</h3>
           <p className="text-lg text-emerald-50 max-w-3xl mx-auto leading-relaxed">
