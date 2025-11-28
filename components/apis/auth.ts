@@ -56,3 +56,36 @@ export const verifyOTP = async (user_name: string, otp: string) => {
     return { success: false, error: "Network error, please try again." };
   }
 };
+
+export const adminLogin = async (user_name: string, password: string, user_type_id: string) => {
+  try {
+    const response = await fetch(`${BASE_URL}admin/auth/get-admin-login-details`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "UserName": user_name,
+        "Password": password,
+        "UserTypeID": user_type_id,
+        "AuthInfo": "{}"
+      }),
+    });
+
+
+    const data = await response.json();
+    if (data.success) {
+      Cookies.save("token", data?.data?.authToken, { path: "/", maxAge: 60 * 60 * 24 });
+      Cookies.save("userID", data?.data?.user_id, { path: "/", maxAge: 60 * 60 * 24 });
+      Cookies.save("userName", data?.data?.user_name, { path: "/", maxAge: 60 * 60 * 24 });
+      Cookies.save("userTypeID", data?.data?.user_type_id, { path: "/", maxAge: 60 * 60 * 24 });
+      Cookies.save("userFullName", data?.data?.user_full_name, { path: "/", maxAge: 60 * 60 * 24 });
+    }
+    console.log(data);
+
+
+    return data;
+  } catch (error) {
+    return { success: false, error: "Network error, please try again." };
+  }
+};
