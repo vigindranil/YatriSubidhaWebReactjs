@@ -111,7 +111,7 @@ export function OTPLoginForm({ onSuccess }: OTPLoginFormProps) {
               <strong>OTP sent to:</strong> {contactType === "phone" ? contact : contact}
             </p>
             <p className="text-xs text-slate-600 mt-2">
-              Check your {contactType === "phone" ? "SMS/WhatsApp" : "email"} for the 6-digit code
+              Check your {contactType === "phone" ? "SMS/WhatsApp" : "email"} for the 4-digit code
             </p>
           </div>
 
