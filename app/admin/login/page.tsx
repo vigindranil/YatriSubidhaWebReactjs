@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import { AdvancedCaptcha } from "@/components/advanced-captcha"
 import { Lock, ArrowRight, Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
+import { adminLogin } from "@/components/apis/auth"
+import { toast } from "sonner"
 
 export default function AdminLoginPage() {
   const router = useRouter()
@@ -57,46 +59,62 @@ export default function AdminLoginPage() {
   }
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError("")
 
-    if (!formData.adminType || !formData.username || !formData.password) {
-      setError("Please fill in all fields.")
+    try {
+
+      e.preventDefault()
+      setLoading(true)
+      setError("")
+
+      if (!formData.adminType || !formData.username || !formData.password) {
+        toast.error("Please fill in all fields.");
+        setError("Please fill in all fields.")
+        setLoading(false)
+        return
+      }
+
+      if (formData.captcha.toUpperCase().trim() !== captchaCode) {
+        toast.error("Invalid CAPTCHA. Please try again.");
+        setError("Invalid CAPTCHA. Please try again.")
+        setFormData((prev) => ({
+          ...prev,
+          captcha: "",
+        }))
+        setCaptchaCode(generateCaptcha())
+        setLoading(false)
+        return
+      }
+
+      const creds: Record<string, { user: string; pass: string; route: string }> = {
+        "1": { user: "superadmin", pass: "admin123", route: "/admin/dashboard" },
+        "2": { user: "operator", pass: "operator123", route: "/admin/operator" },
+        "3": { user: "boi", pass: "boi123", route: "/admin/dashboard" },
+        "4": { user: "customs", pass: "customs123", route: "/admin/dashboard" },
+        "5": { user: "bsf", pass: "bsf123", route: "/admin/dashboard" },
+        "6": { user: "lpai", pass: "lpai123", route: "/admin/dashboard" },
+      }
+
+      const cfg = creds[formData.adminType]
+
+      const res = await adminLogin(formData.username, formData.password, formData.adminType);
+      if (res.success) {
+        toast.success("Login successful.");
+        router.push(cfg.route)
+      }
+      else {
+        toast.error(res.message)
+        setError(res.message)
+        setLoading(false)
+        return
+      }
+
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to login, please try again.");
+      setError("Failed to login, please try again.")
+    } finally {
       setLoading(false)
-      return
     }
-
-    if (formData.captcha.toUpperCase().trim() !== captchaCode) {
-      setError("Invalid CAPTCHA. Please try again.")
-      setFormData((prev) => ({
-        ...prev,
-        captcha: "",
-      }))
-      setCaptchaCode(generateCaptcha())
-      setLoading(false)
-      return
-    }
-
-    const creds: Record<string, { user: string; pass: string; route: string }> = {
-      "1": { user: "superadmin", pass: "admin123", route: "/admin/dashboard" },
-      "2": { user: "operator", pass: "operator123", route: "/admin/operator" },
-      "3": { user: "boi", pass: "boi123", route: "/admin/dashboard" },
-      "4": { user: "customs", pass: "customs123", route: "/admin/dashboard" },
-      "5": { user: "bsf", pass: "bsf123", route: "/admin/dashboard" },
-      "6": { user: "lpai", pass: "lpai123", route: "/admin/dashboard" },
-    }
-
-    const cfg = creds[formData.adminType]
-    await new Promise((resolve) => setTimeout(resolve, 800))
-
-    if (!cfg || formData.username !== cfg.user || formData.password !== cfg.pass) {
-      setError("Invalid credentials")
-      setLoading(false)
-      return
-    }
-
-    router.push(cfg.route)
   }
 
   return (
