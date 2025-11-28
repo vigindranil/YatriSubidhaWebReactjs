@@ -52,15 +52,6 @@ export function NewBooking() {
     getAvailableSlotByDate()
   }, [])
 
-  // Mock data for slots
-  // const slots: Slot[] = [
-  //   { id: "8", name: "SLOT-8", timing: "01:00 PM TO 01:59 PM", capacity: 100, booked: 0, available: 100 },
-  //   { id: "9", name: "SLOT-9", timing: "02:00 PM TO 02:59 PM", capacity: 100, booked: 0, available: 100 },
-  //   { id: "10", name: "SLOT-10", timing: "03:00 PM TO 03:59 PM", capacity: 100, booked: 0, available: 100 },
-  //   { id: "11", name: "SLOT-11", timing: "04:00 PM TO 04:59 PM", capacity: 100, booked: 0, available: 100 },
-  //   { id: "12", name: "SLOT-12", timing: "05:00 PM TO 05:59 PM", capacity: 100, booked: 0, available: 100 },
-  // ]
-
   const handleSort = (field: SortField) => {
     if (sortField === field) {
       setSortDirection(sortDirection === "asc" ? "desc" : "asc")

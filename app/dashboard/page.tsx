@@ -23,6 +23,12 @@ function DashboardContent() {
     }
   }, [searchParams])
 
+  useEffect(() => {
+    if(activeTab === "book"){
+      getDepartures()
+    }
+  }, [activeTab])
+
   const getDepartures = async () => {
     const response = await callApi("admin/arrival-departure-count", { AuthInfo: "{}", FromDate: new Date().toISOString().split("T")[0], ToDate: new Date().toISOString().split("T")[0], Type: 2 })
     if (response.success) {
@@ -33,10 +39,6 @@ function DashboardContent() {
       })
     }
   }
-
-  useEffect(() => {
-    getDepartures()
-  }, [])
 
   return (
     <>
