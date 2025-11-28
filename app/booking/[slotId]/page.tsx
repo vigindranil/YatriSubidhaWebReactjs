@@ -318,7 +318,7 @@ function BookingContent() {
                               handlePassengerChange(
                                 passenger.id,
                                 "mobileNumber",
-                                e.target.value.replace(/\D/g, "")
+                              e.target.value.replace(/\D/g, "").slice(0, 10) 
                               )
                             }
                             className="flex-1"

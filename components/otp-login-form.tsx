@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Mail, Phone, ArrowRight, RotateCcw } from "lucide-react"
 import { generateOTP, verifyOTP } from "./apis/auth"
 import { toast } from "sonner";
+import { countryCodes } from "../country/countries";
 
 interface OTPLoginFormProps {
   onSuccess?: () => void
@@ -18,29 +19,49 @@ export function OTPLoginForm({ onSuccess }: OTPLoginFormProps) {
   const [contact, setContact] = useState("")
   const [otp, setOtp] = useState("")
   const [loading, setLoading] = useState(false)
+  const [countryCode, setCountryCode] = useState("+91");
 
   const handleSendOTP = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
+    try {
+      e.preventDefault()
+      setLoading(true)
 
-    const response = await generateOTP(contactType, contact)
+      const fullContact = contactType === "phone" ? `${countryCode}${contact}` : contact;
+      const response = await generateOTP(contactType, fullContact)
 
-    if(response.success){
-      toast.success(response.message || "OTP sent successfully!")
+      if (response.success) {
+        toast.success("OTP sent successfully!")
+        setStep("otp")
+      } else {
+        toast.error(response.message || "Failed to send OTP!")
+      }
+    } catch (error) {
+      console.error("Error sending OTP:", error)
+      toast.error("Failed to send OTP!")
+    } finally {
+      setLoading(false)
     }
-    setStep("otp")
-    setLoading(false)
   }
 
   const handleVerifyOTP = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
+    try {
+      e.preventDefault()
+      setLoading(true)
 
-    const response = await verifyOTP(contact, otp)
-
-    console.log(`OTP verified: ${response}`)
-    setLoading(false)
-    onSuccess?.()
+      const fullContact = contactType === "phone" ? `${countryCode}${contact}` : contact;
+      const response = await verifyOTP(fullContact, otp)
+      if (response.success) {
+        toast.success("OTP verified successfully!")
+        onSuccess?.()
+      } else {
+        toast.error(response.message || "Failed to verify OTP!")
+      }
+    } catch (error) {
+      console.error("Error verifying OTP:", error)
+      toast.error("Failed to verify OTP!")
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleReset = () => {
@@ -85,14 +106,62 @@ export function OTPLoginForm({ onSuccess }: OTPLoginFormProps) {
             <label className="block text-sm font-semibold text-slate-900 mb-2">
               {contactType === "phone" ? "Mobile Number" : "Email Address"}
             </label>
-            <input
-              type={contactType === "phone" ? "tel" : "email"}
-              value={contact}
-              onChange={(e) => setContact(e.target.value)}
-              placeholder={contactType === "phone" ? "+91 XXXXX XXXXX" : "your.email@example.com"}
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-              required
-            />
+
+            <div className="flex gap-2">
+              {contactType === "phone" && (
+                <select
+                  className="w-1/3 px-3 py-3 border border-slate-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  value={countryCode}
+                  onChange={(e) => setCountryCode(e.target.value)}
+                >
+                  <option value="" disabled>Select Country</option>
+                  {countryCodes
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map((country) => (
+                      <option key={`${country.code}-${country.name}`} value={country.code}>
+                        {country.flag} ({country.code})
+                      </option>
+                    ))}
+                </select>
+              )}
+
+              {contactType === "phone" ? (
+                <input
+                  type="tel"
+                  value={contact}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, "");
+                    setContact(
+                      countryCode === "+91"
+                        ? value.slice(0, 10) // Indian strict 10-digit rule
+                        : value.slice(0, 15) // International up to 15 digits
+                    );
+                  }}
+                  placeholder={
+                    countryCode === "+91"
+                      ? "Enter 10-digit mobile number"
+                      : "Enter mobile number"
+                  }
+                  className="w-2/3 px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  required
+                />
+              ) : (
+                <input
+                  type="email"
+                  value={contact}
+                  onChange={(e) => setContact(e.target.value)}
+                  placeholder="your.email@example.com"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  required
+                />
+              )}
+            </div>
+
+            {contactType === "phone" && countryCode === "+91" && contact.length > 0 && contact.length < 10 && (
+              <p className="text-xs text-red-500 mt-1">
+                Mobile number must be exactly 10 digits
+              </p>
+            )}
           </div>
 
           <Button
@@ -122,7 +191,7 @@ export function OTPLoginForm({ onSuccess }: OTPLoginFormProps) {
               value={otp}
               onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 4))}
               placeholder="0000"
-              maxLength="4"
+              maxLength={4}
               className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-center text-2xl tracking-widest font-mono"
               required
             />
