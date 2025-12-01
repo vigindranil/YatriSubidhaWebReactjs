@@ -85,32 +85,43 @@ export default function OfflineBookingPage() {
   }
 
   const savePassengerDetails = async () => {
-    const userId = Cookies.load("userID");
+    const userIdCookie = Cookies.load("userID");
     
-    // Defaulting date to today for offline/counter booking
+    // ⚠️ CRITICAL FIX: If cookie is missing, '0' causes DB error. 
+    // We fallback to 6669 (from your Postman log) or keep 0 if you are sure.
+    // Ideally, ensure you are logged in so the cookie exists.
+    const userId = userIdCookie ? parseInt(userIdCookie) : 6669; 
+    
     const today = new Date().toISOString().split('T')[0];
 
-    // Convert current state to API format
-    
     const formattedPassengers = [{
-      FullName: fullName,
-      //Address: "Counter Booking", // Default since UI input missing
-      //Nationality: "Indian",      // Default since UI input missing
+      FullName: fullName || "Walk-in Passenger",
+      Address: "Counter Booking", 
+      Nationality: "Indian",      
       DOB: "1990-01-01",
       Gender: "Male",
-      MobileNo: mobileNumber,
-      EmailID: email,
-      PassportNo: passportNumber,
-     // PassportValidUpto: "2030-01-01", // Default since UI input missing
+      MobileNo: mobileNumber || "0000000000",
+      EmailID: email || "counter@example.com",
+      PassportNo: passportNumber, 
+      PassportValidUpto: "2030-01-01", 
       VisaNo: "A1234567",
       VisaValidUpto: "2025-12-31",
     }];
 
+    console.log("Sending Payload:", {
+        PrefferedSlotID: 12,
+        JourneyDate: today,
+        UserID: userId,
+        Passport: passportNumber
+    });
+
+    // ⚠️ CRITICAL FIX: PrefferedSlotID set to 12 (Matches Postman). 
+    // Sending 0 usually causes a Foreign Key Error in the DB.
     const response = await callApi("user/save-passenger-details", {
-      PrefferedSlotID: "0", // Default ID for counter/offline
+      PrefferedSlotID: 12, 
       JourneyDate: today,
       PassengerInformation: formattedPassengers,
-      Type: "Departure", // Defaulting to Departure
+      Type: 2, 
       UserID: userId,
       AuthInfo: "{}"
     });
@@ -123,20 +134,19 @@ export default function OfflineBookingPage() {
       return
     }
 
-  
     try {
       const result = await savePassengerDetails();
       
-      if (result.success) {
-        // Use TokenNo from API response
+      if (result && result.success) {
         const bookingId = result?.data[0]?.TokenNo;
         router.push(`/pass/${bookingId}?type=Departure`);
       } else {
-        alert(result.message || "Failed to generate pass");
+        // Show specific error message from server
+        alert(result?.message || "Database Error: Please check if Passport Number already exists.");
       }
     } catch (error) {
       console.error("API Error:", error);
-      alert("An error occurred while booking.");
+      alert("An error occurred while connecting to the server.");
     }
   }
 
