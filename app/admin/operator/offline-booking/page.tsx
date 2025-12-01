@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/select"
 import { PaymentGateway } from "@/components/payment-gateway"
 import { ArrowLeft, CheckCircle, CreditCard, Printer, Users } from "lucide-react"
+import { callApi } from "@/components/apis/commonApi"
+import Cookies from "react-cookies"
 
 export default function OfflineBookingPage() {
   const router = useRouter()
@@ -82,14 +84,60 @@ export default function OfflineBookingPage() {
     issueReceipt("Online")
   }
 
-  const handleIssuePass = () => {
+  const savePassengerDetails = async () => {
+    const userId = Cookies.load("userID");
+    
+    // Defaulting date to today for offline/counter booking
+    const today = new Date().toISOString().split('T')[0];
+
+    // Convert current state to API format
+    
+    const formattedPassengers = [{
+      FullName: fullName,
+      //Address: "Counter Booking", // Default since UI input missing
+      //Nationality: "Indian",      // Default since UI input missing
+      DOB: "1990-01-01",
+      Gender: "Male",
+      MobileNo: mobileNumber,
+      EmailID: email,
+      PassportNo: passportNumber,
+     // PassportValidUpto: "2030-01-01", // Default since UI input missing
+      VisaNo: "A1234567",
+      VisaValidUpto: "2025-12-31",
+    }];
+
+    const response = await callApi("user/save-passenger-details", {
+      PrefferedSlotID: "0", // Default ID for counter/offline
+      JourneyDate: today,
+      PassengerInformation: formattedPassengers,
+      Type: "Departure", // Defaulting to Departure
+      UserID: userId,
+      AuthInfo: "{}"
+    });
+    return response;
+  }
+
+  const handleIssuePass = async () => {
     if (!paymentDone) {
       alert("Complete payment first")
       return
     }
 
-    const bookingId = `AS-${Date.now()}`
-    router.push(`/pass/${bookingId}`)
+  
+    try {
+      const result = await savePassengerDetails();
+      
+      if (result.success) {
+        // Use TokenNo from API response
+        const bookingId = result?.data[0]?.TokenNo;
+        router.push(`/pass/${bookingId}?type=Departure`);
+      } else {
+        alert(result.message || "Failed to generate pass");
+      }
+    } catch (error) {
+      console.error("API Error:", error);
+      alert("An error occurred while booking.");
+    }
   }
 
   const printReceipt = () => {
