@@ -3,13 +3,16 @@
 import { use, useEffect, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { DigitalPass } from "@/components/digital-pass"
-import { Download, Share2, Printer, ArrowLeft } from "lucide-react"
+import { Download, Share2, Printer, ArrowLeft, Mail, MessageCircle, MessageSquare } from "lucide-react"
 import { callApi } from "@/components/apis/commonApi"
 import { useRouter, useSearchParams } from "next/navigation"
+// Switched to html-to-image to fix the 'lab' color error
+import { toPng } from "html-to-image"
+import jsPDF from "jspdf"
 
 export default function PassPage({ params }: { params: Promise<{ bookingId: string }> }) {
   const { bookingId } = use(params)
-  const passRef = useRef(null)
+  const passRef = useRef<HTMLDivElement>(null)
   const [showShareMenu, setShowShareMenu] = useState(false)
   const [bookingDetails, setBookingDetails] = useState<any>([])
   const searchParams = useSearchParams()
@@ -31,8 +34,52 @@ export default function PassPage({ params }: { params: Promise<{ bookingId: stri
     window.print()
   }
 
-  const handleDownload = () => {
-    window.print()
+  const handleDownload = async () => {
+    if (!passRef.current) return
+
+    try {
+      // Using toPng from html-to-image handles modern CSS colors correctly
+      const dataUrl = await toPng(passRef.current, { cacheBust: true })
+      
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
+      })
+
+      const imgProperties = pdf.getImageProperties(dataUrl)
+      const pdfWidth = pdf.internal.pageSize.getWidth()
+      const pdfHeight = (imgProperties.height * pdfWidth) / imgProperties.width
+
+      // Add image to PDF (x, y, width, height)
+      pdf.addImage(dataUrl, "PNG", 0, 10, pdfWidth, pdfHeight)
+      pdf.save(`Yatri-Subidha-Pass-${bookingId}.pdf`)
+    } catch (error) {
+      console.error("Error generating PDF:", error)
+    }
+  }
+
+  const getShareText = () => {
+    // Using \r\n ensures new lines work correctly on most mobile clients
+    return `Here is my Yatri Subidha Pass.\r\n\r\nReference: ${bookingDetails[0]?.TokenNo || bookingId}\r\nDate: ${bookingDetails[0]?.JourneyDate}\r\nTime: ${bookingDetails[0]?.SlotTime}`
+  }
+
+  const shareViaEmail = () => {
+    const subject = "My Yatri Subidha Pass"
+    window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(getShareText())}`
+    setShowShareMenu(false)
+  }
+
+  const shareViaWhatsApp = () => {
+    const text = getShareText()
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank")
+    setShowShareMenu(false)
+  }
+
+  const shareViaSMS = () => {
+    // ?& ensures compatibility with both iOS and Android
+    window.location.href = `sms:?&body=${encodeURIComponent(getShareText())}`
+    setShowShareMenu(false)
   }
 
   const router = useRouter();
@@ -68,7 +115,6 @@ export default function PassPage({ params }: { params: Promise<{ bookingId: stri
             qrCode="/qr-code.png"
             passengers={bookingDetails || []}
           />
-
         </div>
 
         {/* Action Buttons */}
@@ -84,20 +130,40 @@ export default function PassPage({ params }: { params: Promise<{ bookingId: stri
           </Button>
 
           <div className="relative">
-            <Button onClick={() => setShowShareMenu(!showShareMenu)} variant="outline" className="w-full gap-2">
+            <Button 
+              onClick={() => setShowShareMenu(!showShareMenu)} 
+              variant="outline" 
+              className="w-full gap-2 relative"
+            >
               <Share2 className="w-4 h-4" />
               Share
             </Button>
 
             {showShareMenu && (
-              <div className="absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-lg shadow-lg z-10">
-                <button className="w-full text-left px-4 py-2 hover:bg-slate-50 border-b border-slate-200">
-                  Email
-                </button>
-                <button className="w-full text-left px-4 py-2 hover:bg-slate-50 border-b border-slate-200">
-                  WhatsApp
-                </button>
-                <button className="w-full text-left px-4 py-2 hover:bg-slate-50">SMS</button>
+              <div className="absolute right-0 bottom-full mb-2 sm:bottom-auto sm:top-full sm:mt-2 w-56 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                <div className="p-1">
+                  <button
+                    onClick={shareViaEmail}
+                    className="flex items-center w-full text-left px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-emerald-600 rounded-lg transition-colors"
+                  >
+                    <Mail className="w-4 h-4 mr-3" />
+                    Share via Email
+                  </button>
+                  <button
+                    onClick={shareViaWhatsApp}
+                    className="flex items-center w-full text-left px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-emerald-600 rounded-lg transition-colors"
+                  >
+                    <MessageCircle className="w-4 h-4 mr-3" />
+                    Share via WhatsApp
+                  </button>
+                  <button
+                    onClick={shareViaSMS}
+                    className="flex items-center w-full text-left px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-emerald-600 rounded-lg transition-colors"
+                  >
+                    <MessageSquare className="w-4 h-4 mr-3" />
+                    Share via SMS
+                  </button>
+                </div>
               </div>
             )}
           </div>
