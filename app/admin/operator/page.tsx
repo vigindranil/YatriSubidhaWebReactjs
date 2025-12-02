@@ -3,7 +3,7 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { CreditCard, ClipboardList, Users, ArrowUpRight, ArrowDownLeft, LogOut, UserCircle } from "lucide-react"
+import { CreditCard, ClipboardList, Users, ArrowUpRight, ArrowDownLeft, LogOut, UserCircle, FileText } from "lucide-react"
 import { useState } from "react"
 
 export default function OperatorDashboardPage() {
@@ -45,6 +45,13 @@ export default function OperatorDashboardPage() {
                 <Button className="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white gap-2 shadow-lg shadow-indigo-500/25 hover:shadow-xl transition-all duration-300 font-semibold">
                   <ClipboardList className="w-4 h-4" />
                   Online Booking
+                </Button>
+              </Link>
+               
+              <Link href="/admin/operator/booking-report">
+                <Button className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white gap-2 shadow-lg shadow-blue-500/30 hover:shadow-xl transition-all duration-300 font-semibold">
+                  <FileText className="w-4 h-4" />
+                  Booking Report
                 </Button>
               </Link>
 

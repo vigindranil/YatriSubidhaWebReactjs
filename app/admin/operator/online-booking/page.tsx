@@ -16,7 +16,9 @@ type Payment = {
   transaction_number?: string
   payment_date?: string
 }
+
 type Booking = {
+  booking_id?: number // Added to store BookingID for the update API
   booking_number: string
   customer_name: string
   mobile_number?: string
@@ -42,7 +44,6 @@ export default function OnlineBookingPage() {
     setError(null)
     setBooking(null)
     try {
-
       const response = await fetch(`${BASE_URL}user/slot/get-departure-booking-details-by-token-number`, {
         method: "POST",
         headers: {
@@ -65,6 +66,7 @@ export default function OnlineBookingPage() {
 
         // Map API response to your existing Booking type
         const mappedBooking: Booking = {
+          booking_id: apiData.BookingID, // Capturing ID for the update call
           booking_number: apiData.TokenNo,
           customer_name: apiData.PasengerName,
           mobile_number: apiData.MobileNo,
@@ -74,8 +76,8 @@ export default function OnlineBookingPage() {
           status: apiData.AttendanceStatus === "NOT ATTENDED" ? "pending" : "checked",
 
           payment: {
-            method: "Online", // Defaulting as this is OnlineBookingPage
-            amount: 200, // Not provided in API
+            method: "Online", 
+            amount: 200, 
             transaction_number: "TXN" + apiData?.TokenNo,
             payment_date: new Date(apiData.JourneyDate).toLocaleDateString() || "-"
           },
@@ -96,18 +98,39 @@ export default function OnlineBookingPage() {
   }
 
   async function markChecked() {
-    if (!booking) return
+    if (!booking || !booking.booking_id) return
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch(`/api/mock-booking/${encodeURIComponent(booking.booking_number)}/check`, {
+      const response = await fetch(`${BASE_URL}admin/update-booking-attendance`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ operator: "operator-ui" }),
+        headers: { 
+          "Content-Type": "application/json" 
+        },
+        body: JSON.stringify({ 
+          "BookingID": booking.booking_id,
+          "AuthInfo": "{}"
+        }),
       })
-      if (!res.ok) throw new Error(await res.text())
-      const updated = await res.json()
-      setBooking(updated)
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`)
+      }
+      
+      const json = await response.json()
+      
+      if (json.success) {
+        // Update local state to show checked status immediately
+        setBooking(prev => prev ? ({
+            ...prev,
+            status: "checked",
+            checked_by: "Operator",
+            checked_at: new Date().toLocaleDateString()
+        }) : null)
+      } else {
+        throw new Error(json.message || "Failed to update attendance")
+      }
+
     } catch (err: any) {
       setError(err?.message ?? "Failed to update")
     } finally {
@@ -198,26 +221,11 @@ export default function OnlineBookingPage() {
                 </div>
               </div>
 
-              {/* QR Scanner Section */}
-              {/* <div className="border-t-2 border-slate-200 pt-6">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-4 h-4 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
-                  </svg>
-                </div>
-                <p className="text-sm font-semibold text-slate-700">Or scan booking QR code</p>
-              </div>
-              <div className="bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl p-4 max-w-md">
-                <QrScanner onScan={handleScan} />
-              </div>
-            </div> */}
-
               {/* Status Messages */}
               {loading && (
                 <div className="mt-6 flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-xl px-4 py-3">
                   <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                  <span className="text-sm font-medium text-blue-700">Searching for booking...</span>
+                  <span className="text-sm font-medium text-blue-700">Searching / Updating...</span>
                 </div>
               )}
               {error && (

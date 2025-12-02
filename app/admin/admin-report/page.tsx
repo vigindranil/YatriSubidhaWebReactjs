@@ -14,7 +14,8 @@ import {
   ChevronDown,
   ChevronUp,
   Filter,
-  Check
+  Check,
+  FileText
 } from "lucide-react";
 import { callApi } from "@/components/apis/commonApi";
 
@@ -30,6 +31,7 @@ interface BookingData {
   nationality: string;
   phone: string;
   email: string;
+  journeyType: string;
 }
 
 const SLOT_OPTIONS = [
@@ -39,7 +41,7 @@ const SLOT_OPTIONS = [
 
 export default function BookingReport() {
   const [formData, setFormData] = useState({
-    journeyType: '2',
+    journeyType: '2', // Default 2 for Arrival
     slot: '', // Empty string = All Slots
     startDate: new Date().toISOString().split('T')[0],
     endDate: new Date().toISOString().split('T')[0]
@@ -95,10 +97,12 @@ export default function BookingReport() {
     setExpandedRows(new Set());
 
     try {
+      const typeValue = parseInt(formData.journeyType) || 2;
+      
       const payload = {
         FromDate: formData.startDate,
         ToDate: formData.endDate,
-        Type: parseInt(formData.journeyType) || 2,
+        Type: typeValue,
         AuthInfo: "{}",
         PageNumber: 1,
         SlotName: formData.slot
@@ -120,7 +124,8 @@ export default function BookingReport() {
           attendanceDate: item.AttendenceDate ? new Date(item.AttendenceDate).toLocaleDateString() : 'N/A',
           nationality: item.Nationality,
           phone: item.MobileNo,
-          email: item.EmailID
+          email: item.EmailID,
+          journeyType: typeValue === 2 ? "Arrival" : "Departure"
         }));
 
         if (formData.slot) {
@@ -164,6 +169,14 @@ export default function BookingReport() {
                 <UserCircle className="w-5 h-5 text-emerald-400" />
                 <span className="text-white font-medium text-sm">Operator #12</span>
               </div>
+              
+              <Link href="/admin/operator/booking-report">
+                <Button className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white gap-2 shadow-lg shadow-blue-500/30 hover:shadow-xl transition-all duration-300 font-semibold">
+                  <FileText className="w-4 h-4" />
+                  Booking Report
+                </Button>
+              </Link>
+
               <Link href="/admin/operator/offline-booking">
                 <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white gap-2 shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/40 transition-all duration-300 font-semibold">
                   <CreditCard className="w-4 h-4" />
@@ -211,8 +224,8 @@ export default function BookingReport() {
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-lg text-gray-900 appearance-none focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all font-medium cursor-pointer"
                 >
-                  <option value="1">Arrival</option>
-                  <option value="2">Departure</option>
+                  <option value="2">Arrival</option>
+                  <option value="1">Departure</option>
                 </select>
                 <ChevronDown className="absolute right-3 top-3.5 text-gray-400 pointer-events-none" size={16} />
               </div>
@@ -229,7 +242,6 @@ export default function BookingReport() {
                       : 'border-gray-200 bg-slate-50 hover:bg-slate-100'
                   }`}
                 >
-                  {/* TEXT IS NOW ALWAYS BLACK (GRAY-900) */}
                   <span className="font-medium text-gray-900">
                     {formData.slot || "All Slots"}
                   </span>
@@ -311,6 +323,7 @@ export default function BookingReport() {
                 <tr className="bg-slate-50 border-b border-gray-200">
                   <th className="w-12 px-4 py-4"></th>
                   <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Name</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Type</th>
                   <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Attendance Status</th>
                   <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Journey Date</th>
                   <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Slot Name</th>
@@ -320,7 +333,7 @@ export default function BookingReport() {
               <tbody className="divide-y divide-gray-100">
                 {bookings.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="px-6 py-16 text-center">
+                    <td colSpan={7} className="px-6 py-16 text-center">
                       <div className="flex flex-col items-center justify-center text-gray-400">
                         <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
                             <Search size={32} className="opacity-40" />
@@ -343,6 +356,15 @@ export default function BookingReport() {
                           </td>
                           <td className="px-6 py-4 text-sm text-gray-900 font-bold truncate" title={booking.name}>{booking.name}</td>
                           <td className="px-6 py-4 text-sm">
+                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                              booking.journeyType === 'Arrival' 
+                                ? 'bg-blue-100 text-blue-800' 
+                                : 'bg-purple-100 text-purple-800'
+                            }`}>
+                              {booking.journeyType}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-sm">
                             <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold shadow-sm ${
                               booking.attendanceStatus !== 'NOT ATTENDED' 
                               ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' 
@@ -362,7 +384,7 @@ export default function BookingReport() {
                         </tr>
                         {isExpanded && (
                           <tr className="bg-slate-50/50 border-b border-gray-100 shadow-inner">
-                            <td colSpan={6} className="px-6 py-6">
+                            <td colSpan={7} className="px-6 py-6">
                               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-top-1 duration-200 pl-4">
                                 <div className="space-y-1">
                                   <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Reference Number</p>
