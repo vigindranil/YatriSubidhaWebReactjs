@@ -179,8 +179,8 @@ export default function BookingReport() {
                 onChange={handleInputChange}
                 className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
               >
-                <option value="1">Arrival (1)</option>
-                <option value="2">Departure (2)</option>
+                <option value="1">Arrival </option>
+                <option value="2">Departure </option>
               </select>
             </div>
 
