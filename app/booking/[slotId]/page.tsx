@@ -293,7 +293,7 @@ function BookingContent() {
                           <Select
                             value={passenger.countryCode}
                             onValueChange={(value) =>
-                              handlePassengerChange(passenger.id, "countryCode", value)
+                              handlePassengerChange(passenger.id, value)
                             }
                           >
                             <SelectTrigger className="w-32">
