@@ -16,6 +16,7 @@ import { PaymentGateway } from "@/components/payment-gateway"
 import { ArrowLeft, CheckCircle, CreditCard, Printer, Users } from "lucide-react"
 import { callApi } from "@/components/apis/commonApi"
 import Cookies from "react-cookies"
+import { AdminNav } from "@/components/admin-nav"
 
 export default function OfflineBookingPage() {
   const router = useRouter()
@@ -86,42 +87,42 @@ export default function OfflineBookingPage() {
 
   const savePassengerDetails = async () => {
     const userIdCookie = Cookies.load("userID");
-    
+
     // ⚠️ CRITICAL FIX: If cookie is missing, '0' causes DB error. 
     // We fallback to 6669 (from your Postman log) or keep 0 if you are sure.
     // Ideally, ensure you are logged in so the cookie exists.
-    const userId = userIdCookie ? parseInt(userIdCookie) : 6669; 
-    
+    const userId = userIdCookie ? parseInt(userIdCookie) : 6669;
+
     const today = new Date().toISOString().split('T')[0];
 
     const formattedPassengers = [{
       FullName: fullName || "Walk-in Passenger",
-      Address: "Counter Booking", 
-      Nationality: "Indian",      
+      Address: "Counter Booking",
+      Nationality: "Indian",
       DOB: "1990-01-01",
       Gender: "Male",
       MobileNo: mobileNumber || "0000000000",
       EmailID: email || "counter@example.com",
-      PassportNo: passportNumber, 
-      PassportValidUpto: "2030-01-01", 
+      PassportNo: passportNumber,
+      PassportValidUpto: "2030-01-01",
       VisaNo: "A1234567",
       VisaValidUpto: "2025-12-31",
     }];
 
     console.log("Sending Payload:", {
-        PrefferedSlotID: 12,
-        JourneyDate: today,
-        UserID: userId,
-        Passport: passportNumber
+      PrefferedSlotID: 12,
+      JourneyDate: today,
+      UserID: userId,
+      Passport: passportNumber
     });
 
     // ⚠️ CRITICAL FIX: PrefferedSlotID set to 12 (Matches Postman). 
     // Sending 0 usually causes a Foreign Key Error in the DB.
     const response = await callApi("user/save-passenger-details", {
-      PrefferedSlotID: 12, 
+      PrefferedSlotID: 12,
       JourneyDate: today,
       PassengerInformation: formattedPassengers,
-      Type: 2, 
+      Type: 2,
       UserID: userId,
       AuthInfo: "{}"
     });
@@ -136,7 +137,7 @@ export default function OfflineBookingPage() {
 
     try {
       const result = await savePassengerDetails();
-      
+
       if (result && result.success) {
         const bookingId = result?.data[0]?.TokenNo;
         router.push(`/pass/${bookingId}?type=Departure`);
@@ -156,28 +157,7 @@ export default function OfflineBookingPage() {
 
   return (
     <main className="min-h-screen bg-slate-100">
-      <div className="bg-slate-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">AS</span>
-            </div>
-            <span className="font-bold text-xl">Counter Operator</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link href="/admin/operator/online-booking">
-              <Button className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2">
-                <CreditCard className="w-4 h-4" />
-                Offline Booking
-              </Button>
-            </Link>
-            <Button variant="outline" className="border-white/30 text-white bg-transparent gap-2">
-              <Users className="w-4 h-4" />
-              Queue
-            </Button>
-          </div>
-        </div>
-      </div>
+      <AdminNav />
       {showGateway && (
         <PaymentGateway amount={Number(amount)} onPaymentSuccess={handlePaymentSuccess} onCancel={() => setShowGateway(false)} />
       )}
@@ -203,131 +183,131 @@ export default function OfflineBookingPage() {
           <div className="p-6">
             <p className="text-slate-600 mb-6">Passport number is mandatory. Other fields are optional.</p>
 
-          <div className="grid lg:grid-cols-3 gap-6">
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-semibold text-slate-900 mb-2">Passport Number *</label>
-                <Input value={passportNumber} onChange={(e) => setPassportNumber(e.target.value)} placeholder="N12345678" required />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-slate-900 mb-2">Full Name</label>
-                <Input value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="John Doe" />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-slate-900 mb-2">Mobile Number</label>
-                <Input value={mobileNumber} onChange={(e) => setMobileNumber(e.target.value)} placeholder="+91-XXXXXXXXXX" />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-slate-900 mb-2">Email Address</label>
-                <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="name@example.com" />
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-semibold text-slate-900 mb-2">Payment Method</label>
-                <Select value={paymentMethod} onValueChange={(v) => setPaymentMethod(v as any)}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="online">Online</SelectItem>
-                    <SelectItem value="offline">Offline (Cash)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {paymentMethod === "offline" && (
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-900 mb-2">Currency</label>
-                    <Select value={currency} onValueChange={setCurrency}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {currencies.map((c) => (
-                          <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-900 mb-2">Amount</label>
-                    <Input type="number" min={1} value={amount} onChange={(e) => setAmount(e.target.value)} />
-                  </div>
+            <div className="grid lg:grid-cols-3 gap-6">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-slate-900 mb-2">Passport Number *</label>
+                  <Input value={passportNumber} onChange={(e) => setPassportNumber(e.target.value)} placeholder="N12345678" required />
                 </div>
-              )}
 
-              {paymentDone ? (
-                <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3">
-                  <p className="text-sm font-semibold text-emerald-700 flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4" /> Payment Completed
-                  </p>
+                <div>
+                  <label className="block text-sm font-semibold text-slate-900 mb-2">Full Name</label>
+                  <Input value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="John Doe" />
                 </div>
-              ) : (
-                <Button onClick={handlePay} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white gap-2">
-                  <CreditCard className="w-4 h-4" />
-                  {paymentMethod === "online" ? "Pay Online" : "Record Cash Payment"}
-                </Button>
-              )}
-            </div>
-            <div className="space-y-4">
-              <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
-                <h3 className="font-bold text-slate-900 mb-3">Passenger Summary</h3>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between"><span className="text-slate-600">Passport</span><span className="font-mono font-semibold text-slate-900">{passportNumber || "—"}</span></div>
-                  <div className="flex justify-between"><span className="text-slate-600">Name</span><span className="font-semibold text-slate-900">{fullName || "—"}</span></div>
-                  <div className="flex justify-between"><span className="text-slate-600">Mobile</span><span className="font-semibold text-slate-900">{mobileNumber || "—"}</span></div>
-                  <div className="flex justify-between"><span className="text-slate-600">Email</span><span className="font-semibold text-slate-900">{email || "—"}</span></div>
-                  <div className="flex justify-between"><span className="text-slate-600">Payment</span><span className="font-semibold text-slate-900">{paymentDone ? "Completed" : "Pending"}</span></div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-slate-900 mb-2">Mobile Number</label>
+                  <Input value={mobileNumber} onChange={(e) => setMobileNumber(e.target.value)} placeholder="+91-XXXXXXXXXX" />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-slate-900 mb-2">Email Address</label>
+                  <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="name@example.com" />
                 </div>
               </div>
-              {receipt && (
-                <div className="print-area">
-                  <h2 className="text-lg font-bold text-slate-900 mb-3">Payment Receipt</h2>
-                  <div className="bg-white rounded-lg p-4 border border-slate-200">
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <p className="text-slate-600">Reference</p>
-                        <p className="font-mono font-semibold text-slate-900">{receipt.reference}</p>
-                      </div>
-                      <div>
-                        <p className="text-slate-600">Date & Time</p>
-                        <p className="font-semibold text-slate-900">{receipt.date} {receipt.time}</p>
-                      </div>
-                      <div>
-                        <p className="text-slate-600">Method</p>
-                        <p className="font-semibold text-slate-900">{receipt.method}</p>
-                      </div>
-                      <div>
-                        <p className="text-slate-600">Amount</p>
-                        <p className="font-semibold text-slate-900">{receipt.currency ? `${receipt.currency} ${receipt.amount}` : `₹${receipt.amount}`}</p>
-                      </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-slate-900 mb-2">Payment Method</label>
+                  <Select value={paymentMethod} onValueChange={(v) => setPaymentMethod(v as any)}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="online">Online</SelectItem>
+                      <SelectItem value="offline">Offline (Cash)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {paymentMethod === "offline" && (
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-900 mb-2">Currency</label>
+                      <Select value={currency} onValueChange={setCurrency}>
+                        <SelectTrigger className="w-full">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {currencies.map((c) => (
+                            <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-900 mb-2">Amount</label>
+                      <Input type="number" min={1} value={amount} onChange={(e) => setAmount(e.target.value)} />
                     </div>
                   </div>
-                  <div className="flex gap-3 mt-4 print-hide">
-                    <Button onClick={printReceipt} variant="outline" className="gap-2">
-                      <Printer className="w-4 h-4" />
-                      Print Receipt
-                    </Button>
+                )}
+
+                {paymentDone ? (
+                  <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3">
+                    <p className="text-sm font-semibold text-emerald-700 flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4" /> Payment Completed
+                    </p>
+                  </div>
+                ) : (
+                  <Button onClick={handlePay} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white gap-2">
+                    <CreditCard className="w-4 h-4" />
+                    {paymentMethod === "online" ? "Pay Online" : "Record Cash Payment"}
+                  </Button>
+                )}
+              </div>
+              <div className="space-y-4">
+                <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
+                  <h3 className="font-bold text-slate-900 mb-3">Passenger Summary</h3>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between"><span className="text-slate-600">Passport</span><span className="font-mono font-semibold text-slate-900">{passportNumber || "—"}</span></div>
+                    <div className="flex justify-between"><span className="text-slate-600">Name</span><span className="font-semibold text-slate-900">{fullName || "—"}</span></div>
+                    <div className="flex justify-between"><span className="text-slate-600">Mobile</span><span className="font-semibold text-slate-900">{mobileNumber || "—"}</span></div>
+                    <div className="flex justify-between"><span className="text-slate-600">Email</span><span className="font-semibold text-slate-900">{email || "—"}</span></div>
+                    <div className="flex justify-between"><span className="text-slate-600">Payment</span><span className="font-semibold text-slate-900">{paymentDone ? "Completed" : "Pending"}</span></div>
                   </div>
                 </div>
-              )}
+                {receipt && (
+                  <div className="print-area">
+                    <h2 className="text-lg font-bold text-slate-900 mb-3">Payment Receipt</h2>
+                    <div className="bg-white rounded-lg p-4 border border-slate-200">
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <p className="text-slate-600">Reference</p>
+                          <p className="font-mono font-semibold text-slate-900">{receipt.reference}</p>
+                        </div>
+                        <div>
+                          <p className="text-slate-600">Date & Time</p>
+                          <p className="font-semibold text-slate-900">{receipt.date} {receipt.time}</p>
+                        </div>
+                        <div>
+                          <p className="text-slate-600">Method</p>
+                          <p className="font-semibold text-slate-900">{receipt.method}</p>
+                        </div>
+                        <div>
+                          <p className="text-slate-600">Amount</p>
+                          <p className="font-semibold text-slate-900">{receipt.currency ? `${receipt.currency} ${receipt.amount}` : `₹${receipt.amount}`}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex gap-3 mt-4 print-hide">
+                      <Button onClick={printReceipt} variant="outline" className="gap-2">
+                        <Printer className="w-4 h-4" />
+                        Print Receipt
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+
+            <div className="mt-8">
+              <Button onClick={handleIssuePass} className="w-full bg-violet-600 hover:bg-violet-700 text-white gap-2" size="lg" disabled={!paymentDone}>
+                <CheckCircle className="w-5 h-5" />
+                Issue Pass
+              </Button>
             </div>
           </div>
-          
-
-          <div className="mt-8">
-            <Button onClick={handleIssuePass} className="w-full bg-violet-600 hover:bg-violet-700 text-white gap-2" size="lg" disabled={!paymentDone}>
-              <CheckCircle className="w-5 h-5" />
-              Issue Pass
-            </Button>
-          </div>
-        </div>
         </div>
       </div>
     </main>

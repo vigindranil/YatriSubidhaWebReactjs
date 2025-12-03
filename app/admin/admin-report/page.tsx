@@ -3,13 +3,13 @@
 import { useState, Fragment, useRef, useEffect } from 'react';
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { 
-  CreditCard, 
-  ClipboardList, 
-  Users, 
-  LogOut, 
-  UserCircle, 
-  Search, 
+import {
+  CreditCard,
+  ClipboardList,
+  Users,
+  LogOut,
+  UserCircle,
+  Search,
   Loader2,
   ChevronDown,
   ChevronUp,
@@ -17,6 +17,7 @@ import {
   Check
 } from "lucide-react";
 import { callApi } from "@/components/apis/commonApi";
+import { AdminNav } from '@/components/admin-nav';
 
 interface BookingData {
   name: string;
@@ -33,7 +34,7 @@ interface BookingData {
 }
 
 const SLOT_OPTIONS = [
-  "SLOT-1", "SLOT-2", "SLOT-3", "SLOT-4", "SLOT-5", "SLOT-6", 
+  "SLOT-1", "SLOT-2", "SLOT-3", "SLOT-4", "SLOT-5", "SLOT-6",
   "SLOT-7", "SLOT-8", "SLOT-9", "SLOT-10", "SLOT-11", "SLOT-12"
 ];
 
@@ -48,7 +49,7 @@ export default function BookingReport() {
   const [bookings, setBookings] = useState<BookingData[]>([]);
   const [loading, setLoading] = useState(false);
   const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
-  
+
   const [isSlotDropdownOpen, setIsSlotDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -124,7 +125,7 @@ export default function BookingReport() {
         }));
 
         if (formData.slot) {
-          const filtered = mappedData.filter((item: any) => 
+          const filtered = mappedData.filter((item: any) =>
             (item.slotName || "").trim().toUpperCase() === formData.slot.trim().toUpperCase()
           );
           setBookings(filtered);
@@ -145,48 +146,8 @@ export default function BookingReport() {
 
   return (
     <main className="min-h-screen bg-slate-50">
-      <nav className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border-b border-slate-700/50 backdrop-blur-lg shadow-lg sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="h-16 flex items-center justify-between">
-            <div className="flex items-center gap-3 group">
-              <div className="relative w-11 h-11 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-emerald-500/50 transition-all duration-300 group-hover:scale-105">
-                <div className="absolute inset-0 bg-white/20 rounded-xl blur-sm"></div>
-                <span className="relative text-white font-bold text-lg tracking-tight">AS</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="font-bold text-xl text-white leading-none">Counter Operator</span>
-                <span className="text-xs text-emerald-400 font-medium">Service Desk Portal</span>
-              </div>
-            </div>
 
-            <div className="flex items-center gap-3">
-              <div className="hidden sm:flex items-center gap-2 bg-slate-700/50 px-4 py-2 rounded-lg border border-slate-600">
-                <UserCircle className="w-5 h-5 text-emerald-400" />
-                <span className="text-white font-medium text-sm">Operator #12</span>
-              </div>
-              <Link href="/admin/operator/offline-booking">
-                <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white gap-2 shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/40 transition-all duration-300 font-semibold">
-                  <CreditCard className="w-4 h-4" />
-                  Offline Booking
-                </Button>
-              </Link>
-              <Link href="/admin/operator/online-booking">
-                <Button className="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white gap-2 shadow-lg shadow-indigo-500/25 hover:shadow-xl transition-all duration-300 font-semibold">
-                  <ClipboardList className="w-4 h-4" />
-                  Online Booking
-                </Button>
-              </Link>
-              <Button className="border-slate-600 text-slate-300 hover:text-white hover:bg-slate-700/50 gap-2 transition-all duration-300 bg-transparent border">
-                <Users className="w-4 h-4" />
-                <span className="hidden sm:inline">Queue</span>
-              </Button>
-              <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-red-500/10 gap-2 transition-all duration-300 group">
-                <LogOut className="w-4 h-4 group-hover:rotate-12 transition-transform" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <AdminNav />
 
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="mb-8">
@@ -201,7 +162,7 @@ export default function BookingReport() {
 
         <div className="bg-white rounded-2xl shadow-sm p-8 mb-8 border border-slate-200">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-            
+
             <div className="space-y-2">
               <label className="text-xs font-bold text-gray-500 uppercase tracking-wide">Type</label>
               <div className="relative">
@@ -223,11 +184,10 @@ export default function BookingReport() {
               <div className="relative">
                 <button
                   onClick={() => setIsSlotDropdownOpen(!isSlotDropdownOpen)}
-                  className={`w-full px-4 py-3 text-left border rounded-lg flex items-center justify-between transition-all duration-200 ${
-                    isSlotDropdownOpen 
-                      ? 'border-teal-500 ring-2 ring-teal-500/20 bg-white' 
-                      : 'border-gray-200 bg-slate-50 hover:bg-slate-100'
-                  }`}
+                  className={`w-full px-4 py-3 text-left border rounded-lg flex items-center justify-between transition-all duration-200 ${isSlotDropdownOpen
+                    ? 'border-teal-500 ring-2 ring-teal-500/20 bg-white'
+                    : 'border-gray-200 bg-slate-50 hover:bg-slate-100'
+                    }`}
                 >
                   {/* TEXT IS NOW ALWAYS BLACK (GRAY-900) */}
                   <span className="font-medium text-gray-900">
@@ -242,9 +202,8 @@ export default function BookingReport() {
                       <div className="p-1.5 space-y-0.5">
                         <button
                           onClick={() => handleSlotSelect('')}
-                          className={`w-full px-3 py-2 text-sm rounded-md text-left flex items-center justify-between transition-colors ${
-                            formData.slot === '' ? 'bg-teal-50 text-teal-700 font-semibold' : 'text-gray-700 hover:bg-gray-50'
-                          }`}
+                          className={`w-full px-3 py-2 text-sm rounded-md text-left flex items-center justify-between transition-colors ${formData.slot === '' ? 'bg-teal-50 text-teal-700 font-semibold' : 'text-gray-700 hover:bg-gray-50'
+                            }`}
                         >
                           All Slots
                           {formData.slot === '' && <Check size={14} />}
@@ -254,9 +213,8 @@ export default function BookingReport() {
                           <button
                             key={slot}
                             onClick={() => handleSlotSelect(slot)}
-                            className={`w-full px-3 py-2 text-sm rounded-md text-left flex items-center justify-between transition-colors ${
-                              formData.slot === slot ? 'bg-teal-50 text-teal-700 font-semibold' : 'text-gray-700 hover:bg-gray-50'
-                            }`}
+                            className={`w-full px-3 py-2 text-sm rounded-md text-left flex items-center justify-between transition-colors ${formData.slot === slot ? 'bg-teal-50 text-teal-700 font-semibold' : 'text-gray-700 hover:bg-gray-50'
+                              }`}
                           >
                             {slot}
                             {formData.slot === slot && <Check size={14} />}
@@ -323,11 +281,11 @@ export default function BookingReport() {
                     <td colSpan={6} className="px-6 py-16 text-center">
                       <div className="flex flex-col items-center justify-center text-gray-400">
                         <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
-                            <Search size={32} className="opacity-40" />
+                          <Search size={32} className="opacity-40" />
                         </div>
                         <p className="text-lg font-medium text-gray-600">No records found</p>
                         <p className="text-sm mt-1 text-gray-500">
-                           {formData.slot ? `No bookings found for ${formData.slot}.` : "Select filters and click 'Get Details'."}
+                          {formData.slot ? `No bookings found for ${formData.slot}.` : "Select filters and click 'Get Details'."}
                         </p>
                       </div>
                     </td>
@@ -343,20 +301,19 @@ export default function BookingReport() {
                           </td>
                           <td className="px-6 py-4 text-sm text-gray-900 font-bold truncate" title={booking.name}>{booking.name}</td>
                           <td className="px-6 py-4 text-sm">
-                            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold shadow-sm ${
-                              booking.attendanceStatus !== 'NOT ATTENDED' 
-                              ? 'bg-emerald-100 text-emerald-700 border border-emerald-200' 
+                            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold shadow-sm ${booking.attendanceStatus !== 'NOT ATTENDED'
+                              ? 'bg-emerald-100 text-emerald-700 border border-emerald-200'
                               : 'bg-red-50 text-red-600 border border-red-100'
-                            }`}>
+                              }`}>
                               {booking.attendanceStatus !== 'NOT ATTENDED' && <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>}
                               {booking.attendanceStatus}
                             </span>
                           </td>
                           <td className="px-6 py-4 text-sm text-gray-600 font-medium">{booking.journeyDate}</td>
                           <td className="px-6 py-4 text-sm">
-                             <span className="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md font-medium text-xs border border-slate-200">
-                                {booking.slotName}
-                              </span>
+                            <span className="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md font-medium text-xs border border-slate-200">
+                              {booking.slotName}
+                            </span>
                           </td>
                           <td className="px-6 py-4 text-sm text-gray-600 font-mono">{booking.passport}</td>
                         </tr>

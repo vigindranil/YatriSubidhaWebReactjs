@@ -6,6 +6,7 @@ import { ClipboardList } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, CheckCircle, CreditCard, Printer, Users } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { AdminNav } from "@/components/admin-nav"
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -134,28 +135,7 @@ export default function OnlineBookingPage() {
 
   return (
     <main className="min-h-screen bg-slate-100">
-      <div className="bg-slate-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">AS</span>
-            </div>
-            <span className="font-bold text-xl">Counter Operator</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link href="/admin/operator/offline-booking">
-              <Button className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2">
-                <CreditCard className="w-4 h-4" />
-                Offline Booking
-              </Button>
-            </Link>
-            <Button variant="outline" className="border-white/30 text-white bg-transparent gap-2">
-              <Users className="w-4 h-4" />
-              Queue
-            </Button>
-          </div>
-        </div>
-      </div>
+      <AdminNav />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Button variant="ghost" onClick={() => router.back()} className="mb-4 gap-2">
           <ArrowLeft className="w-4 h-4" />

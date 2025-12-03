@@ -211,7 +211,7 @@ export default function OperatorDashboardPage() {
                     Cash or online payment, issue receipt and boarding pass instantly.
                   </p>
                   <div className="mt-4 flex items-center gap-2 text-emerald-600 font-semibold text-sm">
-                    <span>Get Started</span>
+                    <span>Open</span>
                     <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                   </div>
                 </div>
@@ -238,20 +238,26 @@ export default function OperatorDashboardPage() {
               </div>
             </Link>
 
-            <div className="relative border-2 border-slate-200 rounded-2xl p-6 bg-gradient-to-br from-white to-slate-50 opacity-60">
-              <div className="bg-slate-100 inline-flex p-4 rounded-xl mb-4 border border-slate-200">
-                <ClipboardList className="w-7 h-7 text-slate-500" />
+                {/* Online Booking (live) */}
+            <Link href="/admin/admin-report" className="block group">
+              <div className="relative border-2 border-slate-200 rounded-2xl p-6 hover:border-indigo-400 hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-white to-slate-50 overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-100 rounded-full -mr-16 -mt-16 opacity-0 group-hover:opacity-50 transition-opacity"></div>
+                <div className="relative z-10">
+                  <div className="bg-gradient-to-br from-indigo-100 to-violet-100 inline-flex p-4 rounded-xl mb-4 group-hover:scale-110 transition-transform duration-300 border border-indigo-200">
+                    <ClipboardList className="w-7 h-7 text-indigo-700" />
+                  </div>
+                  <h3 className="font-bold text-lg text-slate-900 mb-2">Reports</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    Generate daily booking and transaction reports.
+                  </p>
+                  <div className="mt-4 flex items-center gap-2 text-indigo-600 font-semibold text-sm">
+                    <span>Open</span>
+                    <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                  </div>
+                </div>
               </div>
-              <h3 className="font-bold text-lg text-slate-900 mb-2">Reports</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Generate daily booking and transaction reports.
-              </p>
-              <div className="mt-4">
-                <span className="text-xs font-semibold text-slate-500 bg-slate-200 px-3 py-1 rounded-full">
-                  Coming Soon
-                </span>
-              </div>
-            </div>
+            </Link>
+
           </div>
         </div>
       </div>
