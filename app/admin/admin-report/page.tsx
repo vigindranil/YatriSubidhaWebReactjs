@@ -15,7 +15,9 @@ import {
   ChevronUp,
   Filter,
   Check,
-  FileText
+  FileText,
+  ChevronLeft,  // Added for pagination
+  ChevronRight  // Added for pagination
 } from "lucide-react";
 import { callApi } from "@/components/apis/commonApi";
 import { AdminNav } from '@/components/admin-nav';
@@ -51,6 +53,9 @@ export default function BookingReport() {
   const [bookings, setBookings] = useState<BookingData[]>([]);
   const [loading, setLoading] = useState(false);
   const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
+  
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [isSlotDropdownOpen, setIsSlotDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -88,7 +93,8 @@ export default function BookingReport() {
     setExpandedRows(newExpanded);
   };
 
-  const handleGetDetails = async () => {
+  // Modified to accept page number
+  const handleGetDetails = async (page = 1) => {
     if (!formData.startDate || !formData.endDate) {
       alert("Please select both Start Date and End Date");
       return;
@@ -96,6 +102,9 @@ export default function BookingReport() {
 
     setLoading(true);
     setExpandedRows(new Set());
+    
+    // Logic to handle typeValue derived from formData
+    const typeValue = parseInt(formData.journeyType);
 
     try {
       const payload = {
@@ -103,7 +112,7 @@ export default function BookingReport() {
         ToDate: formData.endDate,
         Type: typeValue,
         AuthInfo: "{}",
-        PageNumber: 1,
+        PageNumber: page, // Use the passed page number
         SlotName: formData.slot
       };
 
@@ -135,9 +144,18 @@ export default function BookingReport() {
         } else {
           setBookings(mappedData);
         }
+        // Update current page on success
+        setCurrentPage(page);
       } else {
-        alert(response.message || "Failed to fetch booking reports");
-        setBookings([]);
+        // If it's a pagination attempt (page > 1) and fails/empty, you might want to handle it differently
+        // For now, adhering to original logic of alerting/clearing
+        if (page === 1) {
+            alert(response.message || "Failed to fetch booking reports");
+            setBookings([]);
+        } else {
+            // Optional: If page > 1 and no data, maybe just don't update or show toast
+            alert("No more records found.");
+        }
       }
     } catch (error) {
       console.error("Error fetching details:", error);
@@ -145,6 +163,11 @@ export default function BookingReport() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage < 1) return;
+    handleGetDetails(newPage);
   };
 
   return (
@@ -254,7 +277,7 @@ export default function BookingReport() {
 
           <div className="flex justify-center pt-2">
             <button
-              onClick={handleGetDetails}
+              onClick={() => handleGetDetails(1)} // Always reset to page 1 on filter click
               disabled={loading}
               className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-teal-600 to-emerald-600 text-white font-semibold rounded-xl transition-all shadow-lg shadow-teal-500/30 hover:shadow-xl hover:shadow-teal-500/40 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -358,6 +381,40 @@ export default function BookingReport() {
                 )}
               </tbody>
             </table>
+            
+            {/* Pagination Controls */}
+            {bookings.length > 0 && (
+              <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 bg-white">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-600">
+                    Page <span className="font-semibold text-gray-900">{currentPage}</span>
+                  </span>
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1 || loading}
+                    className="flex items-center gap-1"
+                  >
+                    <ChevronLeft size={16} />
+                    Previous
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={loading} // Assuming unknown total pages, just allow Next until empty
+                    className="flex items-center gap-1"
+                  >
+                    Next
+                    <ChevronRight size={16} />
+                  </Button>
+                </div>
+              </div>
+            )}
+            
           </div>
         </div>
       </div>
