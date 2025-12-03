@@ -24,7 +24,7 @@ export function AdminNav() {
               <span className="relative text-white font-bold text-lg tracking-tight">AS</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-bold text-xl text-white leading-none">{userType == "1" ? "Super Admin" : userType == "2" ? "Operator Admin" : userType == "3" ? "" : ""}</span>
+              <span className="font-bold text-xl text-white leading-none">{userType == "1" ? "Super Admin" : userType == "2" ? "Counter Operator" : userType == "3" ? "" : ""}</span>
               <span className="text-xs text-emerald-400 font-medium">Service Desk Portal</span>
             </div>
           </div>
@@ -47,6 +47,24 @@ export function AdminNav() {
               </Button>
             </Link>
 
+            <Link href="/admin/admin-credentials">
+              <Button variant="outline" className="border-white/30 text-white bg-transparent gap-2">
+                <Users className="w-4 h-4" />
+                Credentials
+              </Button>
+            </Link>
+            <Link href="/admin/modify-slot-capacity">
+              <Button variant="outline" className="border-white/30 text-white bg-transparent gap-2">
+                <Users className="w-4 h-4" />
+                Slot Capacity
+              </Button>
+            </Link>
+            <Link href="/admin/modify-slot-status">
+              <Button variant="outline" className="border-white/30 text-white bg-transparent gap-2">
+                <Users className="w-4 h-4" />
+                Slot Status
+              </Button>
+            </Link>
             <Link href="/admin/admin-report">
               <Button variant="outline" className="border-white/30 text-white bg-transparent gap-2">
                 <Users className="w-4 h-4" />
