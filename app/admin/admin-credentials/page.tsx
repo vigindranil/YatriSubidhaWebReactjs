@@ -18,6 +18,11 @@ import {
 import { AdminNav } from "@/components/admin-nav";
 import { callApi } from "@/components/apis/commonApi";
 
+// Import libraries for Export (Ensure these are installed: npm install xlsx jspdf jspdf-autotable)
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
 // Interface matching your API response data structure
 interface UserCredential {
   UserID: number;
@@ -70,6 +75,12 @@ export default function AdminCredentialsPage() {
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  // Filter Logic
+  const filteredData = users.filter(item => 
+    (item.UserName || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (item.UserTypeName || "").toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   // Toggle Password Visibility in Table
   const togglePasswordVisibility = (id: number) => {
@@ -129,22 +140,145 @@ export default function AdminCredentialsPage() {
     }
   };
 
-  // Filter Logic
-  const filteredData = users.filter(item => 
-    (item.UserName || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (item.UserTypeName || "").toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // --- EXPORT & PRINT FUNCTIONALITY ---
 
-  const handlePrint = () => window.print();
-  const handleExport = (type: string) => alert(`Exporting to ${type}...`);
+  // 1. Export to Excel
+  const handleExportExcel = () => {
+    if (filteredData.length === 0) {
+      alert("No data to export");
+      return;
+    }
+
+    try {
+      // Prepare data (exclude UserID, include only visible columns)
+      const dataToExport = filteredData.map(user => ({
+        "User Type": user.UserTypeName,
+        "Username": user.UserName,
+        "Password": user.UserPassword // Caution: Exporting passwords is a security risk, but included as per UI
+      }));
+
+      // Create Worksheet
+      const ws = XLSX.utils.json_to_sheet(dataToExport);
+      
+      // Create Workbook
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "AdminCredentials");
+
+      // Save File
+      XLSX.writeFile(wb, "AdminCredentials.xlsx");
+    } catch (error) {
+      console.error("Excel Export Error:", error);
+      // Fallback to CSV if library fails or isn't loaded
+      fallbackCSVExport(); 
+    }
+  };
+
+  // Fallback CSV Export (No external libraries needed)
+  const fallbackCSVExport = () => {
+    const headers = ["User Type", "Username", "Password"];
+    const csvContent = [
+      headers.join(","),
+      ...filteredData.map(u => 
+        `"${u.UserTypeName}","${u.UserName}","${u.UserPassword}"`
+      )
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "AdminCredentials.csv";
+    link.click();
+  };
+
+  // 2. Export to PDF
+  const handleExportPDF = () => {
+    if (filteredData.length === 0) {
+      alert("No data to export");
+      return;
+    }
+
+    try {
+      const doc = new jsPDF();
+
+      // Add Title
+      doc.setFontSize(18);
+      doc.text("Admin Credentials Report", 14, 22);
+      doc.setFontSize(11);
+      doc.setTextColor(100);
+      doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 30);
+
+      // Prepare Table Data
+      const tableColumn = ["User Type", "Username", "Password"];
+      const tableRows = filteredData.map(user => [
+        user.UserTypeName,
+        user.UserName,
+        user.UserPassword
+      ]);
+
+      // Generate Table
+      autoTable(doc, {
+        head: [tableColumn],
+        body: tableRows,
+        startY: 40,
+        theme: 'grid',
+        styles: { fontSize: 10 },
+        headStyles: { fillColor: [22, 163, 74] } // Green-600 color
+      });
+
+      doc.save("AdminCredentials.pdf");
+    } catch (error) {
+      console.error("PDF Export Error:", error);
+      alert("Failed to export PDF. Please ensure jsPDF is installed or use Print -> Save as PDF.");
+    }
+  };
+
+  // 3. Print
+  const handlePrint = () => {
+    window.print();
+  };
 
   return (
     <main className="min-h-screen bg-green-50/30 relative">
       <AdminNav />
+      
+      {/* Print Styles: Hides everything except the table content */}
+      <style jsx global>{`
+        @media print {
+          body * {
+            visibility: hidden;
+          }
+          .print-area, .print-area * {
+            visibility: visible;
+          }
+          .print-area {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            background: white;
+            padding: 20px;
+          }
+          /* Hide non-printable elements */
+          .no-print {
+            display: none !important;
+          }
+          /* Enhance table for print */
+          table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+          }
+          th, td {
+            border: 1px solid #ddd !important;
+            padding: 8px !important;
+            text-align: left !important;
+          }
+        }
+      `}</style>
+
       <div className="max-w-7xl mx-auto px-6 py-8">
         
         {/* Header Section */}
-        <div className="mb-8">
+        <div className="mb-8 no-print">
           <div className="inline-block mb-6">
             <span className="px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-medium border border-green-200 flex items-center gap-2">
               <ShieldCheck className="w-4 h-4" />
@@ -156,18 +290,27 @@ export default function AdminCredentialsPage() {
         </div>
 
         {/* Controls Card */}
-        <div className="bg-white rounded-2xl shadow-sm p-8 mb-8 border border-green-100/50">
+        <div className="bg-white rounded-2xl shadow-sm p-8 mb-8 border border-green-100/50 no-print">
           <div className="flex flex-col md:flex-row justify-between items-end md:items-center gap-6">
             
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-3 w-full md:w-auto">
-              <button onClick={() => handleExport('Excel')} className="flex items-center gap-2 px-5 py-2.5 bg-white border border-green-200 text-green-700 font-semibold rounded-xl hover:bg-green-50 transition-all shadow-sm">
+              <button 
+                onClick={handleExportExcel}
+                className="flex items-center gap-2 px-5 py-2.5 bg-white border border-green-200 text-green-700 font-semibold rounded-xl hover:bg-green-50 transition-all shadow-sm"
+              >
                 <FileSpreadsheet size={18} /> Excel
               </button>
-              <button onClick={() => handleExport('PDF')} className="flex items-center gap-2 px-5 py-2.5 bg-white border border-green-200 text-green-700 font-semibold rounded-xl hover:bg-green-50 transition-all shadow-sm">
+              <button 
+                onClick={handleExportPDF}
+                className="flex items-center gap-2 px-5 py-2.5 bg-white border border-green-200 text-green-700 font-semibold rounded-xl hover:bg-green-50 transition-all shadow-sm"
+              >
                 <FileText size={18} /> PDF
               </button>
-              <button onClick={handlePrint} className="flex items-center gap-2 px-5 py-2.5 bg-white border border-green-200 text-green-700 font-semibold rounded-xl hover:bg-green-50 transition-all shadow-sm">
+              <button 
+                onClick={handlePrint}
+                className="flex items-center gap-2 px-5 py-2.5 bg-white border border-green-200 text-green-700 font-semibold rounded-xl hover:bg-green-50 transition-all shadow-sm"
+              >
                 <Printer size={18} /> Print
               </button>
             </div>
@@ -189,7 +332,7 @@ export default function AdminCredentialsPage() {
         </div>
 
         {/* Data Table */}
-        <div className="bg-white rounded-2xl shadow-sm border border-green-100 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-green-100 overflow-hidden print-area">
           <div className="overflow-x-auto">
             <table className="w-full table-fixed">
               <thead>
@@ -197,7 +340,8 @@ export default function AdminCredentialsPage() {
                   <th className="px-8 py-5 text-left text-xs font-bold text-green-800 uppercase tracking-wider">User Type</th>
                   <th className="px-8 py-5 text-left text-xs font-bold text-green-800 uppercase tracking-wider">Username</th>
                   <th className="px-8 py-5 text-left text-xs font-bold text-green-800 uppercase tracking-wider">Password</th>
-                  <th className="px-8 py-5 text-center text-xs font-bold text-green-800 uppercase tracking-wider">Update Password</th>
+                  {/* Hide Actions column in Print */}
+                  <th className="px-8 py-5 text-center text-xs font-bold text-green-800 uppercase tracking-wider no-print">Update Password</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -240,20 +384,20 @@ export default function AdminCredentialsPage() {
                         </div>
                       </td>
 
-                      {/* Password */}
+                      {/* Password - Always show actual password in Print (logic inside map) */}
                       <td className="px-8 py-5">
                         <div className="flex items-center justify-between max-w-[200px] bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200 group-hover:border-green-200 transition-colors">
                           <span className="font-mono text-sm text-gray-600 truncate mr-2">
                             {visiblePasswords.has(user.UserID) ? user.UserPassword : '••••••••'}
                           </span>
-                          <button onClick={() => togglePasswordVisibility(user.UserID)} className="text-gray-400 hover:text-green-600 transition-colors focus:outline-none">
+                          <button onClick={() => togglePasswordVisibility(user.UserID)} className="text-gray-400 hover:text-green-600 transition-colors focus:outline-none no-print">
                             {visiblePasswords.has(user.UserID) ? <EyeOff size={16} /> : <Eye size={16} />}
                           </button>
                         </div>
                       </td>
 
-                      {/* Actions - UPDATE BUTTON */}
-                      <td className="px-8 py-5 text-center">
+                      {/* Actions - UPDATE BUTTON (Hidden on Print) */}
+                      <td className="px-8 py-5 text-center no-print">
                         <button 
                           onClick={() => openUpdateModal(user)}
                           title="Update Password"
@@ -269,14 +413,14 @@ export default function AdminCredentialsPage() {
             </table>
           </div>
           
-          <div className="bg-gray-50 px-8 py-4 border-t border-gray-200 flex items-center justify-between">
+          <div className="bg-gray-50 px-8 py-4 border-t border-gray-200 flex items-center justify-between no-print">
              <p className="text-xs text-gray-500 font-medium">Showing {filteredData.length} records</p>
           </div>
         </div>
 
         {/* ----------------- UPDATE PASSWORD MODAL ----------------- */}
         {showUpdateModal && selectedUser && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in duration-200 no-print">
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all scale-100">
               
               {/* Modal Header */}
