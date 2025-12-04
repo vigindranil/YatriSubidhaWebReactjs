@@ -128,7 +128,7 @@ export default function AdminCredentialsPage() {
       if (response.success) {
         alert("Password updated successfully!");
         setShowUpdateModal(false);
-        fetchUsers(); // Refresh the list
+        fetchUsers(); 
       } else {
         alert(`Failed to update: ${response.message || "Unknown error"}`);
       }
