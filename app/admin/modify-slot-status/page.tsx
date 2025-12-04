@@ -16,7 +16,6 @@ import {
 import { AdminNav } from "@/components/admin-nav";
 import { callApi } from "@/components/apis/commonApi";
 
-// Interface for local history log
 interface StatusChangeRecord {
   type: string;
   dateRange: string;
@@ -25,17 +24,14 @@ interface StatusChangeRecord {
   timestamp: string;
 }
 
-// Generate static slots (1 to 24)
-// You can adjust the length if you have more or fewer slots
+
 const STATIC_SLOTS = Array.from({ length: 24 }, (_, i) => ({
   id: i + 1,
   label: `Slot ${i + 1}`
 }));
 
 export default function ChangeSlotStatus() {
-  // --- State Management ---
-  
-  // Default to Departure (ID: 1) as per your requirement
+
   const [journeyTypeId, setJourneyTypeId] = useState<number>(1); 
   
   const [fromDate, setFromDate] = useState<string>(new Date().toISOString().split('T')[0]);
@@ -46,10 +42,7 @@ export default function ChangeSlotStatus() {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [recentChanges, setRecentChanges] = useState<StatusChangeRecord[]>([]);
 
-  // --- Handlers ---
-
   const handleSubmit = async () => {
-    // Validation
     if(!selectedSlotId || !activeStatus || !fromDate || !toDate) {
       alert("Please fill in all fields (Slot, Status, and Date Range).");
       return;
@@ -72,7 +65,6 @@ export default function ChangeSlotStatus() {
       if (response.success) {
         alert(response.message || "Slot status updated successfully.");
 
-        // Update Local History Log
         const newRecord: StatusChangeRecord = {
           type: journeyTypeId === 2 ? "Arrival" : "Departure",
           dateRange: `${fromDate} to ${toDate}`,
@@ -99,7 +91,6 @@ export default function ChangeSlotStatus() {
        <AdminNav />
       <div className="max-w-7xl mx-auto px-6 py-8">
         
-        {/* Header Section */}
         <div className="mb-8">
           <div className="inline-block mb-6">
             <span className="px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full text-sm font-medium border border-emerald-200 flex items-center gap-2">
@@ -111,19 +102,15 @@ export default function ChangeSlotStatus() {
           <p className="text-lg text-gray-600">Enable or disable booking slots for specific date ranges.</p>
         </div>
 
-        {/* Main Form Card */}
         <div className="bg-white rounded-2xl shadow-sm p-8 mb-8 border border-emerald-100/50 relative overflow-hidden">
-          {/* Decorative background element */}
           <div className="absolute -top-24 -right-24 w-64 h-64 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-full opacity-60 pointer-events-none blur-3xl"></div>
 
           <div className="relative z-10 max-w-4xl mx-auto">
             
-            {/* 1. Journey Type Selection */}
             <div className="flex flex-col items-center justify-center mb-10">
               <label className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-4">Journey Type</label>
               <div className="flex items-center gap-8 bg-gray-50/80 p-2 rounded-xl border border-gray-200">
                 
-                {/* Arrival Button (ID: 2) */}
                 <button
                   onClick={() => setJourneyTypeId(2)}
                   className={`flex items-center gap-3 px-6 py-3 rounded-lg cursor-pointer transition-all duration-200 ${

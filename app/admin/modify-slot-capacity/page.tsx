@@ -40,23 +40,23 @@ export default function ModifySlotCapacity() {
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [journeyTypeId, setJourneyTypeId] = useState<number>(1); 
 
-  // Data State
+
   const [slotList, setSlotList] = useState<SlotData[]>([]);
   const [loadingSlots, setLoadingSlots] = useState<boolean>(false);
 
-  // Form Input State
+
   const [selectedSlotId, setSelectedSlotId] = useState<string>('');
   const [capacity, setCapacity] = useState<string>('');
   
-  // Submission State
+
   const [submitting, setSubmitting] = useState(false);
   const [recentUpdates, setRecentUpdates] = useState<SlotUpdateRecord[]>([]);
 
-  // Pagination State
+ 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const ITEMS_PER_PAGE = 5;
 
-  // --- API: Fetch Slots ---
+ 
   const fetchSlots = async () => {
     setLoadingSlots(true);
     
@@ -84,7 +84,7 @@ export default function ModifySlotCapacity() {
     }
   };
 
-  // --- useEffect: Debounced Fetch ---
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchSlots();
@@ -96,7 +96,6 @@ export default function ModifySlotCapacity() {
   }, [selectedDate, journeyTypeId]);
 
 
-  // --- Handlers ---
   const handleSlotSelection = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const id = e.target.value;
     setSelectedSlotId(id);
@@ -107,7 +106,6 @@ export default function ModifySlotCapacity() {
     }
   };
 
-  // Logic: Handle Capacity Input 
   const handleCapacityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
@@ -123,7 +121,7 @@ export default function ModifySlotCapacity() {
     }
   };
 
-  // Logic: Block invalid keys (-, +, e, .)
+  
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (['-', '+', 'e', 'E', '.'].includes(e.key)) {
       e.preventDefault();
@@ -182,7 +180,7 @@ export default function ModifySlotCapacity() {
             : slot
         ));
 
-        // 3. Delay refetch
+       
         setTimeout(() => {
           fetchSlots();
         }, 500); 
@@ -227,19 +225,15 @@ export default function ModifySlotCapacity() {
           <h1 className="text-5xl font-bold text-gray-900 mb-3">Modify Slot Capacity</h1>
         </div>
 
-        {/* Main Card */}
         <div className="bg-white rounded-2xl shadow-sm p-8 mb-8 border border-emerald-100/50 relative overflow-hidden">
           <div className="relative z-10">
-            
-            {/* Filters */}
+     
             <div className="flex flex-col md:flex-row items-center justify-center gap-8 mb-10">
               
-              {/* Toggle Buttons */}
               <div className="flex flex-col items-center">
                 <label className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Journey Type</label>
                 <div className="flex items-center gap-4 bg-gray-50 p-1.5 rounded-xl border border-gray-200">
-                  
-                  {/* ARRIVAL BUTTON: Sets ID to 2 */}
+                 
                   <button 
                     onClick={() => setJourneyTypeId(2)}
                     className={`flex items-center gap-2 px-6 py-2.5 rounded-lg transition-all duration-200 ${
@@ -275,7 +269,6 @@ export default function ModifySlotCapacity() {
                 </div>
               </div>
 
-              {/* Date Picker */}
               <div className="flex flex-col items-center w-full md:w-auto">
                 <label className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Journey Date</label>
                 <div className="relative group w-full md:w-64">
@@ -290,10 +283,8 @@ export default function ModifySlotCapacity() {
               </div>
             </div>
 
-            {/* Form Inputs */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 max-w-4xl mx-auto">
-              
-              {/* Dropdown */}
+         
               <div className="space-y-2">
                 <label className="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">
                   Select Slot Name {loadingSlots && <span className="text-emerald-500 animate-pulse ml-2">Loading...</span>}
@@ -318,7 +309,7 @@ export default function ModifySlotCapacity() {
                 </div>
               </div>
 
-              {/* Capacity Input */}
+                                                                  
               <div className="space-y-2">
                 <label className="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">New Capacity</label>
                 <div className="relative group">
@@ -336,7 +327,7 @@ export default function ModifySlotCapacity() {
               </div>
             </div>
 
-            {/* Action Button */}
+        
             <div className="flex justify-center">
               <button
                 onClick={handleSubmit}
@@ -360,7 +351,7 @@ export default function ModifySlotCapacity() {
           </div>
         </div>
 
-        {/* Live Logs with Pagination */}
+        
         <div className="bg-white rounded-2xl shadow-sm border border-emerald-100 overflow-hidden">
           <div className="px-8 py-6 border-b border-gray-100 bg-gray-50/50">
             <h3 className="font-bold text-gray-800 flex items-center gap-2">
@@ -411,7 +402,7 @@ export default function ModifySlotCapacity() {
             </table>
           </div>
 
-          {/* Pagination Footer */}
+        
           {recentUpdates.length > ITEMS_PER_PAGE && (
             <div className="flex items-center justify-between px-8 py-4 border-t border-gray-100 bg-gray-50/30">
               <span className="text-sm text-gray-500 font-medium">

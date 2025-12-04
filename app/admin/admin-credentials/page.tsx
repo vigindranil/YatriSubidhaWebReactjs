@@ -140,9 +140,7 @@ export default function AdminCredentialsPage() {
     }
   };
 
-  // --- EXPORT & PRINT FUNCTIONALITY ---
 
-  // 1. Export to Excel
   const handleExportExcel = () => {
     if (filteredData.length === 0) {
       alert("No data to export");
@@ -150,30 +148,30 @@ export default function AdminCredentialsPage() {
     }
 
     try {
-      // Prepare data (exclude UserID, include only visible columns)
+      
       const dataToExport = filteredData.map(user => ({
         "User Type": user.UserTypeName,
         "Username": user.UserName,
-        "Password": user.UserPassword // Caution: Exporting passwords is a security risk, but included as per UI
+        "Password": user.UserPassword 
       }));
 
-      // Create Worksheet
+      
       const ws = XLSX.utils.json_to_sheet(dataToExport);
       
-      // Create Workbook
+      
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "AdminCredentials");
 
-      // Save File
+      
       XLSX.writeFile(wb, "AdminCredentials.xlsx");
     } catch (error) {
       console.error("Excel Export Error:", error);
-      // Fallback to CSV if library fails or isn't loaded
+      
       fallbackCSVExport(); 
     }
   };
 
-  // Fallback CSV Export (No external libraries needed)
+  
   const fallbackCSVExport = () => {
     const headers = ["User Type", "Username", "Password"];
     const csvContent = [
@@ -190,7 +188,7 @@ export default function AdminCredentialsPage() {
     link.click();
   };
 
-  // 2. Export to PDF
+  
   const handleExportPDF = () => {
     if (filteredData.length === 0) {
       alert("No data to export");
@@ -200,14 +198,14 @@ export default function AdminCredentialsPage() {
     try {
       const doc = new jsPDF();
 
-      // Add Title
+      
       doc.setFontSize(18);
       doc.text("Admin Credentials Report", 14, 22);
       doc.setFontSize(11);
       doc.setTextColor(100);
       doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 30);
 
-      // Prepare Table Data
+      
       const tableColumn = ["User Type", "Username", "Password"];
       const tableRows = filteredData.map(user => [
         user.UserTypeName,
@@ -215,14 +213,14 @@ export default function AdminCredentialsPage() {
         user.UserPassword
       ]);
 
-      // Generate Table
+      
       autoTable(doc, {
         head: [tableColumn],
         body: tableRows,
         startY: 40,
         theme: 'grid',
         styles: { fontSize: 10 },
-        headStyles: { fillColor: [22, 163, 74] } // Green-600 color
+        headStyles: { fillColor: [22, 163, 74] } 
       });
 
       doc.save("AdminCredentials.pdf");
@@ -232,7 +230,7 @@ export default function AdminCredentialsPage() {
     }
   };
 
-  // 3. Print
+  
   const handlePrint = () => {
     window.print();
   };
@@ -241,7 +239,7 @@ export default function AdminCredentialsPage() {
     <main className="min-h-screen bg-green-50/30 relative">
       <AdminNav />
       
-      {/* Print Styles: Hides everything except the table content */}
+      
       <style jsx global>{`
         @media print {
           body * {
@@ -277,7 +275,7 @@ export default function AdminCredentialsPage() {
 
       <div className="max-w-7xl mx-auto px-6 py-8">
         
-        {/* Header Section */}
+
         <div className="mb-8 no-print">
           <div className="inline-block mb-6">
             <span className="px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-medium border border-green-200 flex items-center gap-2">
@@ -289,11 +287,10 @@ export default function AdminCredentialsPage() {
           <p className="text-lg text-gray-600">Manage system access, user roles, and security configurations.</p>
         </div>
 
-        {/* Controls Card */}
+
         <div className="bg-white rounded-2xl shadow-sm p-8 mb-8 border border-green-100/50 no-print">
           <div className="flex flex-col md:flex-row justify-between items-end md:items-center gap-6">
-            
-            {/* Action Buttons */}
+         
             <div className="flex flex-wrap gap-3 w-full md:w-auto">
               <button 
                 onClick={handleExportExcel}
@@ -315,7 +312,7 @@ export default function AdminCredentialsPage() {
               </button>
             </div>
 
-            {/* Search Bar */}
+        
             <div className="w-full md:w-96 space-y-2">
               <div className="relative group">
                 <input
@@ -331,7 +328,7 @@ export default function AdminCredentialsPage() {
           </div>
         </div>
 
-        {/* Data Table */}
+        
         <div className="bg-white rounded-2xl shadow-sm border border-green-100 overflow-hidden print-area">
           <div className="overflow-x-auto">
             <table className="w-full table-fixed">
@@ -340,7 +337,7 @@ export default function AdminCredentialsPage() {
                   <th className="px-8 py-5 text-left text-xs font-bold text-green-800 uppercase tracking-wider">User Type</th>
                   <th className="px-8 py-5 text-left text-xs font-bold text-green-800 uppercase tracking-wider">Username</th>
                   <th className="px-8 py-5 text-left text-xs font-bold text-green-800 uppercase tracking-wider">Password</th>
-                  {/* Hide Actions column in Print */}
+                 
                   <th className="px-8 py-5 text-center text-xs font-bold text-green-800 uppercase tracking-wider no-print">Update Password</th>
                 </tr>
               </thead>
@@ -362,7 +359,7 @@ export default function AdminCredentialsPage() {
                   filteredData.map((user) => (
                     <tr key={user.UserID} className="hover:bg-green-50/40 transition-colors group border-l-4 border-l-transparent hover:border-l-green-500">
                       
-                      {/* User Type */}
+                
                       <td className="px-8 py-5">
                         <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold shadow-sm border ${
                           user.UserTypeName === 'Counter Operator' ? 'bg-blue-50 text-blue-700 border-blue-200' :
@@ -374,7 +371,6 @@ export default function AdminCredentialsPage() {
                         </span>
                       </td>
 
-                      {/* Username */}
                       <td className="px-8 py-5">
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold text-xs">
@@ -384,7 +380,7 @@ export default function AdminCredentialsPage() {
                         </div>
                       </td>
 
-                      {/* Password - Always show actual password in Print (logic inside map) */}
+                     
                       <td className="px-8 py-5">
                         <div className="flex items-center justify-between max-w-[200px] bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200 group-hover:border-green-200 transition-colors">
                           <span className="font-mono text-sm text-gray-600 truncate mr-2">
@@ -396,7 +392,7 @@ export default function AdminCredentialsPage() {
                         </div>
                       </td>
 
-                      {/* Actions - UPDATE BUTTON (Hidden on Print) */}
+                      
                       <td className="px-8 py-5 text-center no-print">
                         <button 
                           onClick={() => openUpdateModal(user)}
@@ -418,12 +414,12 @@ export default function AdminCredentialsPage() {
           </div>
         </div>
 
-        {/* ----------------- UPDATE PASSWORD MODAL ----------------- */}
+      
         {showUpdateModal && selectedUser && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in duration-200 no-print">
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all scale-100">
               
-              {/* Modal Header */}
+             
               <div className="bg-green-50 px-6 py-4 border-b border-green-100 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="bg-white p-2 rounded-lg border border-green-200 shadow-sm">
@@ -442,10 +438,10 @@ export default function AdminCredentialsPage() {
                 </button>
               </div>
 
-              {/* Modal Form */}
+              
               <form onSubmit={handleUpdatePassword} className="p-6 space-y-4">
                 
-                {/* Previous Password Input */}
+                
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-gray-500 uppercase tracking-wide">Previous Password</label>
                   <div className="relative">
@@ -467,7 +463,7 @@ export default function AdminCredentialsPage() {
                   </div>
                 </div>
 
-                {/* New Password Input */}
+               
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-gray-500 uppercase tracking-wide">New Password</label>
                   <div className="relative">
@@ -489,7 +485,7 @@ export default function AdminCredentialsPage() {
                   </div>
                 </div>
 
-                {/* Action Buttons */}
+               
                 <div className="flex gap-3 pt-2">
                   <button
                     type="button"
