@@ -16,7 +16,7 @@ import {
 import { AdminNav } from "@/components/admin-nav";
 import { callApi } from "@/components/apis/commonApi";
 
-// Interface for the data coming from the GET API
+
 interface SlotData {
   SlotID: number;
   SlotNameEng: string;
@@ -35,13 +35,9 @@ interface SlotUpdateRecord {
 }
 
 export default function ModifySlotCapacity() {
-  // --- State Management ---
+  
   
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
-  
-  // UPDATED: Default to 1 (Departure)
-  // Departure = 1
-  // Arrival = 2
   const [journeyTypeId, setJourneyTypeId] = useState<number>(1); 
 
   // Data State
@@ -111,7 +107,7 @@ export default function ModifySlotCapacity() {
     }
   };
 
-  // Logic: Handle Capacity Input (No text, No negatives, No < 1)
+  // Logic: Handle Capacity Input 
   const handleCapacityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
@@ -260,7 +256,7 @@ export default function ModifySlotCapacity() {
                       Arrival
                   </button>
 
-                  {/* DEPARTURE BUTTON: Sets ID to 1 */}
+                  
                   <button 
                     onClick={() => setJourneyTypeId(1)}
                     className={`flex items-center gap-2 px-6 py-2.5 rounded-lg transition-all duration-200 ${
