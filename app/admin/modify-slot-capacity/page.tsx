@@ -38,7 +38,11 @@ export default function ModifySlotCapacity() {
   // --- State Management ---
   
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
-  const [journeyTypeId, setJourneyTypeId] = useState<number>(2); 
+  
+  // UPDATED: Default to 1 (Departure)
+  // Departure = 1
+  // Arrival = 2
+  const [journeyTypeId, setJourneyTypeId] = useState<number>(1); 
 
   // Data State
   const [slotList, setSlotList] = useState<SlotData[]>([]);
@@ -64,7 +68,7 @@ export default function ModifySlotCapacity() {
       const payload = {
         JourneyDate: selectedDate,
         AuthInfo: "{}",
-        Type: journeyTypeId 
+        Type: journeyTypeId // Sends 1 for Departure, 2 for Arrival
       };
 
       const response = await callApi("user/slot/get-available-slot-by-date", payload);
@@ -111,17 +115,13 @@ export default function ModifySlotCapacity() {
   const handleCapacityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
-    // Allow empty string to let user clear input
     if (value === '') {
       setCapacity('');
       return;
     }
 
-    // Convert to number
     const numValue = parseInt(value, 10);
 
-    // Only set state if it's a valid number and >= 1
-    // (NaN check handles non-numeric paste attempts that bypass type="number")
     if (!isNaN(numValue) && numValue >= 1) {
       setCapacity(numValue.toString());
     }
@@ -147,7 +147,7 @@ export default function ModifySlotCapacity() {
         SlotID: parseInt(selectedSlotId),
         SlotCapacity: parseInt(capacity),
         AuthInfo: "{}",
-        JourneyTypeID: journeyTypeId,
+        JourneyTypeID: journeyTypeId, 
         JourneyDate: selectedDate 
       };
 
@@ -159,12 +159,16 @@ export default function ModifySlotCapacity() {
         const targetSlotId = parseInt(selectedSlotId);
         const newCapacityStr = capacity.toString();
 
-        // 1. Update Local Log
+        
         const selectedSlotData = slotList.find(s => s.SlotID === targetSlotId);
+        
+        
+        const typeLabel = journeyTypeId === 2 ? "Arrival" : "Departure";
+
         const newRecord: SlotUpdateRecord = {
           slotName: selectedSlotData ? selectedSlotData.SlotNameEng : "Unknown",
           time: selectedSlotData ? selectedSlotData.TimeRangeEng : "-",
-          type: journeyTypeId === 1 ? "Arrival" : "Departure",
+          type: typeLabel,
           capacity: parseInt(capacity),
           status: "Updated",
           timestamp: new Date()
@@ -172,10 +176,10 @@ export default function ModifySlotCapacity() {
         
         setRecentUpdates(prev => [newRecord, ...prev]);
         
-        // Reset pagination to first page when new item is added
+        
         setCurrentPage(1);
 
-        // 2. Optimistic Update 
+      
         setSlotList(prevList => prevList.map(slot => 
           slot.SlotID === targetSlotId 
             ? { ...slot, SlotCapacity: newCapacityStr } 
@@ -198,7 +202,7 @@ export default function ModifySlotCapacity() {
     }
   };
 
-  // --- Pagination Logic ---
+  
   const totalPages = Math.ceil(recentUpdates.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentTableData = recentUpdates.slice(startIndex, startIndex + ITEMS_PER_PAGE);
@@ -216,7 +220,7 @@ export default function ModifySlotCapacity() {
       <AdminNav />
       <div className="max-w-7xl mx-auto px-6 py-8">
         
-        {/* Header */}
+        
         <div className="mb-8">
           <div className="inline-block mb-6">
             <span className="px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full text-sm font-medium border border-emerald-200 flex items-center gap-2">
@@ -238,6 +242,25 @@ export default function ModifySlotCapacity() {
               <div className="flex flex-col items-center">
                 <label className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Journey Type</label>
                 <div className="flex items-center gap-4 bg-gray-50 p-1.5 rounded-xl border border-gray-200">
+                  
+                  {/* ARRIVAL BUTTON: Sets ID to 2 */}
+                  <button 
+                    onClick={() => setJourneyTypeId(2)}
+                    className={`flex items-center gap-2 px-6 py-2.5 rounded-lg transition-all duration-200 ${
+                      journeyTypeId === 2
+                        ? 'bg-white text-emerald-700 shadow-sm ring-1 ring-emerald-200 font-semibold' 
+                        : 'text-gray-600 hover:bg-gray-100'
+                    }`}
+                  >
+                     <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                        journeyTypeId === 2 ? 'border-emerald-500' : 'border-gray-400'
+                      }`}>
+                        {journeyTypeId === 2 && <div className="w-2 h-2 bg-emerald-500 rounded-full" />}
+                      </div>
+                      Arrival
+                  </button>
+
+                  {/* DEPARTURE BUTTON: Sets ID to 1 */}
                   <button 
                     onClick={() => setJourneyTypeId(1)}
                     className={`flex items-center gap-2 px-6 py-2.5 rounded-lg transition-all duration-200 ${
@@ -246,26 +269,10 @@ export default function ModifySlotCapacity() {
                         : 'text-gray-600 hover:bg-gray-100'
                     }`}
                   >
-                     <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
                         journeyTypeId === 1 ? 'border-emerald-500' : 'border-gray-400'
                       }`}>
                         {journeyTypeId === 1 && <div className="w-2 h-2 bg-emerald-500 rounded-full" />}
-                      </div>
-                      Arrival
-                  </button>
-
-                  <button 
-                    onClick={() => setJourneyTypeId(2)}
-                    className={`flex items-center gap-2 px-6 py-2.5 rounded-lg transition-all duration-200 ${
-                      journeyTypeId === 2 
-                        ? 'bg-white text-emerald-700 shadow-sm ring-1 ring-emerald-200 font-semibold' 
-                        : 'text-gray-600 hover:bg-gray-100'
-                    }`}
-                  >
-                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                        journeyTypeId === 2 ? 'border-emerald-500' : 'border-gray-400'
-                      }`}>
-                        {journeyTypeId === 2 && <div className="w-2 h-2 bg-emerald-500 rounded-full" />}
                       </div>
                       Departure
                   </button>
@@ -315,14 +322,14 @@ export default function ModifySlotCapacity() {
                 </div>
               </div>
 
-              {/* Capacity Input - Updated */}
+              {/* Capacity Input */}
               <div className="space-y-2">
                 <label className="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">New Capacity</label>
                 <div className="relative group">
                   <input
                     type="number"
                     min="1"
-                    placeholder="Enter new capacity "
+                    placeholder="Enter new capacity"
                     value={capacity}
                     onKeyDown={handleKeyDown}
                     onChange={handleCapacityChange}
