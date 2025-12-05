@@ -88,9 +88,6 @@ export default function OfflineBookingPage() {
   const savePassengerDetails = async () => {
     const userIdCookie = Cookies.load("userID");
 
-    // ⚠️ CRITICAL FIX: If cookie is missing, '0' causes DB error. 
-    // We fallback to 6669 (from your Postman log) or keep 0 if you are sure.
-    // Ideally, ensure you are logged in so the cookie exists.
     const userId = userIdCookie ? parseInt(userIdCookie) : 6669;
 
     const today = new Date().toISOString().split('T')[0];
@@ -116,8 +113,7 @@ export default function OfflineBookingPage() {
       Passport: passportNumber
     });
 
-    // ⚠️ CRITICAL FIX: PrefferedSlotID set to 12 (Matches Postman). 
-    // Sending 0 usually causes a Foreign Key Error in the DB.
+    
     const response = await callApi("user/save-passenger-details", {
       PrefferedSlotID: 12,
       JourneyDate: today,

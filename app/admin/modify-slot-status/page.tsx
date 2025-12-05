@@ -201,7 +201,6 @@ export default function ChangeSlotStatus() {
                 </div>
               </div>
 
-              {/* Status Dropdown */}
               <div className="space-y-2">
                 <label className="text-xs font-bold text-gray-500 uppercase tracking-wide ml-1">New Status</label>
                 <div className="relative group">
@@ -219,7 +218,6 @@ export default function ChangeSlotStatus() {
               </div>
             </div>
 
-            {/* 4. Submit Button */}
             <div className="flex justify-center">
               <button
                 onClick={handleSubmit}
@@ -243,7 +241,6 @@ export default function ChangeSlotStatus() {
           </div>
         </div>
 
-        {/* History Table */}
         <div className="bg-white rounded-2xl shadow-sm border border-emerald-100 overflow-hidden">
           <div className="px-8 py-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
             <h3 className="font-bold text-gray-800 flex items-center gap-2">

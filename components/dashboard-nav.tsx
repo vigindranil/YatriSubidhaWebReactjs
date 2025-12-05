@@ -4,12 +4,13 @@ import { Suspense } from "react"
 import { LogOut, Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { usePathname, useSearchParams } from "next/navigation"
+import { usePathname, useSearchParams, useRouter } from "next/navigation"
 import { useState } from "react"
 
 function DashboardNavContent() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const router = useRouter() // Added router for programmatic navigation
   const currentTab = searchParams.get("tab")
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -28,6 +29,17 @@ function DashboardNavContent() {
     },
   ]
 
+
+  const handleLogout = () => {
+    
+    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;"
+    document.cookie = "session=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;"
+    
+  
+    router.push("/")
+    router.refresh() 
+  }
+
   return (
     <nav className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border-b border-slate-700/50 backdrop-blur-lg sticky top-0 z-40 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -44,7 +56,7 @@ function DashboardNavContent() {
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
+          
           <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
@@ -64,9 +76,11 @@ function DashboardNavContent() {
             ))}
             
             <div className="ml-2 pl-2 border-l border-slate-700">
+              
               <Button 
                 variant="ghost" 
-                className="text-slate-300 hover:text-white hover:bg-red-500/10 gap-2 transition-all duration-300 group"
+                onClick={handleLogout}
+                className="text-slate-300 hover:text-white hover:bg-red-500/10 gap-2 transition-all duration-300 group cursor-pointer"
               >
                 <LogOut className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                 <span>Log Out</span>
@@ -102,9 +116,11 @@ function DashboardNavContent() {
                 </Link>
               ))}
               
+             
               <Button 
                 variant="ghost" 
-                className="text-slate-300 hover:text-white hover:bg-red-500/10 gap-2 justify-start mt-2"
+                onClick={handleLogout}
+                className="text-slate-300 hover:text-white hover:bg-red-500/10 gap-2 justify-start mt-2 w-full"
               >
                 <LogOut className="w-4 h-4" />
                 <span>Log Out</span>
