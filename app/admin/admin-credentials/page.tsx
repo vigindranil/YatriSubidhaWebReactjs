@@ -15,16 +15,16 @@ import {
   Lock,     
   Save      
 } from "lucide-react";
-import Swal from 'sweetalert2'; // Import SweetAlert2
+import Swal from 'sweetalert2'; 
 import { AdminNav } from "@/components/admin-nav";
 import { callApi } from "@/components/apis/commonApi";
 
-// Import libraries for Export (Ensure these are installed: npm install xlsx jspdf jspdf-autotable)
+
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-// Interface matching your API response data structure
+
 interface UserCredential {
   UserID: number;
   UserTypeName: string;
@@ -36,17 +36,17 @@ export default function AdminCredentialsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [visiblePasswords, setVisiblePasswords] = useState<Set<number>>(new Set());
   
-  // State for API data
+  
   const [users, setUsers] = useState<UserCredential[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // --- NEW STATE FOR UPDATE PASSWORD MODAL ---
+  
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserCredential | null>(null);
   const [passwordForm, setPasswordForm] = useState({ previous: '', new: '' });
   const [isUpdating, setIsUpdating] = useState(false);
 
-  // State for Modal Password Visibility
+  
   const [showModalPrevPass, setShowModalPrevPass] = useState(false);
   const [showModalNewPass, setShowModalNewPass] = useState(false);
 

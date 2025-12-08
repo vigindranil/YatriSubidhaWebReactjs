@@ -40,7 +40,7 @@ export default function OperatorDashboardPage() {
                 </Button>
               </Link>
 
-              {/* Online Booking (new) */}
+              
               <Link href="/admin/operator/online-booking">
                 <Button className="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white gap-2 shadow-lg shadow-indigo-500/25 hover:shadow-xl transition-all duration-300 font-semibold">
                   <ClipboardList className="w-4 h-4" />
@@ -68,7 +68,7 @@ export default function OperatorDashboardPage() {
       </nav>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Journey Type Selection Card */}
+        
         <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 mb-8 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-full -mr-32 -mt-32 opacity-30"></div>
           
@@ -82,7 +82,7 @@ export default function OperatorDashboardPage() {
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4 max-w-2xl">
-              {/* Departure Radio Card */}
+                
               <div
                 onClick={() => setJourneyType("departure")}
                 className={`relative cursor-pointer rounded-xl border-2 p-6 transition-all duration-300 ${
@@ -132,7 +132,7 @@ export default function OperatorDashboardPage() {
                 )}
               </div>
 
-              {/* Arrival Radio Card */}
+              
               <div
                 onClick={() => setJourneyType("arrival")}
                 className={`relative cursor-pointer rounded-xl border-2 p-6 transition-all duration-300 ${
@@ -185,7 +185,7 @@ export default function OperatorDashboardPage() {
           </div>
         </div>
 
-        {/* Main Content Card */}
+        
         <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8">
           <div className="flex items-center gap-3 mb-6">
             <div className="bg-gradient-to-br from-emerald-500 to-teal-500 p-3 rounded-xl">
@@ -225,7 +225,7 @@ export default function OperatorDashboardPage() {
               </div>
             </Link>
 
-            {/* Online Booking (live) */}
+            
             <Link href="/admin/operator/online-booking" className="block group">
               <div className="relative border-2 border-slate-200 rounded-2xl p-6 hover:border-indigo-400 hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-white to-slate-50 overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-100 rounded-full -mr-16 -mt-16 opacity-0 group-hover:opacity-50 transition-opacity"></div>
@@ -245,7 +245,7 @@ export default function OperatorDashboardPage() {
               </div>
             </Link>
 
-                {/* Online Booking (live) */}
+            
             <Link href="/admin/admin-report" className="block group">
               <div className="relative border-2 border-slate-200 rounded-2xl p-6 hover:border-indigo-400 hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-white to-slate-50 overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-100 rounded-full -mr-16 -mt-16 opacity-0 group-hover:opacity-50 transition-opacity"></div>
@@ -271,4 +271,3 @@ export default function OperatorDashboardPage() {
     </main>
   )
 }
-// ...existing code...

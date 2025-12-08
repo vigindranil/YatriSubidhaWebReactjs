@@ -19,7 +19,7 @@ import {
   ChevronLeft,  
   ChevronRight 
 } from "lucide-react";
-import Swal from 'sweetalert2'; // Import SweetAlert2
+import Swal from 'sweetalert2'; 
 import { callApi } from "@/components/apis/commonApi";
 import { AdminNav } from '@/components/admin-nav';
 
@@ -97,12 +97,12 @@ export default function BookingReport() {
   
   const handleGetDetails = async (page = 1) => {
     if (!formData.startDate || !formData.endDate) {
-      // Validation Alert
+      
       Swal.fire({
         icon: 'warning',
         title: 'Missing Dates',
         text: 'Please select both Start Date and End Date',
-        confirmButtonColor: '#0d9488' // Teal to match theme
+        confirmButtonColor: '#0d9488' 
       });
       return;
     }
@@ -155,7 +155,7 @@ export default function BookingReport() {
       } else {
         
         if (page === 1) {
-            // API Error Alert
+            
             Swal.fire({
               icon: 'error',
               title: 'Request Failed',
@@ -175,7 +175,7 @@ export default function BookingReport() {
       }
     } catch (error) {
       console.error("Error fetching details:", error);
-      // Unexpected Error Alert
+      
       Swal.fire({
         icon: 'error',
         title: 'System Error',
