@@ -15,6 +15,7 @@ import {
   Lock,     
   Save      
 } from "lucide-react";
+import Swal from 'sweetalert2'; // Import SweetAlert2
 import { AdminNav } from "@/components/admin-nav";
 import { callApi } from "@/components/apis/commonApi";
 
@@ -108,7 +109,12 @@ export default function AdminCredentialsPage() {
     if (!selectedUser) return;
 
     if (!passwordForm.previous || !passwordForm.new) {
-      alert("Please fill in both password fields.");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Fields',
+        text: 'Please fill in both password fields.',
+        confirmButtonColor: '#16a34a'
+      });
       return;
     }
 
@@ -126,15 +132,31 @@ export default function AdminCredentialsPage() {
       const response = await callApi("admin/update-admin-password", payload);
 
       if (response.success) {
-        alert("Password updated successfully!");
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Password updated successfully!',
+          timer: 2000,
+          showConfirmButton: false
+        });
         setShowUpdateModal(false);
         fetchUsers(); 
       } else {
-        alert(`Failed to update: ${response.message || "Unknown error"}`);
+        Swal.fire({
+          icon: 'error',
+          title: 'Update Failed',
+          text: `Failed to update: ${response.message || "Unknown error"}`,
+          confirmButtonColor: '#ef4444'
+        });
       }
     } catch (error) {
       console.error("Update error:", error);
-      alert("An error occurred while connecting to the server.");
+      Swal.fire({
+        icon: 'error',
+        title: 'System Error',
+        text: 'An error occurred while connecting to the server.',
+        confirmButtonColor: '#ef4444'
+      });
     } finally {
       setIsUpdating(false);
     }
@@ -143,7 +165,12 @@ export default function AdminCredentialsPage() {
 
   const handleExportExcel = () => {
     if (filteredData.length === 0) {
-      alert("No data to export");
+      Swal.fire({
+        icon: 'info',
+        title: 'No Data',
+        text: 'No data to export',
+        confirmButtonColor: '#16a34a'
+      });
       return;
     }
 
@@ -191,7 +218,12 @@ export default function AdminCredentialsPage() {
   
   const handleExportPDF = () => {
     if (filteredData.length === 0) {
-      alert("No data to export");
+      Swal.fire({
+        icon: 'info',
+        title: 'No Data',
+        text: 'No data to export',
+        confirmButtonColor: '#16a34a'
+      });
       return;
     }
 
@@ -226,7 +258,12 @@ export default function AdminCredentialsPage() {
       doc.save("AdminCredentials.pdf");
     } catch (error) {
       console.error("PDF Export Error:", error);
-      alert("Failed to export PDF. Please ensure jsPDF is installed or use Print -> Save as PDF.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Export Failed',
+        text: 'Failed to export PDF. Please ensure jsPDF is installed or use Print -> Save as PDF.',
+        confirmButtonColor: '#ef4444'
+      });
     }
   };
 
