@@ -352,7 +352,7 @@ export default function ModifySlotCapacity() {
         </div>
 
         
-        <div className="bg-white rounded-2xl shadow-sm border border-emerald-100 overflow-hidden">
+        {/* <div className="bg-white rounded-2xl shadow-sm border border-emerald-100 overflow-hidden">
           <div className="px-8 py-6 border-b border-gray-100 bg-gray-50/50">
             <h3 className="font-bold text-gray-800 flex items-center gap-2">
               <Clock className="w-5 h-5 text-emerald-600" />
@@ -431,7 +431,7 @@ export default function ModifySlotCapacity() {
               </div>
             </div>
           )}
-        </div>
+        </div> */}
 
       </div>
     </main>

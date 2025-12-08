@@ -261,12 +261,15 @@ export default function ChangeSlotStatus() {
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {recentChanges.length === 0 ? (
-                   <tr>
-                     <td colSpan={5} className="px-8 py-10 text-center text-gray-400 text-sm flex flex-col items-center justify-center gap-2">
-                       <AlertCircle className="w-5 h-5 opacity-50" />
-                       No changes made in this session.
-                     </td>
-                   </tr>
+                 <tr>
+  <td colSpan={5} className="px-8 py-10 text-center text-gray-400 text-sm">
+    <div className="flex flex-col items-center justify-center gap-2">
+      <AlertCircle className="w-5 h-5 opacity-50" />
+      No changes made in this session.
+    </div>
+  </td>
+</tr>
+
                 ) : (
                   recentChanges.map((row, index) => (
                     <tr key={index} className="hover:bg-green-50/30 transition-colors animate-in fade-in slide-in-from-top-2">
