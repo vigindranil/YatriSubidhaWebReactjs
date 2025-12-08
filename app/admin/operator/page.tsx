@@ -11,7 +11,7 @@ export default function OperatorDashboardPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50">
-      {/* Enhanced Navigation */}
+      
       <nav className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border-b border-slate-700/50 backdrop-blur-lg shadow-lg sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="h-16 flex items-center justify-between">
@@ -32,7 +32,7 @@ export default function OperatorDashboardPage() {
                 <span className="text-white font-medium text-sm">Operator #12</span>
               </div>
 
-              {/* Offline Booking */}
+              
               <Link href="/admin/operator/offline-booking">
                 <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white gap-2 shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/40 transition-all duration-300 font-semibold">
                   <CreditCard className="w-4 h-4" />
