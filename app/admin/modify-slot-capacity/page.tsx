@@ -13,6 +13,7 @@ import {
   ChevronLeft,
   ChevronRight
 } from "lucide-react";
+import Swal from 'sweetalert2'; // Import SweetAlert2
 import { AdminNav } from "@/components/admin-nav";
 import { callApi } from "@/components/apis/commonApi";
 
@@ -130,7 +131,13 @@ export default function ModifySlotCapacity() {
 
   const handleSubmit = async () => {
     if(!selectedSlotId || !capacity) {
-      alert("Please select a slot and enter capacity.");
+      // Validation Alert
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Fields',
+        text: 'Please select a slot and enter capacity.',
+        confirmButtonColor: '#059669'
+      });
       return;
     }
 
@@ -148,7 +155,14 @@ export default function ModifySlotCapacity() {
       const response = await callApi("admin/update-slot-capacity", payload);
 
       if (response.success) {
-        alert("Slot capacity updated successfully.");
+        // Success Alert
+        Swal.fire({
+          icon: 'success',
+          title: 'Updated!',
+          text: 'Slot capacity updated successfully.',
+          timer: 2000,
+          showConfirmButton: false
+        });
         
         const targetSlotId = parseInt(selectedSlotId);
         const newCapacityStr = capacity.toString();
@@ -186,11 +200,23 @@ export default function ModifySlotCapacity() {
         }, 500); 
         
       } else {
-        alert(`Failed to update: ${response.message}`);
+        // API Error Alert
+        Swal.fire({
+          icon: 'error',
+          title: 'Update Failed',
+          text: `Failed to update: ${response.message}`,
+          confirmButtonColor: '#ef4444'
+        });
       }
     } catch (error) {
       console.error("API Error updating:", error);
-      alert("Server connection error.");
+      // Server Error Alert
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Server connection error.',
+        confirmButtonColor: '#ef4444'
+      });
     } finally {
       setSubmitting(false);
     }

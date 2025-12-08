@@ -13,6 +13,7 @@ import {
   Loader2,
   AlertCircle
 } from "lucide-react";
+import Swal from 'sweetalert2'; // Import SweetAlert2
 import { AdminNav } from "@/components/admin-nav";
 import { callApi } from "@/components/apis/commonApi";
 
@@ -23,7 +24,6 @@ interface StatusChangeRecord {
   slotName: string;
   timestamp: string;
 }
-
 
 const STATIC_SLOTS = Array.from({ length: 24 }, (_, i) => ({
   id: i + 1,
@@ -43,8 +43,14 @@ export default function ChangeSlotStatus() {
   const [recentChanges, setRecentChanges] = useState<StatusChangeRecord[]>([]);
 
   const handleSubmit = async () => {
+    // 1. Validation Check
     if(!selectedSlotId || !activeStatus || !fromDate || !toDate) {
-      alert("Please fill in all fields (Slot, Status, and Date Range).");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Fields',
+        text: 'Please fill in all fields (Slot, Status, and Date Range).',
+        confirmButtonColor: '#059669', // Emerald color to match theme
+      });
       return;
     }
 
@@ -63,7 +69,14 @@ export default function ChangeSlotStatus() {
       const response = await callApi("admin/update-slot-active-status", payload);
 
       if (response.success) {
-        alert(response.message || "Slot status updated successfully.");
+        // 2. Success Alert
+        Swal.fire({
+          icon: 'success',
+          title: 'Updated!',
+          text: response.message || "Slot status updated successfully.",
+          timer: 2000,
+          showConfirmButton: false
+        });
 
         const newRecord: StatusChangeRecord = {
           type: journeyTypeId === 2 ? "Arrival" : "Departure",
@@ -76,11 +89,23 @@ export default function ChangeSlotStatus() {
         setRecentChanges(prev => [newRecord, ...prev]);
 
       } else {
-        alert(`Failed to update: ${response.message}`);
+        // 3. API Failure Alert
+        Swal.fire({
+          icon: 'error',
+          title: 'Update Failed',
+          text: response.message || 'Unknown error occurred.',
+          confirmButtonColor: '#ef4444',
+        });
       }
     } catch (error) {
       console.error("API Error:", error);
-      alert("Server connection error.");
+      // 4. Network/Server Error Alert
+      Swal.fire({
+        icon: 'error',
+        title: 'Connection Error',
+        text: 'Server connection error.',
+        confirmButtonColor: '#ef4444',
+      });
     } finally {
       setSubmitting(false);
     }
@@ -262,14 +287,13 @@ export default function ChangeSlotStatus() {
               <tbody className="divide-y divide-gray-50">
                 {recentChanges.length === 0 ? (
                  <tr>
-  <td colSpan={5} className="px-8 py-10 text-center text-gray-400 text-sm">
-    <div className="flex flex-col items-center justify-center gap-2">
-      <AlertCircle className="w-5 h-5 opacity-50" />
-      No changes made in this session.
-    </div>
-  </td>
-</tr>
-
+                  <td colSpan={5} className="px-8 py-10 text-center text-gray-400 text-sm">
+                    <div className="flex flex-col items-center justify-center gap-2">
+                      <AlertCircle className="w-5 h-5 opacity-50" />
+                      No changes made in this session.
+                    </div>
+                  </td>
+                </tr>
                 ) : (
                   recentChanges.map((row, index) => (
                     <tr key={index} className="hover:bg-green-50/30 transition-colors animate-in fade-in slide-in-from-top-2">

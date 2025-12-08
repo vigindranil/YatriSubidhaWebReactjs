@@ -19,6 +19,7 @@ import {
   ChevronLeft,  
   ChevronRight 
 } from "lucide-react";
+import Swal from 'sweetalert2'; // Import SweetAlert2
 import { callApi } from "@/components/apis/commonApi";
 import { AdminNav } from '@/components/admin-nav';
 
@@ -96,7 +97,13 @@ export default function BookingReport() {
   
   const handleGetDetails = async (page = 1) => {
     if (!formData.startDate || !formData.endDate) {
-      alert("Please select both Start Date and End Date");
+      // Validation Alert
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Dates',
+        text: 'Please select both Start Date and End Date',
+        confirmButtonColor: '#0d9488' // Teal to match theme
+      });
       return;
     }
 
@@ -148,16 +155,33 @@ export default function BookingReport() {
       } else {
         
         if (page === 1) {
-            alert(response.message || "Failed to fetch booking reports");
+            // API Error Alert
+            Swal.fire({
+              icon: 'error',
+              title: 'Request Failed',
+              text: response.message || "Failed to fetch booking reports",
+              confirmButtonColor: '#ef4444'
+            });
             setBookings([]);
         } else {
-            
-            alert("No more records found.");
+            // Pagination End Alert
+            Swal.fire({
+              icon: 'info',
+              title: 'No More Records',
+              text: "No more records found.",
+              confirmButtonColor: '#0d9488'
+            });
         }
       }
     } catch (error) {
       console.error("Error fetching details:", error);
-      alert("An unexpected error occurred");
+      // Unexpected Error Alert
+      Swal.fire({
+        icon: 'error',
+        title: 'System Error',
+        text: "An unexpected error occurred",
+        confirmButtonColor: '#ef4444'
+      });
     } finally {
       setLoading(false);
     }
