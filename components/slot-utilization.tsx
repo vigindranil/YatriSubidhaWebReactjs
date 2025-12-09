@@ -180,12 +180,12 @@ export function SlotUtilization({ dateRange }: SlotUtilizationProps) {
               Pending: <strong>{stats.pending}</strong>
             </span>
           </div>
-          <div className="flex items-center gap-2 p-2 bg-slate-50 rounded-lg">
+          {/* <div className="flex items-center gap-2 p-2 bg-slate-50 rounded-lg">
             <div className="w-3 h-3 rounded-full bg-slate-400"></div>
             <span className="text-sm text-slate-600">
               Total Pax: <strong>{stats.total}</strong>
             </span>
-          </div>
+          </div> */}
         </div>
       )}
     </div>
