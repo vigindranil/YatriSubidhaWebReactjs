@@ -1,5 +1,11 @@
 import { Button } from "@/components/ui/button"
-import { Settings, Users, Bell, LogOut, UserCircle, CreditCard, ClipboardList } from "lucide-react"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { LogOut, UserCircle } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react";
 import Cookies from "react-cookies";
@@ -12,22 +18,24 @@ export function AdminNav() {
 
   useEffect(() => {
     setFullName(Cookies.load("userFullName"));
-    setUserType(Cookies.load("userType"));
+    setUserType(Cookies.load("userTypeID"));
   }, [])
 
   const handleLogout = () => {
-
     Cookies.remove("userFullName", { path: '/' });
-    Cookies.remove("userType", { path: '/' });
+    Cookies.remove("userTypeID", { path: '/' });
     router.push("/");
   };
+
+  // Unified Button Style (Glass/Glow Effect)
+  const buttonStyles = "bg-transparent border-white/20 text-white hover:bg-white/5 shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.25)] transition-all duration-300";
 
   return (
     <nav className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border-b border-slate-700/50 backdrop-blur-lg shadow-lg sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="h-16 flex items-center justify-between">
 
-
+          {/* Logo Section */}
           <Link href="/admin/dashboard">
             <div className="flex items-center gap-3 group cursor-pointer">
               <div className="relative w-11 h-11 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-emerald-500/50 transition-all duration-300 group-hover:scale-105">
@@ -35,62 +43,99 @@ export function AdminNav() {
                 <span className="relative text-white font-bold text-lg tracking-tight">AS</span>
               </div>
               <div className="flex flex-col">
-                <span className="font-bold text-xl text-white leading-none">{userType == "1" ? "Super Admin" : userType == "2" ? "Counter Operator" : userType == "3" ? "" : ""}</span>
+                <span className="font-bold text-xl text-white leading-none">
+                  {userType == "1" ? "Super Admin" : userType == "2" ? "Counter Operator" : ""}
+                </span>
                 <span className="text-xs text-emerald-400 font-medium">Service Desk Portal</span>
               </div>
             </div>
           </Link>
 
           <div className="flex items-center gap-3">
+            {/* User Profile Badge */}
             <div className="hidden sm:flex items-center gap-2 bg-slate-700/50 px-4 py-2 rounded-lg border border-slate-600">
               <UserCircle className="w-5 h-5 text-emerald-400" />
-              <Link href="/admin/dashboard " className="text-white font-medium text-sm">{fullName} </Link>
+              <Link href="/admin/dashboard" className="text-white font-medium text-sm">{fullName}</Link>
             </div>
-            <Link href="/admin/operator/offline-booking">
-              <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white gap-2 shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/40 transition-all duration-300 font-semibold">
-                <CreditCard className="w-4 h-4" />
-                Offline Booking
-              </Button>
-            </Link>
-            <Link href="/admin/operator/online-booking">
-              <Button className="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white gap-2 shadow-lg shadow-indigo-500/25 hover:shadow-xl transition-all duration-300 font-semibold">
-                <ClipboardList className="w-4 h-4" />
-                Online Booking
+
+            {/* --- DASHBOARD --- */}
+            <Link href="/admin/dashboard">
+              <Button variant="outline" className={buttonStyles}>
+                Dashboard
               </Button>
             </Link>
 
-            {userType == "1" && <Link href="/admin/admin-credentials">
-              <Button variant="outline" className="border-white/30 text-white bg-transparent gap-2">
-                <Users className="w-4 h-4" />
-                Credentials
-              </Button>
-            </Link>}
-            {userType == "1" && <Link href="/admin/admin-report">
-              <Button variant="outline" className="border-white/30 text-white bg-transparent gap-2">
-                <Users className="w-4 h-4" />
-                Booking Report
-              </Button>
-            </Link>}    
-            {userType == "1" && <Link href="/admin/modify-slot-capacity">
-              <Button variant="outline" className="border-white/30 text-white bg-transparent gap-2">
-                <Users className="w-4 h-4" />
-                Slot Capacity
-              </Button>
-            </Link>}
-            {userType == "1" && <Link href="/admin/modify-slot-status">
-              <Button variant="outline" className="border-white/30 text-white bg-transparent gap-2">
-                <Users className="w-4 h-4" />
-                Slot Status
-              </Button>
-            </Link>}
-            <Link href="/admin/admin-report">
-              <Button variant="outline" className="border-white/30 text-white bg-transparent gap-2">
-                <Users className="w-4 h-4" />
-                Booking Report
-              </Button>
-            </Link>
+            {/* --- DROPDOWN: BOOKING --- */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className={buttonStyles}>
+                  Bookings
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-slate-800 border-slate-700 text-white">
+                <Link href="/admin/operator/offline-booking">
+                  <DropdownMenuItem className="cursor-pointer focus:bg-slate-700 focus:text-white">
+                    Offline Booking
+                  </DropdownMenuItem>
+                </Link>
+                <Link href="/admin/operator/online-booking">
+                  <DropdownMenuItem className="cursor-pointer focus:bg-slate-700 focus:text-white">
+                    Online Booking
+                  </DropdownMenuItem>
+                </Link>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
+            {/* --- DROPDOWN: MANAGE SLOTS (Super Admin Only) --- */}
+            {userType == "1" && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className={buttonStyles}>
+                    Manage Slots
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-slate-800 border-slate-700 text-white">
+                  <Link href="/admin/modify-slot-capacity">
+                    <DropdownMenuItem className="cursor-pointer focus:bg-slate-700 focus:text-white">
+                      Slot Capacity
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href="/admin/modify-slot-status">
+                    <DropdownMenuItem className="cursor-pointer focus:bg-slate-700 focus:text-white">
+                      Slot Status
+                    </DropdownMenuItem>
+                  </Link>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
 
+            {/* --- OTHER LINKS --- */}
+            {userType == "1" && (
+              <>
+                <Link href="/admin/admin-credentials">
+                  <Button variant="outline" className={buttonStyles}>
+                    User Management
+                  </Button>
+                </Link>
+
+                <Link href="/admin/admin-report">
+                  <Button variant="outline" className={buttonStyles}>
+                    Booking Report
+                  </Button>
+                </Link>
+              </>
+            )}
+
+            {/* Fallback Booking Report Link */}
+            {userType !== "1" && (
+              <Link href="/admin/admin-report">
+                <Button variant="outline" className={buttonStyles}>
+                  Booking Report
+                </Button>
+              </Link>
+            )}
+
+            {/* Logout (Icon Only - Style kept distinct as it is an action icon) */}
             <Button
               variant="ghost"
               onClick={handleLogout}

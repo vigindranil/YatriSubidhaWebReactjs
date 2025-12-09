@@ -50,12 +50,21 @@ export default function AdminCredentialsPage() {
   const [showModalPrevPass, setShowModalPrevPass] = useState(false);
   const [showModalNewPass, setShowModalNewPass] = useState(false);
 
-  // Fetch data on page load
+   const getCookie = (name: string) => {
+    if (typeof document === 'undefined') return null;
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop()?.split(';').shift();
+    return null;
+  };
+  const cookieUserID = getCookie('userID');
+ const dynamicUserID = cookieUserID ? parseInt(cookieUserID) : 0;
+
   const fetchUsers = async () => {
     setLoading(true);
     try {
       const payload = {
-        UserID: 1,
+        UserID: dynamicUserID,
         AuthInfo: "{}"
       };
 
