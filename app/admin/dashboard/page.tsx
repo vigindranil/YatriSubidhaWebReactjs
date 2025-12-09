@@ -72,7 +72,7 @@ export default function AdminDashboard() {
             <PassengerQueue dateRange={dateRange} />
           </div>
           <div className="lg:col-span-1">
-            <SlotUtilization />
+            <SlotUtilization dateRange={dateRange} />
           </div>
         </div>
       </div>
