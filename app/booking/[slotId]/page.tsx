@@ -180,8 +180,10 @@ function BookingContent() {
     console.log(result)
 
     if (result.success) {
-      const bookingId = result?.data[0]?.TokenNo;
-      router.push(`/pass/${bookingId}?type=${type == "1" ? "Departure" : "Arrival"}`)
+      const tokenList = result?.data?.map((item: any) => item.TokenNo) || []
+      const tokenString = tokenList.join(",")
+
+      router.push(`/pass/${btoa(tokenString)}?type=${type == "1" ? "Departure" : "Arrival"}`)
     } else {
       alert(result.message)
     }
@@ -318,7 +320,7 @@ function BookingContent() {
                               handlePassengerChange(
                                 passenger.id,
                                 "mobileNumber",
-                              e.target.value.replace(/\D/g, "").slice(0, 10) 
+                                e.target.value.replace(/\D/g, "").slice(0, 10)
                               )
                             }
                             className="flex-1"

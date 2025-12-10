@@ -12,6 +12,8 @@ import jsPDF from "jspdf"
 
 export default function PassPage({ params }: { params: Promise<{ bookingId: string }> }) {
   const { bookingId } = use(params)
+  const decodedBookingId = atob(decodeURIComponent(bookingId));
+  console.log(decodedBookingId)
   const passRef = useRef<HTMLDivElement>(null)
   const [showShareMenu, setShowShareMenu] = useState(false)
   const [bookingDetails, setBookingDetails] = useState<any>([])
@@ -19,7 +21,7 @@ export default function PassPage({ params }: { params: Promise<{ bookingId: stri
   const type = (searchParams.get("type") as "Departure" | "Arrival") || "Departure"
 
   const getBookingDetailsByTokenNo = async () => {
-    const response = await callApi("user/slot/get-departure-booking-details-by-token-number", { AuthInfo: "{}", TokenNo: bookingId })
+    const response = await callApi("user/slot/get-departure-booking-details-by-token-number", { AuthInfo: "{}", TokenNo: decodeURIComponent(decodedBookingId) })
     if (response.success) {
       console.log(response)
       setBookingDetails(response.data)
@@ -40,7 +42,7 @@ export default function PassPage({ params }: { params: Promise<{ bookingId: stri
     try {
       // Using toPng from html-to-image handles modern CSS colors correctly
       const dataUrl = await toPng(passRef.current, { cacheBust: true })
-      
+
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",
@@ -53,7 +55,7 @@ export default function PassPage({ params }: { params: Promise<{ bookingId: stri
 
       // Add image to PDF (x, y, width, height)
       pdf.addImage(dataUrl, "PNG", 0, 10, pdfWidth, pdfHeight)
-      pdf.save(`Yatri-Subidha-Pass-${bookingId}.pdf`)
+      pdf.save(`Yatri-Subidha-Pass-${decodedBookingId}.pdf`)
     } catch (error) {
       console.error("Error generating PDF:", error)
     }
@@ -61,7 +63,7 @@ export default function PassPage({ params }: { params: Promise<{ bookingId: stri
 
   const getShareText = () => {
     // Using \r\n ensures new lines work correctly on most mobile clients
-    return `Here is my Yatri Subidha Pass.\r\n\r\nReference: ${bookingDetails[0]?.TokenNo || bookingId}\r\nDate: ${bookingDetails[0]?.JourneyDate}\r\nTime: ${bookingDetails[0]?.SlotTime}`
+    return `Here is my Yatri Subidha Pass.\r\n\r\nReference: ${bookingDetails[0]?.TokenNo || decodedBookingId}\r\nDate: ${bookingDetails[0]?.JourneyDate}\r\nTime: ${bookingDetails[0]?.SlotTime}`
   }
 
   const shareViaEmail = () => {
@@ -90,7 +92,7 @@ export default function PassPage({ params }: { params: Promise<{ bookingId: stri
         <div className="mb-8 print-hide">
           <h1 className="text-3xl font-bold text-slate-900 mb-2">Your Yatri Subidha Pass</h1>
           <p className="text-slate-600">
-            Reference: <span className="font-semibold">{bookingId}</span>
+            Reference: {decodeURIComponent(decodedBookingId).split(",").map((item: string, index: number) => <span key={index} className="font-semibold mx-1 border border-slate-200 px-2 py-1 rounded-full ">{item}</span>)}
           </p>
         </div>
         {/* Back Button */}
@@ -105,7 +107,7 @@ export default function PassPage({ params }: { params: Promise<{ bookingId: stri
         {/* Pass Display */}
         <div className="mb-8 print-area" ref={passRef}>
           <DigitalPass
-            bookingId={bookingDetails[0]?.BookingID}
+            bookingId={bookingDetails[0]?.decodedBookingId}
             reference={bookingDetails[0]?.TokenNo}
             date={bookingDetails[0]?.JourneyDate}
             time={bookingDetails[0]?.SlotTime}
@@ -130,9 +132,9 @@ export default function PassPage({ params }: { params: Promise<{ bookingId: stri
           </Button>
 
           <div className="relative">
-            <Button 
-              onClick={() => setShowShareMenu(!showShareMenu)} 
-              variant="outline" 
+            <Button
+              onClick={() => setShowShareMenu(!showShareMenu)}
+              variant="outline"
               className="w-full gap-2 relative"
             >
               <Share2 className="w-4 h-4" />

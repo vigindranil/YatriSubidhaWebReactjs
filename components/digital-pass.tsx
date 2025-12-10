@@ -31,12 +31,12 @@ export function DigitalPass({
 }: DigitalPassProps) {
 
   const slotTailwindColors: Record<string, { bg: string; text: string }> = {
-    "SLOT-1": { bg: "bg-pink-400", text: "text-gray-800" },      // #FF6EC7
-    "SLOT-2": { bg: "bg-purple-400", text: "text-gray-800" },    // #AA77FF
-    "SLOT-3": { bg: "bg-blue-500", text: "text-gray-800" },      // #068FFF
-    "SLOT-4": { bg: "bg-red-500", text: "text-gray-800" },       // #FF2965
-    "SLOT-5": { bg: "bg-green-700", text: "text-gray-200" },     // #2B7A0B
-    "SLOT-6": { bg: "bg-teal-300", text: "text-gray-800" },      // #2BE5A6
+    "SLOT-1": { bg: "bg-pink-400", text: "text-white" },      // #FF6EC7
+    "SLOT-2": { bg: "bg-purple-400", text: "text-white" },    // #AA77FF
+    "SLOT-3": { bg: "bg-blue-500", text: "text-white" },      // #068FFF
+    "SLOT-4": { bg: "bg-red-500", text: "text-white" },       // #FF2965
+    "SLOT-5": { bg: "bg-green-700", text: "text-white" },     // #2B7A0B
+    "SLOT-6": { bg: "bg-teal-300", text: "text-white" },      // #2BE5A6
     "SLOT-7": { bg: "bg-pink-600", text: "text-gray-800" },      // #C84186
     "SLOT-8": { bg: "bg-purple-600", text: "text-gray-200" },    // #6F38C5
     "SLOT-9": { bg: "bg-yellow-400", text: "text-gray-800" },    // #FFD700
@@ -74,10 +74,6 @@ export function DigitalPass({
             <p className="text-sm opacity-80">Yatri Suvidha</p>
             <h1 className="text-2xl font-bold">Border Clearance Pass</h1>
           </div>
-          <div className="text-right">
-            <p className="text-xs opacity-80">Ref.</p>
-            <p className="text-lg font-bold">{reference}</p>
-          </div>
         </div>
       </div>
 
@@ -91,12 +87,11 @@ export function DigitalPass({
         </div>
       </div>
 
-      {/* QR Code + Info */}
       <div className="p-6 flex flex-col items-center text-center">
         {/* QR Code generated using TokenNo */}
-        <QRCodeCanvas className="w-36 h-36 rounded-lg mb-3 border-2 " value={reference} size={100} level="H" includeMargin={true} />
+        {/* <QRCodeCanvas className="w-36 h-36 rounded-lg mb-3 border-2 " value={reference} size={100} level="H" includeMargin={true} /> */}
         {/* <img src={qrCode} alt="QR Code" className="w-36 h-36 rounded-lg mb-3" /> */}
-        <p className="text-xs text-slate-500">Scan at ICP Petrapole for verification</p>
+        <p className="text-xs text-slate-500">Scan QRs at ICP Petrapole for verification</p>
       </div>
 
       {/* Passenger List */}
@@ -106,11 +101,12 @@ export function DigitalPass({
         </h2>
 
         <div className="space-y-3">
-          {passengers?.map((p, index) => (
+          {passengers?.map((p: any, index) => (
             <div
               key={index}
               className="p-4 bg-slate-50 rounded-lg border border-slate-200"
             >
+              <QRCodeCanvas className="w-36 h-36 rounded-lg mb-3 border-2 " value={p?.TokenNo} size={100} level="H" includeMargin={true} />
               <p className="text-sm font-semibold text-slate-800">
                 Passenger {index + 1}: {p?.PasengerName}
               </p>
@@ -145,8 +141,8 @@ export function DigitalPass({
                   <span className="font-semibold">Attendance Status:</span> {p?.AttendanceStatus}
                 </p>
                 <p>
-                  <span className="font-semibold">Attendance Date:</span>{" "}
-                  {p?.AttendenceDate ? new Date(p.AttendenceDate).toLocaleDateString() : "N/A"}
+                  <span className="font-semibold">Ticket No:</span>{" "}
+                  {p?.TokenNo}
                 </p>
               </div>
             </div>
