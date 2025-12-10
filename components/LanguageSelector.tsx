@@ -9,8 +9,8 @@ const LanguageSelectorSafe = ({ children, className }) => {
 
   // list of languages
   const LANGUAGES = [
-    { code: "bn", name: "Bengali" },
-    { code: "bho", name: "Bhojpuri" },
+    { code: "bn", name: "Bangla" },
+    //{ code: "bho", name: "Bhojpuri" },
     { code: "en", name: "English" },
     { code: "hi", name: "Hindi" },
   ];
@@ -63,8 +63,8 @@ const LanguageSelectorSafe = ({ children, className }) => {
   };
 
   return (
-    <div 
-      ref={containerRef} 
+    <div
+      ref={containerRef}
       className={`relative inline-block text-left z-50 ${className || ""}`}
     >
 
@@ -74,11 +74,10 @@ const LanguageSelectorSafe = ({ children, className }) => {
         ) : (
           <button
             type="button"
-            className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium border rounded-lg shadow-sm focus:outline-none transition-all ${
-              isOpen
+            className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium border rounded-lg shadow-sm focus:outline-none transition-all ${isOpen
                 ? "bg-gray-100 text-gray-900 border-gray-300"
                 : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
-            }`}
+              }`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -106,9 +105,8 @@ const LanguageSelectorSafe = ({ children, className }) => {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className={`transition-transform duration-200 ${
-                isOpen ? "rotate-180" : ""
-              }`}
+              className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""
+                }`}
             >
               <path d="m6 9 6 6 6-6" />
             </svg>
@@ -118,11 +116,10 @@ const LanguageSelectorSafe = ({ children, className }) => {
 
       {/* DROPDOWN MENU */}
       <div
-        className={`absolute right-0 mt-2 w-[220px] p-2 bg-white border border-gray-200 rounded-lg shadow-xl z-50 max-h-64 overflow-y-auto transform transition-all duration-200 origin-top-right ${
-          isOpen
+        className={`absolute right-0 mt-2 w-[220px] p-2 bg-white border border-gray-200 rounded-lg shadow-xl z-50 max-h-64 overflow-y-auto transform transition-all duration-200 origin-top-right ${isOpen
             ? "opacity-100 scale-100 translate-y-0"
             : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
-        }`}
+          }`}
       >
         <div className="text-xs text-gray-500 mb-2 px-1">Select Language:</div>
         <ul className="divide-y divide-gray-100">

@@ -323,85 +323,101 @@ export default function BookingReport() {
                   <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Passport Number</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
-                {bookings.length === 0 ? (
-                  <tr>
-                    <td colSpan={7} className="px-6 py-16 text-center">
-                      <div className="flex flex-col items-center justify-center text-gray-400">
-                        <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
-                          <Search size={32} className="opacity-40" />
-                        </div>
-                        <p className="text-lg font-medium text-gray-600">No records found</p>
-                        <p className="text-sm mt-1 text-gray-500">
-                          {formData.slot ? `No bookings found for ${formData.slot}.` : "Select filters and click 'Get Details'."}
-                        </p>
-                      </div>
-                    </td>
-                  </tr>
-                ) : (
-                  bookings.map((booking, index) => {
-                    const isExpanded = expandedRows.has(index);
-                    return (
-                      <Fragment key={index}>
-                        <tr className={`hover:bg-slate-50 transition-colors cursor-pointer border-l-4 ${isExpanded ? 'bg-slate-50/80 border-l-teal-500' : 'border-l-transparent'}`} onClick={() => toggleRow(index)}>
-                          <td className="px-4 py-4 text-center">
-                            {isExpanded ? <ChevronUp className="w-5 h-5 text-teal-600" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
-                          </td>
-                          <td className="px-6 py-4 text-sm text-gray-900 font-bold truncate" title={booking.name}>{booking.name}</td>
-                          <td className="px-6 py-4 text-sm">
-                            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold shadow-sm ${booking.attendanceStatus !== 'NOT ATTENDED'
-                              ? 'bg-emerald-100 text-emerald-700 border border-emerald-200'
-                              : 'bg-red-50 text-red-600 border border-red-100'
-                              }`}>
-                              {booking.attendanceStatus !== 'NOT ATTENDED' && <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>}
-                              {booking.attendanceStatus}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 text-sm text-gray-600 font-medium">{booking.journeyDate}</td>
-                          <td className="px-6 py-4 text-sm">
-                            <span className="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md font-medium text-xs border border-slate-200">
-                              {booking.slotName}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 text-sm text-gray-600 font-mono">{booking.passport}</td>
-                        </tr>
-                        {isExpanded && (
-                          <tr className="bg-slate-50/50 border-b border-gray-100 shadow-inner">
-                            <td colSpan={7} className="px-6 py-6">
-                              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-top-1 duration-200 pl-4">
-                                <div className="space-y-1">
-                                  <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Reference Number</p>
-                                  <p className="text-sm font-mono text-teal-700 bg-white inline-block px-2 py-1 rounded border border-gray-200 shadow-sm">{booking.reference}</p>
-                                </div>
-                                <div className="space-y-1">
-                                  <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Slot Time</p>
-                                  <p className="text-sm text-gray-700 font-medium">{booking.slotTime}</p>
-                                </div>
-                                <div className="space-y-1">
-                                  <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Attendance Date</p>
-                                  <p className="text-sm text-gray-700 font-medium">{booking.attendanceDate}</p>
-                                </div>
-                                <div className="space-y-1">
-                                  <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Nationality</p>
-                                  <p className="text-sm text-gray-700 font-medium">{booking.nationality}</p>
-                                </div>
-                                <div className="space-y-1">
-                                  <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Phone Number</p>
-                                  <p className="text-sm text-gray-700 font-medium">{booking.phone}</p>
-                                </div>
-                                <div className="space-y-1">
-                                  <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Email ID</p>
-                                  <p className="text-sm text-gray-700 font-medium">{booking.email}</p>
-                                </div>
-                              </div>
-                            </td>
-                          </tr>
-                        )}
-                      </Fragment>
-                    );
-                  })
-                )}
-              </tbody>
+             <tbody className="divide-y divide-gray-100">
+  {bookings.length === 0 ? (
+    <tr>
+      <td colSpan={7} className="px-6 py-16 text-center">
+        <div className="flex flex-col items-center justify-center text-gray-400">
+          <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
+            <Search size={32} className="opacity-40" />
+          </div>
+          <p className="text-lg font-medium text-gray-600">No records found</p>
+          <p className="text-sm mt-1 text-gray-500">
+            {formData.slot ? `No bookings found for ${formData.slot}.` : "Select filters and click 'Get Details'."}
+          </p>
+        </div>
+      </td>
+    </tr>
+  ) : (
+    bookings.map((booking, index) => {
+      const isExpanded = expandedRows.has(index);
+      return (
+        <Fragment key={index}>
+          <tr className={`hover:bg-slate-50 transition-colors cursor-pointer border-l-4 ${isExpanded ? 'bg-slate-50/80 border-l-teal-500' : 'border-l-transparent'}`} onClick={() => toggleRow(index)}>
+            {/* Column 1: Expand Arrow */}
+            <td className="px-4 py-4 text-center">
+              {isExpanded ? <ChevronUp className="w-5 h-5 text-teal-600" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
+            </td>
+
+            {/* Column 2: Name */}
+            <td className="px-6 py-4 text-sm text-gray-900 font-bold truncate" title={booking.name}>{booking.name}</td>
+
+            {/* Column 3: Type (ADDED THIS MISSING COLUMN) */}
+            <td className="px-6 py-4 text-sm text-gray-600 font-medium">
+              {booking.journeyType}
+            </td>
+
+            {/* Column 4: Attendance Status */}
+            <td className="px-6 py-4 text-sm">
+              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold shadow-sm ${booking.attendanceStatus !== 'NOT ATTENDED'
+                ? 'bg-emerald-100 text-emerald-700 border border-emerald-200'
+                : 'bg-red-50 text-red-600 border border-red-100'
+                }`}>
+                {booking.attendanceStatus !== 'NOT ATTENDED' && <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>}
+                {booking.attendanceStatus}
+              </span>
+            </td>
+
+            {/* Column 5: Journey Date */}
+            <td className="px-6 py-4 text-sm text-gray-600 font-medium">{booking.journeyDate}</td>
+
+            {/* Column 6: Slot Name */}
+            <td className="px-6 py-4 text-sm">
+              <span className="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md font-medium text-xs border border-slate-200">
+                {booking.slotName}
+              </span>
+            </td>
+
+            {/* Column 7: Passport Number */}
+            <td className="px-6 py-4 text-sm text-gray-600 font-mono">{booking.passport}</td>
+          </tr>
+          {isExpanded && (
+            <tr className="bg-slate-50/50 border-b border-gray-100 shadow-inner">
+              <td colSpan={7} className="px-6 py-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-top-1 duration-200 pl-4">
+                  <div className="space-y-1">
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Reference Number</p>
+                    <p className="text-sm font-mono text-teal-700 bg-white inline-block px-2 py-1 rounded border border-gray-200 shadow-sm">{booking.reference}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Slot Time</p>
+                    <p className="text-sm text-gray-700 font-medium">{booking.slotTime}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Attendance Date</p>
+                    <p className="text-sm text-gray-700 font-medium">{booking.attendanceDate}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Nationality</p>
+                    <p className="text-sm text-gray-700 font-medium">{booking.nationality}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Phone Number</p>
+                    <p className="text-sm text-gray-700 font-medium">{booking.phone}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Email ID</p>
+                    <p className="text-sm text-gray-700 font-medium">{booking.email}</p>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          )}
+        </Fragment>
+      );
+    })
+  )}
+</tbody>
             </table>
             
             

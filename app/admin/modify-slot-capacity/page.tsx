@@ -65,7 +65,7 @@ export default function ModifySlotCapacity() {
       const payload = {
         JourneyDate: selectedDate,
         AuthInfo: "{}",
-        Type: journeyTypeId // Sends 1 for Departure, 2 for Arrival
+        Type: journeyTypeId 
       };
 
       const response = await callApi("user/slot/get-available-slot-by-date", payload);
