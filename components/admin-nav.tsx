@@ -134,7 +134,11 @@ export function AdminNav() {
                 </Button>
               </Link>
             )}
-            <LanguageSelectorSafe />
+            <LanguageSelectorSafe >
+                          <Button variant="ghost" className={buttonStyles}>
+                             Language
+                          </Button>
+                        </LanguageSelectorSafe>
 
             {/* Logout (Icon Only - Style kept distinct as it is an action icon) */}
             <Button

@@ -15,6 +15,10 @@ function DashboardNavContent() {
   const currentTab = searchParams.get("tab")
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
+  // --- FIX: Defined the missing buttonStyles variable here ---
+  // Matches the style of your other nav links (slate text, white on hover)
+  const buttonStyles = "text-slate-300 hover:text-white hover:bg-slate-700/50 transition-all duration-300";
+
   const navLinks = [
     { href: "/", label: "Home", active: pathname === "/" && !currentTab },
     { href: "/about", label: "About", active: pathname === "/about" },
@@ -30,13 +34,10 @@ function DashboardNavContent() {
     },
   ]
 
-
   const handleLogout = () => {
-    
     document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;"
     document.cookie = "session=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;"
     
-  
     router.push("/")
     router.refresh() 
   }
@@ -46,6 +47,7 @@ function DashboardNavContent() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="h-16 flex items-center justify-between">
        
+          {/* Logo Section */}
           <Link href="/" className="flex items-center gap-3 group">
             <div className="relative w-11 h-11 bg-gradient-to-br from-cyan-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-cyan-500/50 transition-all duration-300 group-hover:scale-105">
               <div className="absolute inset-0 bg-white/20 rounded-xl blur-sm"></div>
@@ -58,6 +60,7 @@ function DashboardNavContent() {
           </Link>
 
           
+          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
@@ -75,10 +78,15 @@ function DashboardNavContent() {
                 {link.label}
               </Link>
             ))}
-            <LanguageSelectorSafe />
+
+            {/* --- FIX: Implemented LanguageSelectorSafe with buttonStyles --- */}
+            <LanguageSelectorSafe>
+              <Button variant="ghost" className={buttonStyles}>
+                 Language
+              </Button>
+            </LanguageSelectorSafe>
             
             <div className="ml-2 pl-2 border-l border-slate-700">
-              
               <Button 
                 variant="ghost" 
                 onClick={handleLogout}
@@ -91,6 +99,7 @@ function DashboardNavContent() {
           </div>
 
        
+          {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/50 transition-colors"
@@ -100,6 +109,7 @@ function DashboardNavContent() {
         </div>
 
      
+        {/* Mobile Dropdown */}
         {mobileMenuOpen && (
           <div className="md:hidden py-4 border-t border-slate-700/50 animate-slideDown">
             <div className="flex flex-col gap-2">
@@ -118,7 +128,6 @@ function DashboardNavContent() {
                 </Link>
               ))}
               
-             
               <Button 
                 variant="ghost" 
                 onClick={handleLogout}
