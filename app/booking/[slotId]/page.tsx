@@ -188,10 +188,10 @@ function BookingContent() {
   }
 
   const countryCodes = [
-    { code: "IN", name: "India", flag: "🇮🇳" },
-    { code: "BD", name: "Bangladesh", flag: "🇧🇩" },
-    { code: "US", name: "United States", flag: "🇺🇸" },
-    { code: "GB", name: "United Kingdom", flag: "🇬🇧" },
+    { code: "IN", name: "India",  },
+    { code: "BD", name: "Bangladesh",  },
+    { code: "US", name: "United States",  },
+    { code: "GB", name: "United Kingdom",  },
   ]
 
   const nationalities = ["Indian", "Bangladeshi", "American", "British", "Other"]
