@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { usePathname, useSearchParams, useRouter } from "next/navigation"
 import { useState } from "react"
+import LanguageSelectorSafe from "./LanguageSelector"
 
 function DashboardNavContent() {
   const pathname = usePathname()
@@ -74,6 +75,7 @@ function DashboardNavContent() {
                 {link.label}
               </Link>
             ))}
+            <LanguageSelectorSafe />
             
             <div className="ml-2 pl-2 border-l border-slate-700">
               

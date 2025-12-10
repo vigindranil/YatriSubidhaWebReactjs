@@ -149,3 +149,82 @@
     padding: 0 !important;
   }
 }
+
+/* -------------------------------------------------------------------------- */
+/* GOOGLE TRANSLATE UI FIXES                                                  */
+/* -------------------------------------------------------------------------- */
+
+/* 1. COMPLETELY HIDE THE TOP BAR (Aggressive) */
+iframe.skiptranslate {
+    display: none !important; 
+    visibility: hidden !important;
+}
+.goog-te-banner-frame {
+    display: none !important;
+}
+body {
+    top: 0px !important; 
+}
+
+/* 2. HIDE GOOGLE TOOLTIPS & HIGHLIGHTS */
+.goog-tooltip {
+    display: none !important;
+}
+.goog-tooltip:hover {
+    display: none !important;
+}
+.goog-text-highlight {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+/* 3. CUSTOMIZE THE GADGET CONTAINER */
+/* Font-size: 0 hides the "Powered by Google" and "Select Language" text nodes */
+.goog-te-gadget {
+    font-size: 0px !important; 
+    color: transparent !important;
+    width: 100% !important;
+}
+
+/* Hide the Google Logo and specific text spans */
+.goog-te-gadget .goog-logo-link {
+    display: none !important;
+}
+.goog-te-gadget span {
+    display: none !important;
+}
+
+/* 4. CUSTOMIZE THE SELECT DROPDOWN */
+.goog-te-gadget .goog-te-combo {
+    /* Restore text size for the dropdown options */
+    font-size: 14px !important; 
+    font-family: var(--font-sans), sans-serif !important;
+    color: #334155 !important; /* Standard Slate Gray */
+    background-color: #ffffff !important;
+    
+    /* Layout */
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 8px 10px !important;
+    
+    /* Border & Radius */
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 6px !important;
+    
+    cursor: pointer;
+    outline: none;
+    height: auto !important;
+}
+
+/* Fix Hover State (Using standard gray, NOT green) */
+.goog-te-gadget .goog-te-combo:hover {
+    background-color: #f1f5f9 !important; /* Light gray hover */
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+}
+
+/* Focus State */
+.goog-te-gadget .goog-te-combo:focus {
+    border-color: #94a3b8 !important;
+    outline: none !important;
+}

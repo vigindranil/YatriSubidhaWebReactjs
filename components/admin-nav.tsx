@@ -10,7 +10,7 @@ import Link from "next/link"
 import { useEffect, useState } from "react";
 import Cookies from "react-cookies";
 import { useRouter } from "next/navigation";
-
+import LanguageSelectorSafe from "@/components/LanguageSelector";
 export function AdminNav() {
   const router = useRouter();
   const [fullName, setFullName] = useState("");
@@ -134,6 +134,7 @@ export function AdminNav() {
                 </Button>
               </Link>
             )}
+            <LanguageSelectorSafe />
 
             {/* Logout (Icon Only - Style kept distinct as it is an action icon) */}
             <Button

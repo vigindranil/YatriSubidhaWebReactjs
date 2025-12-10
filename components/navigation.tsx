@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
 import { useState } from "react"
 import Link from "next/link"
+import LanguageSelectorSafe from "@/components/LanguageSelector";
 
 interface NavigationProps {
   onLoginClick: () => void
@@ -59,8 +60,9 @@ export function Navigation({ onLoginClick }: NavigationProps) {
           <Button onClick={onLoginClick} className="bg-emerald-600 hover:bg-emerald-700 text-white">
             Book Slot
           </Button>
-        </div>
 
+        </div>
+        <LanguageSelectorSafe />
         {/* Mobile Menu Button */}
         <button className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} aria-label="Toggle menu">
           {mobileMenuOpen ? <X className="w-6 h-6 text-slate-900" /> : <Menu className="w-6 h-6 text-slate-900" />}
