@@ -6,10 +6,23 @@ import { AnalyticsCards } from "@/components/analytics-cards"
 import { PassingTrend } from "@/components/passing-trend"
 import { SlotUtilization } from "@/components/slot-utilization"
 import { PassengerQueue } from "@/components/passenger-queue"
-import { DateRangePicker } from "@/components/date-range-picker"
+// import { DateRangePicker } from "@/components/date-range-picker" // Removed
+import { Calendar } from "lucide-react" // Added for the icon
 
 export default function AdminDashboard() {
+
+  // State handles start and end, but we will set them to the same value
   const [dateRange, setDateRange] = useState({ start: "", end: "" })
+
+  // Function to handle single date selection
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedDate = e.target.value;
+    // Set both start and end to the same selected date
+    setDateRange({
+      start: selectedDate,
+      end: selectedDate
+    });
+  };
 
   const analytics = {
     totalPassengers: 12847,
@@ -32,45 +45,34 @@ export default function AdminDashboard() {
             <h1 className="text-4xl font-bold text-white">Portal Analytics</h1>
             <p className="text-slate-300 mt-2">Real-time monitoring and statistics</p>
           </div>
-          <DateRangePicker onDateChange={setDateRange} />
+
+          {/* New Single Date Picker UI */}
+          <div className="flex items-center gap-3 bg-slate-800 p-2 rounded-lg border border-slate-700 shadow-sm">
+            <div className="flex items-center gap-2 px-2">
+              <Calendar className="w-5 h-5 text-emerald-500" />
+              <span className="text-sm font-medium text-slate-300">Select Date:</span>
+            </div>
+            <input
+              type="date"
+              onChange={handleDateChange}
+              className="bg-slate-900 text-white border border-slate-600 rounded px-3 py-1.5 focus:outline-none focus:border-emerald-500 text-sm [&::-webkit-calendar-picker-indicator]:invert"
+            />
+          </div>
         </div>
 
-        {/* KPI Cards */}
-        <AnalyticsCards analytics={analytics} />
+        <AnalyticsCards dateRange={dateRange} />
 
-        {/* Charts Grid */}
-        <div className="grid lg:grid-cols-2 gap-8 mb-8">
-          <PassingTrend />
-          <SlotUtilization />
+        <div className="grid lg:grid-cols-1 gap-8 mb-8">
+           <PassingTrend dateRange={dateRange} /> 
         </div>
 
-        {/* Detailed Tables */}
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
-            <PassengerQueue />
+            {/* PassengerQueue will now receive the same date for start and end */}
+            <PassengerQueue dateRange={dateRange} />
           </div>
-
-          {/* Recent Activities */}
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <div className="bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-4">
-              <h3 className="text-lg font-bold text-white">Recent Activities</h3>
-            </div>
-
-            <div className="p-6 space-y-4 max-h-96 overflow-y-auto">
-              {[
-                { time: "12:45 PM", action: "Pass verified", user: "John Doe" },
-                { time: "12:40 PM", action: "New booking", user: "Jane Smith" },
-                { time: "12:35 PM", action: "Pass printed", user: "Mike Johnson" },
-                { time: "12:30 PM", action: "Pass verified", user: "Sarah Williams" },
-                { time: "12:25 PM", action: "New booking", user: "Robert Brown" },
-              ].map((activity, index) => (
-                <div key={index} className="border-l-4 border-emerald-500 pl-4 py-2">
-                  <p className="text-xs font-semibold text-slate-500">{activity.time}</p>
-                  <p className="font-semibold text-slate-900">{activity.action}</p>
-                  <p className="text-sm text-slate-600">{activity.user}</p>
-                </div>
-              ))}
-            </div>
+          <div className="lg:col-span-1">
+            <SlotUtilization dateRange={dateRange} />
           </div>
         </div>
       </div>

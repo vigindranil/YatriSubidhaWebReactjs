@@ -10,7 +10,7 @@ import { useState } from "react"
 function DashboardNavContent() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const router = useRouter() // Added router for programmatic navigation
+  const router = useRouter() 
   const currentTab = searchParams.get("tab")
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -44,7 +44,7 @@ function DashboardNavContent() {
     <nav className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border-b border-slate-700/50 backdrop-blur-lg sticky top-0 z-40 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="h-16 flex items-center justify-between">
-          {/* Logo */}
+       
           <Link href="/" className="flex items-center gap-3 group">
             <div className="relative w-11 h-11 bg-gradient-to-br from-cyan-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-cyan-500/50 transition-all duration-300 group-hover:scale-105">
               <div className="absolute inset-0 bg-white/20 rounded-xl blur-sm"></div>
@@ -88,7 +88,7 @@ function DashboardNavContent() {
             </div>
           </div>
 
-          {/* Mobile Menu Button */}
+       
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700/50 transition-colors"
@@ -97,7 +97,7 @@ function DashboardNavContent() {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
+     
         {mobileMenuOpen && (
           <div className="md:hidden py-4 border-t border-slate-700/50 animate-slideDown">
             <div className="flex flex-col gap-2">

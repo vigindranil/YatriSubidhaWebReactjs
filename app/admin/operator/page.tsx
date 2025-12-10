@@ -5,70 +5,18 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { CreditCard, ClipboardList, Users, ArrowUpRight, ArrowDownLeft, LogOut, UserCircle, FileText } from "lucide-react"
 import { useState } from "react"
+import { AdminNav } from "@/components/admin-nav"
 
 export default function OperatorDashboardPage() {
   const [journeyType, setJourneyType] = useState<"arrival" | "departure">("departure")
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50">
-      {/* Enhanced Navigation */}
-      <nav className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border-b border-slate-700/50 backdrop-blur-lg shadow-lg sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="h-16 flex items-center justify-between">
-            <div className="flex items-center gap-3 group">
-              <div className="relative w-11 h-11 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-emerald-500/50 transition-all duration-300 group-hover:scale-105">
-                <div className="absolute inset-0 bg-white/20 rounded-xl blur-sm"></div>
-                <span className="relative text-white font-bold text-lg tracking-tight">AS</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="font-bold text-xl text-white leading-none">Counter Operator</span>
-                <span className="text-xs text-emerald-400 font-medium">Service Desk Portal</span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <div className="hidden sm:flex items-center gap-2 bg-slate-700/50 px-4 py-2 rounded-lg border border-slate-600">
-                <UserCircle className="w-5 h-5 text-emerald-400" />
-                <span className="text-white font-medium text-sm">Operator #12</span>
-              </div>
-
-              {/* Offline Booking */}
-              <Link href="/admin/operator/offline-booking">
-                <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white gap-2 shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/40 transition-all duration-300 font-semibold">
-                  <CreditCard className="w-4 h-4" />
-                  Offline Booking
-                </Button>
-              </Link>
-
-              {/* Online Booking (new) */}
-              <Link href="/admin/operator/online-booking">
-                <Button className="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white gap-2 shadow-lg shadow-indigo-500/25 hover:shadow-xl transition-all duration-300 font-semibold">
-                  <ClipboardList className="w-4 h-4" />
-                  Online Booking
-                </Button>
-              </Link>
-               
-              <Link href="/admin/operator/booking-report">
-                <Button className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white gap-2 shadow-lg shadow-blue-500/30 hover:shadow-xl transition-all duration-300 font-semibold">
-                  <FileText className="w-4 h-4" />
-                  Booking Report
-                </Button>
-              </Link>
-
-              <Button className="border-slate-600 text-slate-300 hover:text-white hover:bg-slate-700/50 gap-2 transition-all duration-300 bg-transparent border">
-                <Users className="w-4 h-4" />
-                <span className="hidden sm:inline">Queue</span>
-              </Button>
-              <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-red-500/10 gap-2 transition-all duration-300 group">
-                <LogOut className="w-4 h-4 group-hover:rotate-12 transition-transform" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      
+      <AdminNav />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Journey Type Selection Card */}
+        
         <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 mb-8 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-full -mr-32 -mt-32 opacity-30"></div>
           
@@ -82,7 +30,7 @@ export default function OperatorDashboardPage() {
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4 max-w-2xl">
-              {/* Departure Radio Card */}
+                
               <div
                 onClick={() => setJourneyType("departure")}
                 className={`relative cursor-pointer rounded-xl border-2 p-6 transition-all duration-300 ${
@@ -132,7 +80,7 @@ export default function OperatorDashboardPage() {
                 )}
               </div>
 
-              {/* Arrival Radio Card */}
+              
               <div
                 onClick={() => setJourneyType("arrival")}
                 className={`relative cursor-pointer rounded-xl border-2 p-6 transition-all duration-300 ${
@@ -185,7 +133,7 @@ export default function OperatorDashboardPage() {
           </div>
         </div>
 
-        {/* Main Content Card */}
+        
         <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8">
           <div className="flex items-center gap-3 mb-6">
             <div className="bg-gradient-to-br from-emerald-500 to-teal-500 p-3 rounded-xl">
@@ -225,7 +173,7 @@ export default function OperatorDashboardPage() {
               </div>
             </Link>
 
-            {/* Online Booking (live) */}
+            
             <Link href="/admin/operator/online-booking" className="block group">
               <div className="relative border-2 border-slate-200 rounded-2xl p-6 hover:border-indigo-400 hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-white to-slate-50 overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-100 rounded-full -mr-16 -mt-16 opacity-0 group-hover:opacity-50 transition-opacity"></div>
@@ -245,7 +193,7 @@ export default function OperatorDashboardPage() {
               </div>
             </Link>
 
-                {/* Online Booking (live) */}
+            
             <Link href="/admin/admin-report" className="block group">
               <div className="relative border-2 border-slate-200 rounded-2xl p-6 hover:border-indigo-400 hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-white to-slate-50 overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-100 rounded-full -mr-16 -mt-16 opacity-0 group-hover:opacity-50 transition-opacity"></div>
@@ -271,4 +219,3 @@ export default function OperatorDashboardPage() {
     </main>
   )
 }
-// ...existing code...
