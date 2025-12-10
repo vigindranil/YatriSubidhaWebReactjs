@@ -12,7 +12,7 @@ export const callApi = async (url: string, request_body: any): Promise<any> => {
             Authorization: `Bearer ${TOKEN}`,
             "Content-Type": "application/json",
         },
-        body: JSON.stringify(request_body),
+        body: JSON.stringify({...request_body, UserID: Cookies.load("userID")}),
     });
 
     if (response.status === 401) {
