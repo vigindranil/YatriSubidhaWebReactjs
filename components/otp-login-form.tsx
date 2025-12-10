@@ -26,7 +26,7 @@ export function OTPLoginForm({ onSuccess }: OTPLoginFormProps) {
       e.preventDefault()
       setLoading(true)
 
-      const fullContact = contactType === "phone" ? `${countryCode}${contact}` : contact;
+      const fullContact = contactType === "phone" ? `${contact}` : contact;
       const response = await generateOTP(contactType, fullContact)
 
       if (response.success) {
@@ -48,7 +48,7 @@ export function OTPLoginForm({ onSuccess }: OTPLoginFormProps) {
       e.preventDefault()
       setLoading(true)
 
-      const fullContact = contactType === "phone" ? `${countryCode}${contact}` : contact;
+      const fullContact = contactType === "phone" ? `${contact}` : contact;
       const response = await verifyOTP(fullContact, otp)
       if (response.success) {
         toast.success("OTP verified successfully!")
