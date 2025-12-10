@@ -10,7 +10,7 @@ const LanguageSelectorSafe = ({ children, className }) => {
   // list of languages
   const LANGUAGES = [
     { code: "bn", name: "Bengali" },
-    { code: "bho", name: "Bhojpuri" },
+    //{ code: "bho", name: "Bhojpuri" },
     { code: "en", name: "English" },
     { code: "hi", name: "Hindi" },
   ];
