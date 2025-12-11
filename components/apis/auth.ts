@@ -1,4 +1,5 @@
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+import { decryptPayload } from "@/utils/encryption";
 import Cookies from "react-cookies";
 
 // Function to send OTP
@@ -17,11 +18,10 @@ export const generateOTP = async (type: string = "email", user_name: string) => 
     });
 
 
-    const data = await response.json();
-    console.log(data);
-
-
+    const encData = await response.json();
+    const data = decryptPayload(encData);
     return data;
+
   } catch (error) {
     return { success: false, error: "Network error, please try again." };
   }
@@ -43,13 +43,12 @@ export const verifyOTP = async (user_name: string, otp: string) => {
     });
 
 
-    const data = await response.json();
+    const encData = await response.json();
+    const data = decryptPayload(encData);
     if (data.success) {
       Cookies.save("token", data?.data?.authToken, { path: "/", maxAge: 60 * 60 * 24 });
       Cookies.save("userID", data?.data?.UserID, { path: "/", maxAge: 60 * 60 * 24 });
     }
-    console.log(data);
-
 
     return data;
   } catch (error) {
@@ -73,7 +72,8 @@ export const adminLogin = async (user_name: string, password: string, user_type_
     });
 
 
-    const data = await response.json();
+    const encData = await response.json();
+    const data = decryptPayload(encData);
     if (data.success) {
       Cookies.save("token", data?.data?.authToken, { path: "/", maxAge: 60 * 60 * 24 });
       Cookies.save("userID", data?.data?.user_id, { path: "/", maxAge: 60 * 60 * 24 });
@@ -81,9 +81,7 @@ export const adminLogin = async (user_name: string, password: string, user_type_
       Cookies.save("userTypeID", data?.data?.user_type_id, { path: "/", maxAge: 60 * 60 * 24 });
       Cookies.save("userFullName", data?.data?.user_full_name, { path: "/", maxAge: 60 * 60 * 24 });
     }
-    console.log(data);
-
-
+    
     return data;
   } catch (error) {
     return { success: false, error: "Network error, please try again." };
