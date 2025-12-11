@@ -16,8 +16,8 @@ import {
   Filter,
   Check,
   FileText,
-  ChevronLeft,  
-  ChevronRight 
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 import Swal from 'sweetalert2'; 
 import { callApi } from "@/components/apis/commonApi";
@@ -43,8 +43,7 @@ const SLOT_OPTIONS = [
   "SLOT-7", "SLOT-8", "SLOT-9", "SLOT-10", "SLOT-11", "SLOT-12"
 ];
 
-// Define the limit for pagination
-const RECORDS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 10;
 
 export default function BookingReport() {
   const [formData, setFormData] = useState({
@@ -58,7 +57,9 @@ export default function BookingReport() {
   const [loading, setLoading] = useState(false);
   const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
   
+  // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
 
   const [isSlotDropdownOpen, setIsSlotDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -95,8 +96,9 @@ export default function BookingReport() {
     }
     setExpandedRows(newExpanded);
   };
-  
-  const handleGetDetails = async (page = 1) => {
+
+  // Separated fetch logic to handle pagination
+  const fetchBookingData = async (page: number) => {
     if (!formData.startDate || !formData.endDate) {
       Swal.fire({
         icon: 'warning',
@@ -119,7 +121,7 @@ export default function BookingReport() {
         Type: typeValue,
         AuthInfo: "{}",
         PageNumber: page, 
-        PageSize: RECORDS_PER_PAGE, // Request specific number of records
+        PageSize: ITEMS_PER_PAGE, 
         SlotName: formData.slot
       };
 
@@ -128,6 +130,11 @@ export default function BookingReport() {
       const response = await callApi("admin/admin-booking-report-details", payload);
 
       if (response.success && response.data) {
+        // Assuming API returns TotalCount at root or inside data
+        // If your API returns TotalCount differently, adjust this line:
+        const totalCount = response.TotalCount || response.totalCount || 0;
+        setTotalItems(totalCount);
+
         const mappedData = response.data.map((item: any) => ({
           name: item.PasengerName,
           passport: item.PassportNo,
@@ -143,35 +150,32 @@ export default function BookingReport() {
           journeyType: typeValue === 2 ? "Arrival" : "Departure"
         }));
 
+        // Note: Client-side filtering for 'slot' might interfere with server-side pagination 
+        // if the API handles slot filtering. Ideally, API should handle SlotName.
+        // Keeping logic as consistent as possible with previous version:
         if (formData.slot) {
-          const filtered = mappedData.filter((item: any) =>
-            (item.slotName || "").trim().toUpperCase() === formData.slot.trim().toUpperCase()
-          );
-          setBookings(filtered);
+            // If the API filters by slot (payload has SlotName), we use mappedData directly.
+            // If the API does NOT filter by slot, we would filter here, but that breaks pagination counts.
+            // Assuming API handles SlotName based on payload.
+            setBookings(mappedData);
         } else {
           setBookings(mappedData);
         }
         
-        setCurrentPage(page);
       } else {
-        
-        if (page === 1) {
-            Swal.fire({
+        // Only show error alert if it's strictly an error, 
+        // for empty data often APIs just return empty arrays.
+        if(bookings.length === 0 && page === 1) {
+            // Optional: Show alert only on first load fail
+             Swal.fire({
               icon: 'error',
               title: 'Request Failed',
               text: response.message || "Failed to fetch booking reports",
               confirmButtonColor: '#ef4444'
             });
-            setBookings([]);
-        } else {
-            // Pagination End Alert
-            Swal.fire({
-              icon: 'info',
-              title: 'No More Records',
-              text: "No more records found.",
-              confirmButtonColor: '#0d9488'
-            });
         }
+        setBookings([]);
+        setTotalItems(0);
       }
     } catch (error) {
       console.error("Error fetching details:", error);
@@ -181,15 +185,27 @@ export default function BookingReport() {
         text: "An unexpected error occurred",
         confirmButtonColor: '#ef4444'
       });
+      setBookings([]);
     } finally {
       setLoading(false);
     }
   };
-
-  const handlePageChange = (newPage: number) => {
-    if (newPage < 1) return;
-    handleGetDetails(newPage);
+  
+  // Wrapper for the search button (resets to page 1)
+  const handleGetDetails = () => {
+    setCurrentPage(1);
+    fetchBookingData(1);
   };
+
+  // Handler for pagination buttons
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= Math.ceil(totalItems / ITEMS_PER_PAGE)) {
+      setCurrentPage(newPage);
+      fetchBookingData(newPage);
+    }
+  };
+
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
   return (
     <main className="min-h-screen bg-slate-50">
@@ -298,7 +314,7 @@ export default function BookingReport() {
 
           <div className="flex justify-center pt-2">
             <button
-              onClick={() => handleGetDetails(1)} 
+              onClick={handleGetDetails} 
               disabled={loading}
               className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-teal-600 to-emerald-600 text-white font-semibold rounded-xl transition-all shadow-lg shadow-teal-500/30 hover:shadow-xl hover:shadow-teal-500/40 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -323,137 +339,162 @@ export default function BookingReport() {
                 </tr>
               </thead>
              <tbody className="divide-y divide-gray-100">
-  {bookings.length === 0 ? (
-    <tr>
-      <td colSpan={7} className="px-6 py-16 text-center">
-        <div className="flex flex-col items-center justify-center text-gray-400">
-          <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
-            <Search size={32} className="opacity-40" />
-          </div>
-          <p className="text-lg font-medium text-gray-600">No records found</p>
-          <p className="text-sm mt-1 text-gray-500">
-            {formData.slot ? `No bookings found for ${formData.slot}.` : "Select filters and click 'Get Details'."}
-          </p>
-        </div>
-      </td>
-    </tr>
-  ) : (
-    bookings.map((booking, index) => {
-      const isExpanded = expandedRows.has(index);
-      return (
-        <Fragment key={index}>
-          <tr className={`hover:bg-slate-50 transition-colors cursor-pointer border-l-4 ${isExpanded ? 'bg-slate-50/80 border-l-teal-500' : 'border-l-transparent'}`} onClick={() => toggleRow(index)}>
-            {/* Column 1: Expand Arrow */}
-            <td className="px-4 py-4 text-center">
-              {isExpanded ? <ChevronUp className="w-5 h-5 text-teal-600" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
-            </td>
+              {bookings.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="px-6 py-16 text-center">
+                    <div className="flex flex-col items-center justify-center text-gray-400">
+                      <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
+                        <Search size={32} className="opacity-40" />
+                      </div>
+                      <p className="text-lg font-medium text-gray-600">No records found</p>
+                      <p className="text-sm mt-1 text-gray-500">
+                        {formData.slot ? `No bookings found for ${formData.slot}.` : "Select filters and click 'Get Details'."}
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                bookings.map((booking, index) => {
+                  const isExpanded = expandedRows.has(index);
+                  return (
+                    <Fragment key={index}>
+                      <tr className={`hover:bg-slate-50 transition-colors cursor-pointer border-l-4 ${isExpanded ? 'bg-slate-50/80 border-l-teal-500' : 'border-l-transparent'}`} onClick={() => toggleRow(index)}>
+                        
+                        <td className="px-4 py-4 text-center">
+                          {isExpanded ? <ChevronUp className="w-5 h-5 text-teal-600" /> : <ChevronDown className="w-5 h-5 text-gray-400" />}
+                        </td>
 
-            {/* Column 2: Name */}
-            <td className="px-6 py-4 text-sm text-gray-900 font-bold truncate" title={booking.name}>{booking.name}</td>
+                        {/* Column 2: Name */}
+                        <td className="px-6 py-4 text-sm text-gray-900 font-bold truncate" title={booking.name}>{booking.name}</td>
 
-            {/* Column 3: Type */}
-            <td className="px-6 py-4 text-sm text-gray-600 font-medium">
-              {booking.journeyType}
-            </td>
+                        {/* Column 3: Type */}
+                        <td className="px-6 py-4 text-sm text-gray-600 font-medium">
+                          {booking.journeyType}
+                        </td>
 
-            {/* Column 4: Attendance Status */}
-            <td className="px-6 py-4 text-sm">
-              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold shadow-sm ${booking.attendanceStatus !== 'NOT ATTENDED'
-                ? 'bg-emerald-100 text-emerald-700 border border-emerald-200'
-                : 'bg-red-50 text-red-600 border border-red-100'
-                }`}>
-                {booking.attendanceStatus !== 'NOT ATTENDED' && <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>}
-                {booking.attendanceStatus}
-              </span>
-            </td>
+                        {/* Column 4: Attendance Status */}
+                        <td className="px-6 py-4 text-sm">
+                          <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold shadow-sm ${booking.attendanceStatus !== 'NOT ATTENDED'
+                            ? 'bg-emerald-100 text-emerald-700 border border-emerald-200'
+                            : 'bg-red-50 text-red-600 border border-red-100'
+                            }`}>
+                            {booking.attendanceStatus !== 'NOT ATTENDED' && <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>}
+                            {booking.attendanceStatus}
+                          </span>
+                        </td>
 
-            {/* Column 5: Journey Date */}
-            <td className="px-6 py-4 text-sm text-gray-600 font-medium">{booking.journeyDate}</td>
+                        {/* Column 5: Journey Date */}
+                        <td className="px-6 py-4 text-sm text-gray-600 font-medium">{booking.journeyDate}</td>
 
-            {/* Column 6: Slot Name */}
-            <td className="px-6 py-4 text-sm">
-              <span className="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md font-medium text-xs border border-slate-200">
-                {booking.slotName}
-              </span>
-            </td>
+                        {/* Column 6: Slot Name */}
+                        <td className="px-6 py-4 text-sm">
+                          <span className="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md font-medium text-xs border border-slate-200">
+                            {booking.slotName}
+                          </span>
+                        </td>
 
-            {/* Column 7: Passport Number */}
-            <td className="px-6 py-4 text-sm text-gray-600 font-mono">{booking.passport}</td>
-          </tr>
-          {isExpanded && (
-            <tr className="bg-slate-50/50 border-b border-gray-100 shadow-inner">
-              <td colSpan={7} className="px-6 py-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-top-1 duration-200 pl-4">
-                  <div className="space-y-1">
-                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Reference Number</p>
-                    <p className="text-sm font-mono text-teal-700 bg-white inline-block px-2 py-1 rounded border border-gray-200 shadow-sm">{booking.reference}</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Slot Time</p>
-                    <p className="text-sm text-gray-700 font-medium">{booking.slotTime}</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Attendance Date</p>
-                    <p className="text-sm text-gray-700 font-medium">{booking.attendanceDate}</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Nationality</p>
-                    <p className="text-sm text-gray-700 font-medium">{booking.nationality}</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Phone Number</p>
-                    <p className="text-sm text-gray-700 font-medium">{booking.phone}</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Email ID</p>
-                    <p className="text-sm text-gray-700 font-medium">{booking.email}</p>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          )}
-        </Fragment>
-      );
-    })
-  )}
-</tbody>
+                        {/* Column 7: Passport Number */}
+                        <td className="px-6 py-4 text-sm text-gray-600 font-mono">{booking.passport}</td>
+                      </tr>
+                      {isExpanded && (
+                        <tr className="bg-slate-50/50 border-b border-gray-100 shadow-inner">
+                          <td colSpan={7} className="px-6 py-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-top-1 duration-200 pl-4">
+                              <div className="space-y-1">
+                                <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Reference Number</p>
+                                <p className="text-sm font-mono text-teal-700 bg-white inline-block px-2 py-1 rounded border border-gray-200 shadow-sm">{booking.reference}</p>
+                              </div>
+                              <div className="space-y-1">
+                                <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Slot Time</p>
+                                <p className="text-sm text-gray-700 font-medium">{booking.slotTime}</p>
+                              </div>
+                              <div className="space-y-1">
+                                <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Attendance Date</p>
+                                <p className="text-sm text-gray-700 font-medium">{booking.attendanceDate}</p>
+                              </div>
+                              <div className="space-y-1">
+                                <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Nationality</p>
+                                <p className="text-sm text-gray-700 font-medium">{booking.nationality}</p>
+                              </div>
+                              <div className="space-y-1">
+                                <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Phone Number</p>
+                                <p className="text-sm text-gray-700 font-medium">{booking.phone}</p>
+                              </div>
+                              <div className="space-y-1">
+                                <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Email ID</p>
+                                <p className="text-sm text-gray-700 font-medium">{booking.email}</p>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </Fragment>
+                  );
+                })
+              )}
+            </tbody>
             </table>
-            
-            
-            {bookings.length > 0 && (
-              <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 bg-white">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-600">
-                    Page <span className="font-semibold text-gray-900">{currentPage}</span>
-                  </span>
-                </div>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1 || loading}
-                    className="flex items-center gap-1"
-                  >
-                    <ChevronLeft size={16} />
-                    Previous
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    // Disabled if loading OR if we have fewer records than the limit
-                    disabled={loading || bookings.length < RECORDS_PER_PAGE}
-                    className="flex items-center gap-1"
-                  >
-                    Next
-                    <ChevronRight size={16} />
-                  </Button>
-                </div>
-              </div>
-            )}
-            
           </div>
+          
+          {/* Pagination Controls */}
+          {bookings.length > 0 && (
+            <div className="px-6 py-4 bg-slate-50 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="text-sm text-gray-500">
+                Showing page <span className="font-semibold text-gray-900">{currentPage}</span> of <span className="font-semibold text-gray-900">{totalPages || 1}</span>
+                {totalItems > 0 && <span className="ml-1">({totalItems} total records)</span>}
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1 || loading}
+                  className="p-2 rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:text-teal-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  aria-label="Previous Page"
+                >
+                  <ChevronLeft size={18} />
+                </button>
+                
+                {/* Page Indicator Buttons (Optional: Show range) */}
+                <div className="flex items-center gap-1">
+                  {[...Array(Math.min(5, totalPages || 1))].map((_, idx) => {
+                     // Simple logic to show a few pages around current page
+                     let pageNum = currentPage;
+                     if (totalPages > 5) {
+                        if (currentPage <= 3) pageNum = idx + 1;
+                        else if (currentPage >= totalPages - 2) pageNum = totalPages - 4 + idx;
+                        else pageNum = currentPage - 2 + idx;
+                     } else {
+                        pageNum = idx + 1;
+                     }
+                     
+                     return (
+                        <button
+                          key={pageNum}
+                          onClick={() => handlePageChange(pageNum)}
+                          disabled={loading}
+                          className={`min-w-[32px] h-8 flex items-center justify-center text-sm font-medium rounded-md transition-colors ${
+                            currentPage === pageNum
+                              ? "bg-teal-600 text-white shadow-sm"
+                              : "text-gray-600 hover:bg-gray-100"
+                          }`}
+                        >
+                          {pageNum}
+                        </button>
+                     );
+                  })}
+                </div>
+
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={(totalPages > 0 && currentPage >= totalPages) || loading}
+                  className="p-2 rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:text-teal-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  aria-label="Next Page"
+                >
+                  <ChevronRight size={18} />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </main>

@@ -66,9 +66,10 @@ export function NewBooking() {
       if (!searchQuery) return true
       const query = searchQuery.toLowerCase()
       return (
-        slot.SlotID.toLowerCase().includes(query) ||
-        slot.name.toLowerCase().includes(query) ||
-        slot?.TimeRangeEng.toLowerCase().includes(query)
+        String(slot.SlotID).toLowerCase().includes(query) ||
+        (slot.name && slot.name.toLowerCase().includes(query)) ||
+        (slot.SlotNameEng && slot.SlotNameEng.toLowerCase().includes(query)) ||
+        (slot.TimeRangeEng && slot.TimeRangeEng.toLowerCase().includes(query))
       )
     })
     .sort((a, b) => {
