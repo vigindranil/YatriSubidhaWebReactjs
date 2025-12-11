@@ -24,10 +24,13 @@ export function AdminNav() {
   const handleLogout = () => {
     Cookies.remove("userFullName", { path: '/' });
     Cookies.remove("userTypeID", { path: '/' });
+    Cookies.remove("userID", { path: '/' });
+    Cookies.remove("token", { path: '/' });
+    Cookies.remove("userName", { path: '/' });
     router.push("/");
   };
 
-  // Unified Button Style (Glass/Glow Effect)
+
   const buttonStyles = "bg-transparent border-white/20 text-white hover:bg-white/5 shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.25)] transition-all duration-300";
 
   return (
@@ -59,11 +62,12 @@ export function AdminNav() {
             </div>
 
             {/* --- DASHBOARD --- */}
+            {userType == "1" && (
             <Link href="/admin/dashboard">
               <Button variant="outline" className={buttonStyles}>
                 Dashboard
               </Button>
-            </Link>
+            </Link>)}
 
             {/* --- DROPDOWN: BOOKING --- */}
             <DropdownMenu>
@@ -154,7 +158,7 @@ export function AdminNav() {
               </Button>
             </LanguageSelectorSafe>
 
-            {/* Logout (Icon Only - Style kept distinct as it is an action icon) */}
+            
             <Button
               variant="ghost"
               onClick={handleLogout}
