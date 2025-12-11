@@ -17,9 +17,11 @@ export const generateOTP = async (type: string = "email", user_name: string) => 
       }),
     });
 
-
-    const encData = await response.json();
-    const data = decryptPayload(encData);
+    
+    
+    // const encData = await response.json();
+    // const data = decryptPayload(encData.data);
+    const data = await response.json();
     return data;
 
   } catch (error) {
@@ -43,9 +45,11 @@ export const verifyOTP = async (user_name: string, otp: string) => {
     });
 
 
-    const encData = await response.json();
-    const data = decryptPayload(encData);
-    if (data.success) {
+    // const encData = await response.json();
+    // const data = decryptPayload(encData.data);
+    const data = await response.json();
+    if (data?.success) {
+      console.log("aksh", data);
       Cookies.save("token", data?.data?.authToken, { path: "/", maxAge: 60 * 60 * 24 });
       Cookies.save("userID", data?.data?.UserID, { path: "/", maxAge: 60 * 60 * 24 });
     }
@@ -72,8 +76,9 @@ export const adminLogin = async (user_name: string, password: string, user_type_
     });
 
 
-    const encData = await response.json();
-    const data = decryptPayload(encData);
+    // const encData = await response.json();
+    // const data = decryptPayload(encData.data);
+    const data = await response.json();
     if (data.success) {
       Cookies.save("token", data?.data?.authToken, { path: "/", maxAge: 60 * 60 * 24 });
       Cookies.save("userID", data?.data?.user_id, { path: "/", maxAge: 60 * 60 * 24 });

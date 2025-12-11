@@ -28,7 +28,8 @@ export const callApi = async (url: string, request_body: any): Promise<any> => {
     Cookies.remove("token");
   } else {
     const data = await response.json();
-    const decryptedData = decryptPayload(data);
-    return decryptedData;
+    // const decryptedData = decryptPayload(data);
+    // return decryptedData;
+    return data;
   }
 };
