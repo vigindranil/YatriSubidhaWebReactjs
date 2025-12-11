@@ -11,9 +11,7 @@ export function encryptPayload(data: any) {
 export function decryptPayload(cipherText: string) {
   try {
     const bytes = CryptoJS.AES.decrypt(cipherText, ENC_SECRET_KEY);
-    console.log("aksh", bytes);
     const decryptedJson = bytes.toString(CryptoJS.enc.Utf8);
-    console.log("aksh", decryptedJson);
 
     if (!decryptedJson) {
       throw new Error("Data tempered or wrong key");

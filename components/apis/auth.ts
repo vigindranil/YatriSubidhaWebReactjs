@@ -1,6 +1,7 @@
+// import { decryptPayload } from "@/utils/encryption";
+// import cookie from "react-cookies";
+import Cookies from 'js-cookie';
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-import { decryptPayload } from "@/utils/encryption";
-import Cookies from "react-cookies";
 
 // Function to send OTP
 export const generateOTP = async (type: string = "email", user_name: string) => {
@@ -48,11 +49,14 @@ export const verifyOTP = async (user_name: string, otp: string) => {
     // const encData = await response.json();
     // const data = decryptPayload(encData.data);
     const data = await response.json();
-    if (data?.success) {
-      console.log("aksh", data);
-      Cookies.save("token", data?.data?.authToken, { path: "/", maxAge: 60 * 60 * 24 });
-      Cookies.save("userID", data?.data?.UserID, { path: "/", maxAge: 60 * 60 * 24 });
-    }
+
+    console.log("aksh", data?.data?.authToken);
+
+    localStorage.setItem("token", data?.data?.authToken);
+    localStorage.setItem("userID", data?.data?.UserID);
+    // if (data?.success) {
+    //   console.log("aksh", data);
+    // }
 
     return data;
   } catch (error) {
@@ -80,11 +84,11 @@ export const adminLogin = async (user_name: string, password: string, user_type_
     // const data = decryptPayload(encData.data);
     const data = await response.json();
     if (data.success) {
-      Cookies.save("token", data?.data?.authToken, { path: "/", maxAge: 60 * 60 * 24 });
-      Cookies.save("userID", data?.data?.user_id, { path: "/", maxAge: 60 * 60 * 24 });
-      Cookies.save("userName", data?.data?.user_name, { path: "/", maxAge: 60 * 60 * 24 });
-      Cookies.save("userTypeID", data?.data?.user_type_id, { path: "/", maxAge: 60 * 60 * 24 });
-      Cookies.save("userFullName", data?.data?.user_full_name, { path: "/", maxAge: 60 * 60 * 24 });
+      localStorage.setItem("token", data?.data?.authToken);
+      localStorage.setItem("userID", data?.data?.user_id);
+      localStorage.setItem("userName", data?.data?.user_name);
+      localStorage.setItem("userTypeID", data?.data?.user_type_id);
+      localStorage.setItem("userFullName", data?.data?.user_full_name);
     }
     
     return data;

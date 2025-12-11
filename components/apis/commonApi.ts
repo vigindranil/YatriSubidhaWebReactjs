@@ -4,8 +4,8 @@ import Cookies from "react-cookies";
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const callApi = async (url: string, request_body: any): Promise<any> => {
-  const TOKEN = Cookies.load("token");
-  const userID = Cookies.load("userID");
+  const TOKEN = localStorage.getItem("token");
+  const userID = localStorage.getItem("userID");
 
   // Merge request body + userId
   const finalBody = { ...request_body, UserID: userID };
@@ -24,8 +24,8 @@ export const callApi = async (url: string, request_body: any): Promise<any> => {
   });
 
   if (response.status === 401) {
-    Cookies.remove("userID");
-    Cookies.remove("token");
+    // localStorage.removeItem("userID");
+    // localStorage.removeItem("token");
   } else {
     const data = await response.json();
     // const decryptedData = decryptPayload(data);
