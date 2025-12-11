@@ -77,8 +77,8 @@ export default function OnlineBookingPage() {
           status: apiData.AttendanceStatus === "NOT ATTENDED" ? "pending" : "checked",
 
           payment: {
-            method: "Online", 
-            amount: 200, 
+            method: "Online",
+            amount: 200,
             transaction_number: "TXN" + apiData?.TokenNo,
             payment_date: new Date(apiData.JourneyDate).toLocaleDateString() || "-"
           },
@@ -105,10 +105,10 @@ export default function OnlineBookingPage() {
     try {
       const response = await fetch(`${BASE_URL}admin/update-booking-attendance`, {
         method: "POST",
-        headers: { 
-          "Content-Type": "application/json" 
+        headers: {
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           "BookingID": booking.booking_id,
           "AuthInfo": "{}"
         }),
@@ -117,16 +117,16 @@ export default function OnlineBookingPage() {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`)
       }
-      
+
       const json = await response.json()
-      
+
       if (json.success) {
         // Update local state to show checked status immediately
         setBooking(prev => prev ? ({
-            ...prev,
-            status: "checked",
-            checked_by: "Operator",
-            checked_at: new Date().toLocaleDateString()
+          ...prev,
+          status: "checked",
+          checked_by: "Operator",
+          checked_at: new Date().toLocaleDateString()
         }) : null)
       } else {
         throw new Error(json.message || "Failed to update attendance")

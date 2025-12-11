@@ -502,6 +502,27 @@ function BookingContent() {
                   </div>
                 </div>
               </div>
+              
+                {!paymentDone && (
+                  <Button
+                    onClick={() => setShowPayment(true)}
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white gap-2 py-3"
+                    size="lg"
+                  >
+                    <CreditCard className="w-5 h-5" />
+                    Payment
+                  </Button>
+                )}
+
+                {paymentDone && (
+                  <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3 text-center">
+                    <p className="text-sm font-semibold text-emerald-700 flex items-center justify-center gap-2">
+                      <CheckCircle className="w-4 h-4" />
+                      Payment Completed
+                    </p>
+                  </div>
+                )} 
+                
 
               <div className="space-y-3">
                 <Button
@@ -514,25 +535,6 @@ function BookingContent() {
                   {paymentDone ? "Book Slot" : "Complete Payment First"}
                 </Button>
 
-                {!paymentDone && (
-                  <Button
-                    onClick={() => setShowPayment(true)}
-                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white gap-2 py-3"
-                    size="lg"
-                  >
-                    <CreditCard className="w-5 h-5" />
-                    Payment Done
-                  </Button>
-                )}
-
-                {paymentDone && (
-                  <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3 text-center">
-                    <p className="text-sm font-semibold text-emerald-700 flex items-center justify-center gap-2">
-                      <CheckCircle className="w-4 h-4" />
-                      Payment Completed
-                    </p>
-                  </div>
-                )}
               </div>
             </div>
           </div>
