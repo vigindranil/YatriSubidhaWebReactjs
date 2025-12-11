@@ -86,7 +86,7 @@ export default function OfflineBookingPage() {
   }
 
   const savePassengerDetails = async () => {
-    const userIdCookie = Cookies.load("userID");
+    const userIdCookie = localStorage.getItem("userID");
 
     const userId = userIdCookie ? parseInt(userIdCookie) : 6669;
 
@@ -113,7 +113,7 @@ export default function OfflineBookingPage() {
       Passport: passportNumber
     });
 
-    
+
     const response = await callApi("user/save-passenger-details", {
       PrefferedSlotID: 12,
       JourneyDate: today,

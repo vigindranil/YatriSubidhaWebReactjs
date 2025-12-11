@@ -18,14 +18,14 @@ interface Booking {
 export function BookingHistory() {
 
   const [bookings, setBookings] = useState<any>([]);
-     const [startDate, setStartDate] = useState<string>(() => {
-        return new Date().toISOString().split("T")[0];
-      });
-     const [endDate, setEndDate] = useState<string>(() => {
-        return new Date().toISOString().split("T")[0];
-      });
-    const getHistory = async () => {
-    const userID = Cookies.load("userID")
+  const [startDate, setStartDate] = useState<string>(() => {
+    return new Date().toISOString().split("T")[0];
+  });
+  const [endDate, setEndDate] = useState<string>(() => {
+    return new Date().toISOString().split("T")[0];
+  });
+  const getHistory = async () => {
+    const userID = localStorage.getItem("userID")
     const response = await callApi("user/slot/get-slot-booking-details", { authInfo: "{}", StartDate: startDate, EndDate: endDate, UserID: userID })
     if (response.success) {
       setBookings(response?.data)
@@ -34,26 +34,26 @@ export function BookingHistory() {
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     getHistory();
   }, [])
 
   const statusConfig = {
-    "ATTENDED": { 
-      icon: CheckCircle, 
-      bg: "bg-gradient-to-r from-emerald-50 to-green-50", 
+    "ATTENDED": {
+      icon: CheckCircle,
+      bg: "bg-gradient-to-r from-emerald-50 to-green-50",
       border: "border-emerald-200",
-      text: "text-emerald-700", 
+      text: "text-emerald-700",
       iconBg: "bg-emerald-100",
-      label: "Attended" 
+      label: "Attended"
     },
-    "NOT ATTENDED": { 
-      icon: Clock, 
-      bg: "bg-gradient-to-r from-yellow-50 to-amber-50", 
+    "NOT ATTENDED": {
+      icon: Clock,
+      bg: "bg-gradient-to-r from-yellow-50 to-amber-50",
       border: "border-yellow-200",
-      text: "text-yellow-700", 
+      text: "text-yellow-700",
       iconBg: "bg-yellow-100",
-      label: "Not Attended" 
+      label: "Not Attended"
     },
   }
 
@@ -82,9 +82,9 @@ export function BookingHistory() {
         </div>
 
         {/* Date Selection Section */}
-          <div className="mb-8">
-            <div className="flex items-center justify-center gap-4">
-              <div>
+        <div className="mb-8">
+          <div className="flex items-center justify-center gap-4">
+            <div>
               <Label>From Date</Label>
               <Input
                 type="date"
@@ -92,11 +92,11 @@ export function BookingHistory() {
                 onChange={(e) => setStartDate(e.target.value)}
                 className="w-64"
                 placeholder="From"
-                />
-                </div>
+              />
+            </div>
 
-                <div>
-                  <Label>To Date</Label>
+            <div>
+              <Label>To Date</Label>
               <Input
                 type="date"
                 value={endDate}
@@ -104,17 +104,17 @@ export function BookingHistory() {
                 className="w-64"
                 placeholder="To"
               />
-              </div>
-              <Button
-                onClick={getHistory}
-                className="bg-slate-700 cursor-pointer hover:bg-slate-800 text-white gap-2"
-              >
-                Search
-                <Search className="w-4 h-4" />
-              </Button>
             </div>
+            <Button
+              onClick={getHistory}
+              className="bg-slate-700 cursor-pointer hover:bg-slate-800 text-white gap-2"
+            >
+              Search
+              <Search className="w-4 h-4" />
+            </Button>
           </div>
-        
+        </div>
+
         <div className="text-sm text-slate-500 bg-slate-100 px-4 py-2 rounded-lg font-medium">
           {bookings?.length} Total Bookings
         </div>
@@ -133,7 +133,7 @@ export function BookingHistory() {
           >
             {/* Decorative gradient overlay */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-slate-50 to-transparent rounded-full -mr-32 -mt-32 opacity-50"></div>
-            
+
             <div className="relative z-10">
               {/* Header Section */}
               <div className="flex items-start justify-between mb-6 pb-4 border-b border-slate-100">

@@ -17,16 +17,16 @@ export function AdminNav() {
   const [userType, setUserType] = useState("");
 
   useEffect(() => {
-    setFullName(Cookies.load("userFullName"));
-    setUserType(Cookies.load("userTypeID"));
+    setFullName(localStorage.getItem("userFullName"));
+    setUserType(localStorage.getItem("userTypeID"));
   }, [])
 
   const handleLogout = () => {
-    Cookies.remove("userFullName", { path: '/' });
-    Cookies.remove("userTypeID", { path: '/' });
-    Cookies.remove("userID", { path: '/' });
-    Cookies.remove("token", { path: '/' });
-    Cookies.remove("userName", { path: '/' });
+    localStorage.removeItem("userFullName", { path: '/' });
+    localStorage.removeItem("userTypeID", { path: '/' });
+    localStorage.removeItem("userID", { path: '/' });
+    localStorage.removeItem("token", { path: '/' });
+    localStorage.removeItem("userName", { path: '/' });
     router.push("/");
   };
 
@@ -63,11 +63,11 @@ export function AdminNav() {
 
             {/* --- DASHBOARD --- */}
             {userType == "1" && (
-            <Link href="/admin/dashboard">
-              <Button variant="outline" className={buttonStyles}>
-                Dashboard
-              </Button>
-            </Link>)}
+              <Link href="/admin/dashboard">
+                <Button variant="outline" className={buttonStyles}>
+                  Dashboard
+                </Button>
+              </Link>)}
 
             {/* --- DROPDOWN: BOOKING --- */}
             <DropdownMenu>
@@ -140,25 +140,25 @@ export function AdminNav() {
             )}
             <LanguageSelectorSafe>
               <Button variant="ghost" className={buttonStyles}>
-                 <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="2" x2="22" y1="12" y2="12"></line>
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-            </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="2" x2="22" y1="12" y2="12"></line>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
               </Button>
             </LanguageSelectorSafe>
 
-            
+
             <Button
               variant="ghost"
               onClick={handleLogout}
@@ -166,9 +166,9 @@ export function AdminNav() {
             >
               <LogOut className="w-4 h-4 group-hover:rotate-12 transition-transform" />
             </Button>
-            
+
           </div>
-          
+
         </div>
       </div>
     </nav>

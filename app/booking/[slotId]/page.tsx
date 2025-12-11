@@ -108,7 +108,7 @@ function BookingContent() {
   }
 
   const savePassengerDetails = async () => {
-    const userId = Cookies.load("userID");
+    const userId = localStorage.getItem("userID");
 
     // Convert to proper API format
     const formattedPassengers = passengers?.map((p) => ({
@@ -190,10 +190,10 @@ function BookingContent() {
   }
 
   const countryCodes = [
-    { code: "IN", name: "India",  },
-    { code: "BD", name: "Bangladesh",  },
-    { code: "US", name: "United States",  },
-    { code: "GB", name: "United Kingdom",  },
+    { code: "IN", name: "India", },
+    { code: "BD", name: "Bangladesh", },
+    { code: "US", name: "United States", },
+    { code: "GB", name: "United Kingdom", },
   ]
 
   const nationalities = ["Indian", "Bangladeshi", "American", "British", "Other"]

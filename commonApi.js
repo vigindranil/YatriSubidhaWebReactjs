@@ -3,7 +3,7 @@ import Cookies from "react-cookies";
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const callApi = async (url, request_body) => {
-  const TOKEN = Cookies.load("access_token");
+  const TOKEN = localStorage.getItem("access_token");
 
   const response = await fetch(`${API_BASE_URL}${url}`, {
     method: "POST",
@@ -16,18 +16,18 @@ export const callApi = async (url, request_body) => {
   });
 
   if (response.status === 401) {
-    Cookies.remove("user_id");
-    Cookies.remove("user_type_id");
-    Cookies.remove("user_type_name");
-    Cookies.remove("user_full_name");
-    Cookies.remove("access_token");
+    localStorage.removeItem("user_id");
+    localStorage.removeItem("user_type_id");
+    localStorage.removeItem("user_type_name");
+    localStorage.removeItem("user_full_name");
+    localStorage.removeItem("access_token");
   } else {
     return await response.json();
   }
 };
 
 export const callGetApi = async (url) => {
-  const TOKEN = Cookies.load("access_token");
+  const TOKEN = localStorage.getItem("access_token");
 
   const response = await fetch(`${API_BASE_URL}${url}`, {
     method: "GET",
@@ -39,17 +39,17 @@ export const callGetApi = async (url) => {
   });
 
   if (response.status === 401) {
-    Cookies.remove("user_id");
-    Cookies.remove("user_type_id");
-    Cookies.remove("user_type_name");
-    Cookies.remove("user_full_name");
-    Cookies.remove("access_token");
+    localStorage.removeItem("user_id");
+    localStorage.removeItem("user_type_id");
+    localStorage.removeItem("user_type_name");
+    localStorage.removeItem("user_full_name");
+    localStorage.removeItem("access_token");
   } else {
     return await response.json();
   }
 };
 
-export const callApiWithoutToken = async (url, request_body={}) => {
+export const callApiWithoutToken = async (url, request_body = {}) => {
 
   const response = await fetch(`${API_BASE_URL}${url}`, {
     method: "POST",
@@ -60,7 +60,7 @@ export const callApiWithoutToken = async (url, request_body={}) => {
     body: JSON.stringify(request_body),
   });
 
-    return await response.json();
-  
+  return await response.json();
+
 };
 
