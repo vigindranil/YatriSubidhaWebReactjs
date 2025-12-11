@@ -43,6 +43,9 @@ const SLOT_OPTIONS = [
   "SLOT-7", "SLOT-8", "SLOT-9", "SLOT-10", "SLOT-11", "SLOT-12"
 ];
 
+// Define the limit for pagination
+const RECORDS_PER_PAGE = 5;
+
 export default function BookingReport() {
   const [formData, setFormData] = useState({
     journeyType: '2', 
@@ -54,7 +57,6 @@ export default function BookingReport() {
   const [bookings, setBookings] = useState<BookingData[]>([]);
   const [loading, setLoading] = useState(false);
   const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
-  
   
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -93,11 +95,9 @@ export default function BookingReport() {
     }
     setExpandedRows(newExpanded);
   };
-
   
   const handleGetDetails = async (page = 1) => {
     if (!formData.startDate || !formData.endDate) {
-      
       Swal.fire({
         icon: 'warning',
         title: 'Missing Dates',
@@ -119,6 +119,7 @@ export default function BookingReport() {
         Type: typeValue,
         AuthInfo: "{}",
         PageNumber: page, 
+        PageSize: RECORDS_PER_PAGE, // Request specific number of records
         SlotName: formData.slot
       };
 
@@ -155,7 +156,6 @@ export default function BookingReport() {
       } else {
         
         if (page === 1) {
-            
             Swal.fire({
               icon: 'error',
               title: 'Request Failed',
@@ -175,7 +175,6 @@ export default function BookingReport() {
       }
     } catch (error) {
       console.error("Error fetching details:", error);
-      
       Swal.fire({
         icon: 'error',
         title: 'System Error',
@@ -352,7 +351,7 @@ export default function BookingReport() {
             {/* Column 2: Name */}
             <td className="px-6 py-4 text-sm text-gray-900 font-bold truncate" title={booking.name}>{booking.name}</td>
 
-            {/* Column 3: Type (ADDED THIS MISSING COLUMN) */}
+            {/* Column 3: Type */}
             <td className="px-6 py-4 text-sm text-gray-600 font-medium">
               {booking.journeyType}
             </td>
@@ -443,7 +442,8 @@ export default function BookingReport() {
                     variant="outline"
                     size="sm"
                     onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={loading}
+                    // Disabled if loading OR if we have fewer records than the limit
+                    disabled={loading || bookings.length < RECORDS_PER_PAGE}
                     className="flex items-center gap-1"
                   >
                     Next
