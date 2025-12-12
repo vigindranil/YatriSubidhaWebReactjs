@@ -1,5 +1,19 @@
 import { Button } from "@/components/ui/button"
-import { Download, QrCode, Calendar, Clock, CheckCircle, AlertCircle, ArrowUpRight, ArrowDownLeft, ArrowRight, Search } from "lucide-react"
+import { 
+  Download, 
+  QrCode, 
+  Calendar, 
+  Clock, 
+  CheckCircle, 
+  AlertCircle, 
+  ArrowUpRight, 
+  ArrowDownLeft, 
+  ArrowRight, 
+  Search,
+  User,      // Icon for Name
+  Phone,     // Icon for Mobile
+  Layers     // Icon for Slot
+} from "lucide-react"
 import { useEffect, useState } from "react"
 import { callApi } from "./apis/commonApi"
 import Cookies from "react-cookies"
@@ -13,6 +27,9 @@ interface Booking {
   BookingTypeName: string
   status: string
   reference: string
+  Name: string       
+  MobileNo: string    
+  Slot: string        
 }
 
 export function BookingHistory() {
@@ -157,6 +174,41 @@ export function BookingHistory() {
 
               {/* Details Grid */}
               <div className="grid md:grid-cols-3 gap-6 mb-6">
+                
+                {/* --- Name Field (Showing booking.Name) --- */}
+                <div className="bg-slate-50 rounded-xl p-4 hover:bg-slate-100 transition-colors">
+                  <div className="flex items-center gap-2 mb-2">
+                    <User className="w-4 h-4 text-slate-500" />
+                    <p className="text-xs font-semibold text-slate-600 uppercase tracking-wide">Name</p>
+                  </div>
+                  <p className="text-lg font-bold text-slate-900">
+                    {booking?.PasengerName || "-"}
+                  </p>
+                </div>
+
+                {/* --- Mobile Field (Showing booking.MobileNo) --- */}
+                <div className="bg-slate-50 rounded-xl p-4 hover:bg-slate-100 transition-colors">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Phone className="w-4 h-4 text-slate-500" />
+                    <p className="text-xs font-semibold text-slate-600 uppercase tracking-wide">Mobile No</p>
+                  </div>
+                  <p className="text-lg font-bold text-slate-900">
+                    {booking?.MobileNo || "-"}
+                  </p>
+                </div>
+
+                {/* --- Slot Field (Showing booking.Slot) --- */}
+                <div className="bg-slate-50 rounded-xl p-4 hover:bg-slate-100 transition-colors">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Layers className="w-4 h-4 text-slate-500" />
+                    <p className="text-xs font-semibold text-slate-600 uppercase tracking-wide">Slot</p>
+                  </div>
+                  <p className="text-lg font-bold text-slate-900">
+                    {booking?.SlotName || "-"}
+                  </p>
+                </div>
+
+                {/* --- Existing Fields --- */}
                 <div className="bg-slate-50 rounded-xl p-4 hover:bg-slate-100 transition-colors">
                   <div className="flex items-center gap-2 mb-2">
                     <Calendar className="w-4 h-4 text-slate-500" />

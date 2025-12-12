@@ -97,7 +97,6 @@ export default function BookingReport() {
     setExpandedRows(newExpanded);
   };
 
-  // Separated fetch logic to handle pagination
   const fetchBookingData = async (page: number) => {
     if (!formData.startDate || !formData.endDate) {
       Swal.fire({
@@ -130,8 +129,6 @@ export default function BookingReport() {
       const response = await callApi("admin/admin-booking-report-details", payload);
 
       if (response.success && response.data) {
-        // Assuming API returns TotalCount at root or inside data
-        // If your API returns TotalCount differently, adjust this line:
         const totalCount = response.TotalCount || response.totalCount || 0;
         setTotalItems(totalCount);
 
@@ -150,23 +147,16 @@ export default function BookingReport() {
           journeyType: typeValue === 2 ? "Arrival" : "Departure"
         }));
 
-        // Note: Client-side filtering for 'slot' might interfere with server-side pagination 
-        // if the API handles slot filtering. Ideally, API should handle SlotName.
-        // Keeping logic as consistent as possible with previous version:
         if (formData.slot) {
-            // If the API filters by slot (payload has SlotName), we use mappedData directly.
-            // If the API does NOT filter by slot, we would filter here, but that breaks pagination counts.
-            // Assuming API handles SlotName based on payload.
+           
             setBookings(mappedData);
         } else {
           setBookings(mappedData);
         }
         
       } else {
-        // Only show error alert if it's strictly an error, 
-        // for empty data often APIs just return empty arrays.
+        
         if(bookings.length === 0 && page === 1) {
-            // Optional: Show alert only on first load fail
              Swal.fire({
               icon: 'error',
               title: 'Request Failed',

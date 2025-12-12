@@ -17,7 +17,7 @@ export default function OperatorDashboardPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
-        <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 mb-8 relative overflow-hidden">
+        {/* <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 mb-8 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-emerald-100 to-teal-100 rounded-full -mr-32 -mt-32 opacity-30"></div>
           
           <div className="relative z-10">
@@ -131,7 +131,7 @@ export default function OperatorDashboardPage() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         
         <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8">

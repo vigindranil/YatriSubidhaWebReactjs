@@ -1,14 +1,13 @@
 "use client"
+
 import { useState } from "react"
-import Link from "next/link"
-import { QrScanner } from "@/components/qr-scanner"
 import { ClipboardList } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, CheckCircle, CreditCard, Printer, Users } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { AdminNav } from "@/components/admin-nav"
-
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+// Import the common API handler
+import { callApi } from "@/components/apis/commonApi"
 
 type Payment = {
   method: string
@@ -19,7 +18,7 @@ type Payment = {
 }
 
 type Booking = {
-  booking_id?: number // Added to store BookingID for the update API
+  booking_id?: number
   booking_number: string
   customer_name: string
   mobile_number?: string
@@ -45,29 +44,20 @@ export default function OnlineBookingPage() {
     setError(null)
     setBooking(null)
     try {
-      const response = await fetch(`${BASE_URL}user/slot/get-departure-booking-details-by-token-number`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          "TokenNo": number,
-          "AuthInfo": "{}"
-        }),
-      });
+      // Modified to use callApi
+      const payload = {
+        TokenNo: number,
+        AuthInfo: "{}"
+      };
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
+      const response = await callApi("user/slot/get-departure-booking-details-by-token-number", payload);
 
-      const json = await response.json();
+      if (response && response.success && response.data && response.data.length > 0) {
+        const apiData = response.data[0];
 
-      if (json.success && json.data && json.data.length > 0) {
-        const apiData = json.data[0];
-
-        // Map API response to your existing Booking type
+        
         const mappedBooking: Booking = {
-          booking_id: apiData.BookingID, // Capturing ID for the update call
+          booking_id: apiData.BookingID,
           booking_number: apiData.TokenNo,
           customer_name: apiData.PasengerName,
           mobile_number: apiData.MobileNo,
@@ -88,7 +78,7 @@ export default function OnlineBookingPage() {
 
         setBooking(mappedBooking)
       } else {
-        throw new Error(json.message || "Booking details not found");
+        throw new Error(response?.message || "Booking details not found");
       }
 
     } catch (err: any) {
@@ -103,24 +93,15 @@ export default function OnlineBookingPage() {
     setLoading(true)
     setError(null)
     try {
-      const response = await fetch(`${BASE_URL}admin/update-booking-attendance`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          "BookingID": booking.booking_id,
-          "AuthInfo": "{}"
-        }),
-      })
+      // Modified to use callApi
+      const payload = {
+        BookingID: booking.booking_id,
+        AuthInfo: "{}"
+      };
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`)
-      }
+      const response = await callApi("admin/update-booking-attendance", payload);
 
-      const json = await response.json()
-
-      if (json.success) {
+      if (response && response.success) {
         // Update local state to show checked status immediately
         setBooking(prev => prev ? ({
           ...prev,
@@ -129,7 +110,7 @@ export default function OnlineBookingPage() {
           checked_at: new Date().toLocaleDateString()
         }) : null)
       } else {
-        throw new Error(json.message || "Failed to update attendance")
+        throw new Error(response?.message || "Failed to update attendance")
       }
 
     } catch (err: any) {
@@ -139,6 +120,7 @@ export default function OnlineBookingPage() {
     }
   }
 
+  // Helper for scanner if implemented later
   function handleScan(data: string | null) {
     if (!data) return
     try {

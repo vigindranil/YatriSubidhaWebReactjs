@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -12,14 +13,15 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { PaymentGateway } from "@/components/payment-gateway"
-import { ArrowLeft, CheckCircle, CreditCard, Printer } from "lucide-react"
+import { ArrowLeft, CheckCircle, CreditCard, Printer, Users } from "lucide-react"
 import { callApi } from "@/components/apis/commonApi"
+import Cookies from "react-cookies"
 import { AdminNav } from "@/components/admin-nav"
 
 export default function OfflineBookingPage() {
   const router = useRouter()
 
-  // --- Dropdown States ---
+  // --- NEW: Dropdown States ---
   const [journeyType, setJourneyType] = useState<string>("1") // Default "1" (Departure)
   const [slotList, setSlotList] = useState<any[]>([])
   const [selectedSlotId, setSelectedSlotId] = useState<string>("")
@@ -52,32 +54,29 @@ export default function OfflineBookingPage() {
     { value: "EUR", label: "EUR – Euro" },
   ]
 
-  // --- IMPLEMENTED: Fetch Slots Logic from Reference Code ---
   useEffect(() => {
     const fetchSlots = async () => {
       const today = new Date().toISOString().split('T')[0];
       try {
-        const payload = {
-            JourneyDate: today,
-            AuthInfo: "{}",
-            Type: parseInt(journeyType) // Convert string "1"/"2" to number
-        };
+        // Adjust endpoint name based on your backend routes (e.g., user/get-slots-by-date)
+        const response = await callApi("user/get-slots-by-date", {
+          JourneyDate: today,
+          Type: journeyType
+        });
 
-        const response = await callApi("user/slot/get-available-slot-by-date", payload);
-
-        if (response && response.success && Array.isArray(response.data)) {
-          setSlotList(response.data);
+        if (response && response.success) {
+          setSlotList(response.data || []);
         } else {
           setSlotList([]);
         }
       } catch (error) {
         console.error("Error fetching slots:", error);
-        setSlotList([]);
       }
     }
 
     fetchSlots();
-    setSelectedSlotId(""); // Reset selection on type change
+  
+    setSelectedSlotId("");
   }, [journeyType]);
   // -------------------------------------
 
@@ -137,12 +136,12 @@ export default function OfflineBookingPage() {
       VisaValidUpto: "2025-12-31",
     }];
 
-    // --- UPDATED: Payload structure ---
+    // --- UPDATED: Use dynamic Slot ID and Type ---
     const response = await callApi("user/save-passenger-details", {
-      PrefferedSlotID: parseInt(selectedSlotId), 
+      PrefferedSlotID: selectedSlotId, // Used selected state
       JourneyDate: today,
       PassengerInformation: formattedPassengers,
-      Type: parseInt(journeyType),
+      Type: journeyType, // Used selected state
       UserID: userId,
       AuthInfo: "{}"
     });
@@ -150,7 +149,7 @@ export default function OfflineBookingPage() {
   }
 
   const handleIssuePass = async () => {
-    // --- Validation ---
+    // --- NEW: Validation ---
     if (!selectedSlotId) {
       alert("Please select a slot first");
       return;
@@ -169,6 +168,7 @@ export default function OfflineBookingPage() {
         const tokenList = result?.data?.map((item: any) => item.TokenNo) || []
         const tokenString = tokenList.join(",")
         
+        // Updated redirect to use dynamic type
         router.push(`/pass/${btoa(tokenString)}?type=${journeyType == "1" ? "Departure" : "Arrival"}`)
       } else {
         alert(result?.message || "Database Error: Please check if Passport Number already exists.");
@@ -214,7 +214,7 @@ export default function OfflineBookingPage() {
             <div className="grid lg:grid-cols-3 gap-6">
               <div className="space-y-4">
                 
-                {/* --- IMPLEMENTED: Journey Type & Slot Selection --- */}
+                {/* --- NEW: Journey Type & Slot Selection --- */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold text-slate-900 mb-2">Journey Type *</label>
@@ -238,9 +238,8 @@ export default function OfflineBookingPage() {
                       <SelectContent>
                         {slotList.length > 0 ? (
                           slotList.map((slot: any) => (
-                            <SelectItem key={slot.SlotID} value={String(slot.SlotID)}>
-                              {/* Using SlotNameEng and TimeRangeEng from reference API */}
-                              {slot.SlotNameEng} ({slot.TimeRangeEng})
+                            <SelectItem key={slot.SlotID || slot.id} value={String(slot.SlotID || slot.id)}>
+                              {slot.SlotName || slot.name} ({slot.SlotTime || slot.timing})
                             </SelectItem>
                           ))
                         ) : (
@@ -326,6 +325,7 @@ export default function OfflineBookingPage() {
                 <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
                   <h3 className="font-bold text-slate-900 mb-3">Passenger Summary</h3>
                   <div className="space-y-2 text-sm">
+                    {/* Added Slot Summary */}
                     <div className="flex justify-between"><span className="text-slate-600">Type</span><span className="font-semibold text-slate-900">{journeyType === "1" ? "Departure" : "Arrival"}</span></div>
                     <div className="flex justify-between"><span className="text-slate-600">Passport</span><span className="font-mono font-semibold text-slate-900">{passportNumber || "—"}</span></div>
                     <div className="flex justify-between"><span className="text-slate-600">Name</span><span className="font-semibold text-slate-900">{fullName || "—"}</span></div>
