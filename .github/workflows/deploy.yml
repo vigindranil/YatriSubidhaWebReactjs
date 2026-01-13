@@ -1,0 +1,48 @@
+name: Deploy React App
+
+on:
+  push:
+    branches:
+      - staging   # change if needed
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_ENC_KEY_HEX: ${{ secrets.VITE_ENC_KEY_HEX }}
+        run: npm run build
+
+      - name: Upload build to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: ".next/*"
+          target: ${{ secrets.SERVER_PATH }}
+          strip_components: 1
+          debug: true
+
+      - name: Reload Nginx
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            sudo systemctl reload nginx
